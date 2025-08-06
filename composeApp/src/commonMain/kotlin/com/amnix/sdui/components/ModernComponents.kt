@@ -330,7 +330,7 @@ fun ModernExampleSelector(
 }
 
 /**
- * Code editor-style JSON editor with syntax highlighting and developer-friendly design
+ * Code editor-style JSON editor with integrated error display and developer-friendly design
  */
 @Composable
 fun ModernJsonEditor(
@@ -339,6 +339,7 @@ fun ModernJsonEditor(
     selectedExample: DemoExample,
     formState: MutableMap<String, Any?>,
     onShowFormData: (String) -> Unit,
+    parseError: Throwable? = null,
     isDarkMode: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
@@ -346,7 +347,7 @@ fun ModernJsonEditor(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        // Minimal header with code editor styling
+        // Minimal header with code editor styling and error indicator
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -360,25 +361,56 @@ fun ModernJsonEditor(
                     modifier = Modifier
                         .size(8.dp)
                         .background(
-                            color = Color(0xFF4CAF50), // Green dot like VS Code
+                            color = if (parseError != null) Color(0xFFFF5F57) else Color(0xFF4CAF50), // Red if error, green if OK
                             shape = RoundedCornerShape(50.dp),
                         ),
                 )
                 Text(
-                    text = "config.json",
+                    text = "${selectedExample.resourcePath}.json",
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium,
                     fontFamily = FontFamily.Monospace,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
+                
+                // Error indicator badge
+                if (parseError != null) {
+                    Box(
+                        modifier = Modifier
+                            .background(
+                                color = Color(0xFFFF5F57).copy(alpha = 0.1f),
+                                shape = RoundedCornerShape(4.dp),
+                            )
+                            .padding(horizontal = 6.dp, vertical = 2.dp),
+                    ) {
+                        Text(
+                            text = "ERROR",
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = FontFamily.Monospace,
+                            color = Color(0xFFFF5F57),
+                        )
+                    }
+                }
             }
             
-            Text(
-                text = "${jsonInput.lines().size} lines",
-                style = MaterialTheme.typography.bodySmall,
-                fontFamily = FontFamily.Monospace,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                if (parseError != null) {
+                    Text(
+                        text = "⚠️",
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
+                Text(
+                    text = "${jsonInput.lines().size} lines",
+                    style = MaterialTheme.typography.bodySmall,
+                    fontFamily = FontFamily.Monospace,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                )
+            }
         }
 
         // Code editor-style container
@@ -444,7 +476,7 @@ fun ModernJsonEditor(
                     onValueChange = onJsonChange,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(650.dp),
+                        .height(if (parseError != null) 580.dp else 650.dp), // Reduce height when error is shown
                     textStyle = TextStyle(
                         fontFamily = FontFamily.Monospace,
                         fontSize = 14.sp,
@@ -467,7 +499,48 @@ fun ModernJsonEditor(
                         cursorColor = if (isDarkMode) Color(0xFF60A5FA) else Color(0xFF3B82F6),
                     ),
                     shape = RoundedCornerShape(0.dp),
+                    isError = parseError != null,
                 )
+                
+                // Inline error display at bottom of editor
+                if (parseError != null) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = Color(0xFFFF5F57).copy(alpha = 0.1f),
+                                shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp),
+                            )
+                            .padding(12.dp),
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.Top,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            Text(
+                                text = "⚠️",
+                                style = MaterialTheme.typography.bodySmall,
+                            )
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(4.dp),
+                            ) {
+                                Text(
+                                    text = "JSON Parse Error",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    fontFamily = FontFamily.Monospace,
+                                    color = Color(0xFFFF5F57),
+                                )
+                                Text(
+                                    text = parseError.message ?: "Invalid JSON syntax",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    fontFamily = FontFamily.Monospace,
+                                    color = Color(0xFFFF5F57).copy(alpha = 0.8f),
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
 

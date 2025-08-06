@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Alignment
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -92,6 +93,7 @@ fun JsonEditorCard(
     selectedExample: DemoExample,
     formState: MutableMap<String, Any?>,
     onShowFormData: (String) -> Unit,
+    parseError: Throwable? = null,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -111,12 +113,44 @@ fun JsonEditorCard(
                 onValueChange = onJsonChange,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(250.dp),
+                    .height(if (parseError != null) 200.dp else 250.dp),
                 placeholder = { Text("Enter SDUI JSON...") },
                 textStyle = MaterialTheme.typography.bodyMedium.copy(
                     fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
                 ),
+                isError = parseError != null,
             )
+            
+            // Simple error display for legacy component
+            if (parseError != null) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.errorContainer,
+                    ),
+                ) {
+                    Row(
+                        modifier = Modifier.padding(12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        Text(text = "⚠️")
+                        Column {
+                            Text(
+                                text = "JSON Error",
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onErrorContainer,
+                            )
+                            Text(
+                                text = parseError.message ?: "Invalid JSON",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onErrorContainer,
+                            )
+                        }
+                    }
+                }
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 

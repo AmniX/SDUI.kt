@@ -154,23 +154,20 @@ fun WideLayout(
                         isDarkMode = false, // Always use light theme for left panel
                     )
 
-                    // JSON Editor (now gets more space)
+                    // JSON Editor with integrated error display
                     ModernJsonEditor(
                         jsonInput = jsonInput,
                         onJsonChange = onJsonChange,
                         selectedExample = selectedExample,
                         formState = formState,
                         onShowFormData = onActionMessage,
+                        parseError = parsedComponent.exceptionOrNull(),
                         isDarkMode = false, // Always use light theme for left panel
                     )
 
                     // Status Messages
                     actionMessage?.let { message ->
                         ModernStatusCard(message)
-                    }
-
-                    parsedComponent.exceptionOrNull()?.let { error ->
-                        ModernErrorDisplay(error)
                     }
                 }
             }
@@ -229,23 +226,19 @@ fun CompactLayout(
             onExampleChange = onExampleChange,
         )
 
-        // JSON Editor
+        // JSON Editor with integrated error display
         JsonEditorCard(
             jsonInput = jsonInput,
             onJsonChange = onJsonChange,
             selectedExample = selectedExample,
             formState = formState,
             onShowFormData = onActionMessage,
+            parseError = parsedComponent.exceptionOrNull(),
         )
 
         // Action Message
         actionMessage?.let { message ->
             ActionMessageCard(message)
-        }
-
-        // Error Display
-        parsedComponent.exceptionOrNull()?.let { error ->
-            ErrorCard(error)
         }
 
         // Rendered UI with mobile preview theming
