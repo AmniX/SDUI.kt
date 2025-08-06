@@ -1,6 +1,7 @@
 package com.amnix.sdui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,11 +20,15 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -325,7 +330,7 @@ fun ModernExampleSelector(
 }
 
 /**
- * Modern JSON editor with large text field and action buttons (maximized for space)
+ * Code editor-style JSON editor with syntax highlighting and developer-friendly design
  */
 @Composable
 fun ModernJsonEditor(
@@ -341,67 +346,169 @@ fun ModernJsonEditor(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        SectionHeader(
-            title = "JSON Editor",
-            color = MaterialTheme.colorScheme.secondary,
-        )
-
-        ElevatedCard(
-            elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
-            colors = CardDefaults.elevatedCardColors(
-                containerColor = MaterialTheme.colorScheme.surface.copy(
-                    alpha = if (isDarkMode) 0.85f else 1.0f,
-                ),
-            ),
-            shape = RoundedCornerShape(12.dp),
+        // Minimal header with code editor styling
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Column(
-                modifier = Modifier.padding(20.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
+                Box(
+                    modifier = Modifier
+                        .size(8.dp)
+                        .background(
+                            color = Color(0xFF4CAF50), // Green dot like VS Code
+                            shape = RoundedCornerShape(50.dp),
+                        ),
+                )
+                Text(
+                    text = "config.json",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = FontFamily.Monospace,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+            }
+            
+            Text(
+                text = "${jsonInput.lines().size} lines",
+                style = MaterialTheme.typography.bodySmall,
+                fontFamily = FontFamily.Monospace,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+            )
+        }
+
+        // Code editor-style container
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    color = if (isDarkMode) Color(0xFF1E1E1E) else Color(0xFFFAFAFA),
+                    shape = RoundedCornerShape(12.dp),
+                )
+                .border(
+                    width = 1.dp,
+                    color = if (isDarkMode) Color(0xFF3C3C3C) else Color(0xFFE0E0E0),
+                    shape = RoundedCornerShape(12.dp),
+                ),
+        ) {
+            Column {
+                // Editor header with controls
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            color = if (isDarkMode) Color(0xFF2D2D2D) else Color(0xFFF0F0F0),
+                            shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
+                        )
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        // Traffic light dots (macOS style)
+                        Box(
+                            modifier = Modifier
+                                .size(12.dp)
+                                .background(Color(0xFFFF5F57), RoundedCornerShape(50.dp)),
+                        )
+                        Box(
+                            modifier = Modifier
+                                .size(12.dp)
+                                .background(Color(0xFFFFBD2E), RoundedCornerShape(50.dp)),
+                        )
+                        Box(
+                            modifier = Modifier
+                                .size(12.dp)
+                                .background(Color(0xFF28CA42), RoundedCornerShape(50.dp)),
+                        )
+                    }
+                    
+                    Text(
+                        text = "JSON",
+                        style = MaterialTheme.typography.bodySmall,
+                        fontFamily = FontFamily.Monospace,
+                        color = if (isDarkMode) Color(0xFF9CA3AF) else Color(0xFF6B7280),
+                    )
+                }
+
+                // JSON Text Field with code editor styling
                 OutlinedTextField(
                     value = jsonInput,
                     onValueChange = onJsonChange,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(650.dp), // Increased height even more due to compact header
+                        .height(650.dp),
+                    textStyle = TextStyle(
+                        fontFamily = FontFamily.Monospace,
+                        fontSize = 14.sp,
+                        lineHeight = 20.sp,
+                        color = if (isDarkMode) Color(0xFFE5E7EB) else Color(0xFF1F2937),
+                    ),
                     placeholder = {
                         Text(
-                            "Enter your JSON here...",
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                            "{\n  \"type\": \"column\",\n  \"children\": [\n    // Add your JSON here...\n  ]\n}",
+                            fontFamily = FontFamily.Monospace,
+                            fontSize = 14.sp,
+                            color = if (isDarkMode) Color(0xFF6B7280) else Color(0xFF9CA3AF),
                         )
                     },
-                    shape = RoundedCornerShape(8.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        focusedBorderColor = Color.Transparent,
+                        unfocusedBorderColor = Color.Transparent,
+                        cursorColor = if (isDarkMode) Color(0xFF60A5FA) else Color(0xFF3B82F6),
+                    ),
+                    shape = RoundedCornerShape(0.dp),
                 )
+            }
+        }
 
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                ) {
-                    Button(
-                        onClick = {
-                            onJsonChange(
-                                selectedExample.json.ifEmpty {
-                                    "Loading..."
-                                },
-                            )
+        // Action buttons with minimal styling
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            OutlinedButton(
+                onClick = {
+                    onJsonChange(
+                        selectedExample.json.ifEmpty {
+                            "Loading..."
                         },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                        ),
-                        shape = RoundedCornerShape(8.dp),
-                    ) {
-                        Text("Reset to Example")
-                    }
+                    )
+                },
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = MaterialTheme.colorScheme.primary,
+                ),
+                shape = RoundedCornerShape(6.dp),
+            ) {
+                Text(
+                    "Reset",
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.Medium,
+                )
+            }
 
-                    OutlinedButton(
-                        onClick = {
-                            onShowFormData("📋 Form data: ${formState.toMap()}")
-                        },
-                        shape = RoundedCornerShape(8.dp),
-                    ) {
-                        Text("Show Form Data")
-                    }
-                }
+            OutlinedButton(
+                onClick = {
+                    onShowFormData("📋 Form data: ${formState.toMap()}")
+                },
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = MaterialTheme.colorScheme.secondary,
+                ),
+                shape = RoundedCornerShape(6.dp),
+            ) {
+                Text(
+                    "Debug",
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.Medium,
+                )
             }
         }
     }
