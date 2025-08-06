@@ -1,0 +1,27 @@
+{
+    "type": "column",
+    "id": "grid-demo",
+    "children": [
+        {
+            "type": "text",
+            "id": "title",
+            "text": "Grid Layout Demo",
+            "style": {"fontSize": 20, "fontWeight": "bold"}
+        },
+        {"type": "spacer", "id": "s1", "height": 16},
+        {
+            "type": "grid",
+            "id": "number-grid",
+            "columns": 3,
+            "itemSpacing": 8,
+            "items": [
+                {"type": "text", "id": "item1", "text": "1", "style": {"alignment": "center"}},
+                {"type": "text", "id": "item2", "text": "2", "style": {"alignment": "center"}},
+                {"type": "text", "id": "item3", "text": "3", "style": {"alignment": "center"}},
+                {"type": "text", "id": "item4", "text": "4", "style": {"alignment": "center"}},
+                {"type": "text", "id": "item5", "text": "5", "style": {"alignment": "center"}},
+                {"type": "text", "id": "item6", "text": "6", "style": {"alignment": "center"}}
+            ]
+        }
+    ]
+}

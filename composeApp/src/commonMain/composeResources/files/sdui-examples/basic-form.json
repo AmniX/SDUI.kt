@@ -1,0 +1,46 @@
+{
+    "type": "column",
+    "id": "basic-form",
+    "children": [
+        {
+            "type": "text",
+            "id": "title",
+            "text": "Basic Form Example",
+            "style": {"fontSize": 24, "fontWeight": "bold", "textColor": "#1976D2"}
+        },
+        {"type": "spacer", "id": "spacer1", "height": 16},
+        {
+            "type": "textField",
+            "id": "name",
+            "placeholder": "Enter your name",
+            "value": ""
+        },
+        {"type": "spacer", "id": "spacer2", "height": 12},
+        {
+            "type": "textField",
+            "id": "email",
+            "placeholder": "Enter your email",
+            "value": ""
+        },
+        {"type": "spacer", "id": "spacer3", "height": 16},
+        {
+            "type": "row",
+            "id": "buttons",
+            "children": [
+                {
+                    "type": "button",
+                    "id": "submit",
+                    "text": "Submit",
+                    "action": {"type": "navigate", "route": "success"}
+                },
+                {"type": "spacer", "id": "btn-spacer", "width": 12},
+                {
+                    "type": "button",
+                    "id": "reset",
+                    "text": "Reset",
+                    "action": {"type": "reset"}
+                }
+            ]
+        }
+    ]
+}

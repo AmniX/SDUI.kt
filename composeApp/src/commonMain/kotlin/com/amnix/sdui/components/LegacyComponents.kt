@@ -1,0 +1,184 @@
+package com.amnix.sdui.components
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import com.amnix.sdui.data.DemoExample
+import com.amnix.sdui.data.SduiDemoExamples
+
+/**
+ * Legacy components for backward compatibility and compact layout usage
+ */
+
+@Composable
+fun ExampleSelectorCard(
+    selectedExample: DemoExample,
+    isDropdownExpanded: Boolean,
+    onDropdownExpandedChange: (Boolean) -> Unit,
+    onExampleChange: (DemoExample) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = "Demo Examples",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Medium,
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedButton(
+                onClick = { onDropdownExpandedChange(true) },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text("${selectedExample.name} - ${selectedExample.description}")
+            }
+
+            DropdownMenu(
+                expanded = isDropdownExpanded,
+                onDismissRequest = { onDropdownExpandedChange(false) },
+            ) {
+                SduiDemoExamples.examples.forEach { example ->
+                    DropdownMenuItem(
+                        text = {
+                            Column {
+                                Text(
+                                    text = example.name,
+                                    fontWeight = FontWeight.Medium,
+                                )
+                                Text(
+                                    text = example.description,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
+                        },
+                        onClick = {
+                            onExampleChange(example.copy(json = "")) // Reset JSON to trigger reload
+                            onDropdownExpandedChange(false)
+                        },
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun JsonEditorCard(
+    jsonInput: String,
+    onJsonChange: (String) -> Unit,
+    selectedExample: DemoExample,
+    formState: MutableMap<String, Any?>,
+    onShowFormData: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = "JSON Configuration",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Medium,
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedTextField(
+                value = jsonInput,
+                onValueChange = onJsonChange,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(250.dp),
+                placeholder = { Text("Enter SDUI JSON...") },
+                textStyle = MaterialTheme.typography.bodyMedium.copy(
+                    fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
+                ),
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Button(
+                    onClick = {
+                        onJsonChange(
+                            selectedExample.json.ifEmpty {
+                                // If JSON not loaded yet, trigger a reload
+                                "Loading..."
+                            },
+                        )
+                    },
+                ) {
+                    Text("Reset to Example")
+                }
+
+                Button(
+                    onClick = {
+                        onShowFormData("📋 Form data: ${formState.toMap()}")
+                    },
+                ) {
+                    Text("Show Form Data")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ActionMessageCard(message: String, modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+        ),
+    ) {
+        Text(
+            text = message,
+            modifier = Modifier.padding(12.dp),
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+        )
+    }
+}
+
+@Composable
+fun ErrorCard(error: Throwable, modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = Color.Red.copy(alpha = 0.1f)),
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = "❌ JSON Parse Error",
+                fontWeight = FontWeight.Bold,
+                color = Color.Red,
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = error.message ?: "Unknown error",
+                color = Color.Red,
+            )
+        }
+    }
+}

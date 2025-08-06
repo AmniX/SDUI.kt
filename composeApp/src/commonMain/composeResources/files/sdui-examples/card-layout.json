@@ -1,0 +1,54 @@
+{
+    "type": "column",
+    "id": "card-demo",
+    "children": [
+        {
+            "type": "text",
+            "id": "title",
+            "text": "Card Layout Demo",
+            "style": {"fontSize": 20, "fontWeight": "bold"}
+        },
+        {"type": "spacer", "id": "s1", "height": 16},
+        {
+            "type": "card",
+            "id": "user-card",
+            "elevation": 4,
+            "children": [
+                {
+                    "type": "text",
+                    "id": "user-name",
+                    "text": "John Doe",
+                    "style": {"fontSize": 18, "fontWeight": "bold"}
+                },
+                {"type": "spacer", "id": "s2", "height": 8},
+                {
+                    "type": "text",
+                    "id": "user-email",
+                    "text": "john.doe@example.com",
+                    "style": {"textColor": "#666666"}
+                }
+            ]
+        },
+        {"type": "spacer", "id": "s3", "height": 16},
+        {
+            "type": "card",
+            "id": "settings-card",
+            "elevation": 2,
+            "children": [
+                {
+                    "type": "text",
+                    "id": "settings-title",
+                    "text": "Settings",
+                    "style": {"fontSize": 16, "fontWeight": "bold"}
+                },
+                {"type": "spacer", "id": "s4", "height": 12},
+                {
+                    "type": "switch",
+                    "id": "dark-mode",
+                    "label": "Dark Mode",
+                    "checked": false
+                }
+            ]
+        }
+    ]
+}
