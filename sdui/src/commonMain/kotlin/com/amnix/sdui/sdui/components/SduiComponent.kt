@@ -139,4 +139,115 @@ sealed class SduiComponent {
         val children: List<SduiComponent> = emptyList(),
         val elevation: Float? = null
     ) : SduiComponent()
+    
+    @Serializable
+    @kotlinx.serialization.SerialName("List")
+    data class ListComponent(
+        override val id: String? = null,
+        override val style: Style? = null,
+        override val action: SduiAction? = null,
+        override val visible: Boolean? = true,
+        override val meta: Map<String, String>? = null,
+        val items: List<SduiComponent> = emptyList(),
+        val itemSpacing: Float? = null,
+        val scrollable: Boolean? = true,
+        val showScrollIndicator: Boolean? = true
+    ) : SduiComponent()
+    
+    @Serializable
+    @kotlinx.serialization.SerialName("Grid")
+    data class GridComponent(
+        override val id: String? = null,
+        override val style: Style? = null,
+        override val action: SduiAction? = null,
+        override val visible: Boolean? = true,
+        override val meta: Map<String, String>? = null,
+        val items: List<SduiComponent> = emptyList(),
+        val columns: Int = 2,
+        val itemSpacing: Float? = null,
+        val scrollable: Boolean? = true
+    ) : SduiComponent()
+    
+    @Serializable
+    @kotlinx.serialization.SerialName("Switch")
+    data class SwitchComponent(
+        override val id: String? = null,
+        override val style: Style? = null,
+        override val action: SduiAction? = null,
+        override val visible: Boolean? = true,
+        override val meta: Map<String, String>? = null,
+        val checked: Boolean = false,
+        val enabled: Boolean? = true,
+        val label: String? = null
+    ) : SduiComponent()
+    
+    @Serializable
+    @kotlinx.serialization.SerialName("Checkbox")
+    data class CheckboxComponent(
+        override val id: String? = null,
+        override val style: Style? = null,
+        override val action: SduiAction? = null,
+        override val visible: Boolean? = true,
+        override val meta: Map<String, String>? = null,
+        val checked: Boolean = false,
+        val enabled: Boolean? = true,
+        val label: String? = null
+    ) : SduiComponent()
+    
+    @Serializable
+    @kotlinx.serialization.SerialName("RadioButton")
+    data class RadioButtonComponent(
+        override val id: String? = null,
+        override val style: Style? = null,
+        override val action: SduiAction? = null,
+        override val visible: Boolean? = true,
+        override val meta: Map<String, String>? = null,
+        val selected: Boolean = false,
+        val enabled: Boolean? = true,
+        val label: String? = null,
+        val group: String? = null
+    ) : SduiComponent()
+    
+    @Serializable
+    @kotlinx.serialization.SerialName("ProgressBar")
+    data class ProgressBarComponent(
+        override val id: String? = null,
+        override val style: Style? = null,
+        override val action: SduiAction? = null,
+        override val visible: Boolean? = true,
+        override val meta: Map<String, String>? = null,
+        val progress: Float = 0f,
+        val indeterminate: Boolean? = false,
+        val label: String? = null
+    ) : SduiComponent()
+    
+    @Serializable
+    @kotlinx.serialization.SerialName("Slider")
+    data class SliderComponent(
+        override val id: String? = null,
+        override val style: Style? = null,
+        override val action: SduiAction? = null,
+        override val visible: Boolean? = true,
+        override val meta: Map<String, String>? = null,
+        val value: Float = 0f,
+        val minValue: Float = 0f,
+        val maxValue: Float = 100f,
+        val step: Float? = null,
+        val enabled: Boolean? = true,
+        val label: String? = null
+    ) : SduiComponent()
+    
+    @Serializable
+    @kotlinx.serialization.SerialName("Chip")
+    data class ChipComponent(
+        override val id: String? = null,
+        override val style: Style? = null,
+        override val action: SduiAction? = null,
+        override val visible: Boolean? = true,
+        override val meta: Map<String, String>? = null,
+        val text: String,
+        val selected: Boolean? = false,
+        val enabled: Boolean? = true,
+        val icon: String? = null
+    ) : SduiComponent()
 } 
