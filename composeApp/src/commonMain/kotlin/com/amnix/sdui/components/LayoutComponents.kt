@@ -50,8 +50,6 @@ fun ResponsiveLayout(
     parsedComponent: Result<com.amnix.sdui.sdui.components.SduiComponent>,
     dispatcher: ActionDispatcher,
     formState: MutableMap<String, Any?>,
-    mobilePreviewDarkMode: Boolean,
-    onMobilePreviewDarkModeChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     // Use BoxWithConstraints for responsive layout based on available width
@@ -81,8 +79,6 @@ fun ResponsiveLayout(
                 parsedComponent = parsedComponent,
                 dispatcher = dispatcher,
                 formState = formState,
-                mobilePreviewDarkMode = mobilePreviewDarkMode,
-                onMobilePreviewDarkModeChange = onMobilePreviewDarkModeChange,
             )
         } else {
             // Compact Layout: Single Column (Mobile, Narrow Tablets, Small Windows)
@@ -96,7 +92,6 @@ fun ResponsiveLayout(
                 parsedComponent = parsedComponent,
                 dispatcher = dispatcher,
                 formState = formState,
-                mobilePreviewDarkMode = mobilePreviewDarkMode,
             )
         }
     }
@@ -116,8 +111,6 @@ fun WideLayout(
     parsedComponent: Result<com.amnix.sdui.sdui.components.SduiComponent>,
     dispatcher: ActionDispatcher,
     formState: MutableMap<String, Any?>,
-    mobilePreviewDarkMode: Boolean,
-    onMobilePreviewDarkModeChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var isDropdownExpanded by remember { mutableStateOf(false) }
@@ -151,7 +144,6 @@ fun WideLayout(
                         isDropdownExpanded = isDropdownExpanded,
                         onDropdownExpandedChange = { isDropdownExpanded = it },
                         onExampleChange = onExampleChange,
-                        isDarkMode = false, // Always use light theme for left panel
                     )
 
                     // JSON Editor with integrated error display
@@ -162,7 +154,6 @@ fun WideLayout(
                         formState = formState,
                         onShowFormData = onActionMessage,
                         parseError = parsedComponent.exceptionOrNull(),
-                        isDarkMode = false, // Always use light theme for left panel
                     )
 
                     // Status Messages
@@ -177,8 +168,6 @@ fun WideLayout(
                 parsedComponent = parsedComponent,
                 dispatcher = dispatcher,
                 formState = formState,
-                isDarkMode = mobilePreviewDarkMode,
-                onDarkModeChange = onMobilePreviewDarkModeChange,
             )
         }
     }
@@ -198,7 +187,6 @@ fun CompactLayout(
     parsedComponent: Result<com.amnix.sdui.sdui.components.SduiComponent>,
     dispatcher: ActionDispatcher,
     formState: MutableMap<String, Any?>,
-    mobilePreviewDarkMode: Boolean,
     modifier: Modifier = Modifier,
 ) {
     var isDropdownExpanded by remember { mutableStateOf(false) }
@@ -247,7 +235,6 @@ fun CompactLayout(
                 component = component,
                 dispatcher = dispatcher,
                 formState = formState,
-                isDarkMode = mobilePreviewDarkMode,
             )
         }
     }
@@ -261,8 +248,6 @@ private fun MobilePreviewPanel(
     parsedComponent: Result<com.amnix.sdui.sdui.components.SduiComponent>,
     dispatcher: ActionDispatcher,
     formState: MutableMap<String, Any?>,
-    isDarkMode: Boolean,
-    onDarkModeChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -278,55 +263,41 @@ private fun MobilePreviewPanel(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            // Preview Header with Dark Mode Toggle
+            // Preview Header (no dark mode toggle)
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(6.dp)
-                            .background(
-                                color = MaterialTheme.colorScheme.primary,
-                                shape = RoundedCornerShape(50.dp),
-                            ),
-                    )
-                    Text(
-                        text = "Mobile Preview",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onBackground,
-                    )
-                }
-
-                // Dark Mode Toggle for Mobile Preview Only
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    Text(
-                        text = if (isDarkMode) "🌙" else "☀️",
-                        style = MaterialTheme.typography.bodyMedium,
-                    )
-                    Switch(
-                        checked = isDarkMode,
-                        onCheckedChange = onDarkModeChange,
-                    )
-                }
+                Box(
+                    modifier = Modifier
+                        .size(6.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = RoundedCornerShape(50.dp),
+                        ),
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Mobile Preview",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
             }
+
+            // Center the phone vertically between header and bottom
+            Spacer(modifier = Modifier.weight(1f))
 
             // Mobile Phone Frame
             MobilePhonePreview(
                 parsedComponent = parsedComponent,
                 dispatcher = dispatcher,
                 formState = formState,
-                isDarkMode = isDarkMode,
+                modifier = Modifier.align(Alignment.CenterHorizontally),
             )
+
+            Spacer(modifier = Modifier.weight(1f))
         }
     }
 }
@@ -339,7 +310,6 @@ private fun CompactPreviewCard(
     component: com.amnix.sdui.sdui.components.SduiComponent,
     dispatcher: ActionDispatcher,
     formState: MutableMap<String, Any?>,
-    isDarkMode: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Card(

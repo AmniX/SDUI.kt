@@ -15,7 +15,7 @@ import com.amnix.sdui.sdui.renderer.ActionDispatcher
 import com.amnix.sdui.sdui.renderer.FormState
 
 @Composable
-fun SduiPlaygroundScreen(isDarkMode: Boolean = false, onDarkModeChange: (Boolean) -> Unit = {}) {
+fun SduiPlaygroundScreen() {
     var selectedExample by remember { mutableStateOf(SduiDemoExamples.examples.first()) }
     var jsonInput by remember { mutableStateOf(selectedExample.json) }
     var actionMessage by remember { mutableStateOf<String?>(null) }
@@ -79,7 +79,5 @@ fun SduiPlaygroundScreen(isDarkMode: Boolean = false, onDarkModeChange: (Boolean
         parsedComponent = parsedComponent,
         dispatcher = dispatcher,
         formState = formState,
-        mobilePreviewDarkMode = mobilePreviewDarkMode,
-        onMobilePreviewDarkModeChange = { mobilePreviewDarkMode = it },
     )
 }

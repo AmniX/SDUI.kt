@@ -54,7 +54,7 @@ import com.amnix.sdui.data.SduiDemoExamples
  * Modern header section with title, subtitle, and dark mode toggle
  */
 @Composable
-fun ModernHeaderSection(isDarkMode: Boolean, onDarkModeChange: (Boolean) -> Unit, modifier: Modifier = Modifier) {
+fun ModernHeaderSection(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -78,19 +78,7 @@ fun ModernHeaderSection(isDarkMode: Boolean, onDarkModeChange: (Boolean) -> Unit
                 )
             }
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                Text(
-                    text = if (isDarkMode) "🌙" else "☀️",
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-                Switch(
-                    checked = isDarkMode,
-                    onCheckedChange = onDarkModeChange,
-                )
-            }
+            // Dark mode toggle removed
         }
 
         // Divider
@@ -99,9 +87,7 @@ fun ModernHeaderSection(isDarkMode: Boolean, onDarkModeChange: (Boolean) -> Unit
                 .fillMaxWidth()
                 .height(1.dp)
                 .background(
-                    MaterialTheme.colorScheme.outline.copy(
-                        alpha = if (isDarkMode) 0.1f else 0.2f,
-                    ),
+                    MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
                 ),
         )
     }
@@ -151,7 +137,6 @@ fun CompactHeaderWithSampleChooser(
     isDropdownExpanded: Boolean,
     onDropdownExpandedChange: (Boolean) -> Unit,
     onExampleChange: (DemoExample) -> Unit,
-    isDarkMode: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -259,7 +244,6 @@ fun ModernExampleSelector(
     isDropdownExpanded: Boolean,
     onDropdownExpandedChange: (Boolean) -> Unit,
     onExampleChange: (DemoExample) -> Unit,
-    isDarkMode: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -274,9 +258,7 @@ fun ModernExampleSelector(
         ElevatedCard(
             elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp),
             colors = CardDefaults.elevatedCardColors(
-                containerColor = MaterialTheme.colorScheme.surface.copy(
-                    alpha = if (isDarkMode) 0.85f else 1.0f,
-                ),
+                containerColor = MaterialTheme.colorScheme.surface,
             ),
             shape = RoundedCornerShape(12.dp),
         ) {
@@ -355,7 +337,6 @@ fun ModernJsonEditor(
     formState: MutableMap<String, Any?>,
     onShowFormData: (String) -> Unit,
     parseError: Throwable? = null,
-    isDarkMode: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -433,12 +414,12 @@ fun ModernJsonEditor(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    color = if (isDarkMode) Color(0xFF1E1E1E) else Color(0xFFFAFAFA),
+                    color = Color(0xFFFAFAFA),
                     shape = RoundedCornerShape(12.dp),
                 )
                 .border(
                     width = 1.dp,
-                    color = if (isDarkMode) Color(0xFF3C3C3C) else Color(0xFFE0E0E0),
+                    color = Color(0xFFE0E0E0),
                     shape = RoundedCornerShape(12.dp),
                 ),
         ) {
@@ -448,7 +429,7 @@ fun ModernJsonEditor(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            color = if (isDarkMode) Color(0xFF2D2D2D) else Color(0xFFF0F0F0),
+                            color = Color(0xFFF0F0F0),
                             shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
                         )
                         .padding(horizontal = 16.dp, vertical = 8.dp),
@@ -481,7 +462,7 @@ fun ModernJsonEditor(
                         text = "JSON",
                         style = MaterialTheme.typography.bodySmall,
                         fontFamily = FontFamily.Monospace,
-                        color = if (isDarkMode) Color(0xFF9CA3AF) else Color(0xFF6B7280),
+                        color = Color(0xFF6B7280),
                     )
                 }
 
@@ -508,7 +489,7 @@ fun ModernJsonEditor(
                         modifier = Modifier
                             .width(gutterWidth)
                             .background(
-                                color = if (isDarkMode) Color(0xFF252526) else Color(0xFFF5F5F5),
+                                color = Color(0xFFF5F5F5),
                                 shape = RoundedCornerShape(bottomStart = 12.dp),
                             )
                             .padding(start = 8.dp, end = 8.dp)
@@ -531,7 +512,7 @@ fun ModernJsonEditor(
                                     alignment = LineHeightStyle.Alignment.Center,
                                     trim = LineHeightStyle.Trim.None,
                                 ),
-                                color = if (isDarkMode) Color(0xFF6B7280) else Color(0xFF9CA3AF),
+                                color = Color(0xFF9CA3AF),
                                 textAlign = TextAlign.Right,
                             ),
                             modifier = Modifier
@@ -561,10 +542,10 @@ fun ModernJsonEditor(
                                     alignment = LineHeightStyle.Alignment.Center,
                                     trim = LineHeightStyle.Trim.None,
                                 ),
-                                color = if (isDarkMode) Color(0xFFE5E7EB) else Color(0xFF1F2937),
+                                color = Color(0xFF1F2937),
                             ),
-                            cursorBrush = SolidColor(if (isDarkMode) Color(0xFF60A5FA) else Color(0xFF3B82F6)),
-                            visualTransformation = JsonSyntaxHighlightTransformation(isDarkMode),
+                            cursorBrush = SolidColor(Color(0xFF3B82F6)),
+                            visualTransformation = JsonSyntaxHighlightTransformation(),
                             modifier = Modifier.fillMaxWidth(),
                             decorationBox = { innerTextField ->
                                 if (jsonInput.isEmpty()) {
@@ -573,7 +554,7 @@ fun ModernJsonEditor(
                                         fontFamily = FontFamily.Monospace,
                                         fontSize = 14.sp,
                                         lineHeight = 20.sp,
-                                        color = if (isDarkMode) Color(0xFF6B7280) else Color(0xFF9CA3AF),
+                                        color = Color(0xFF9CA3AF),
                                     )
                                 }
                                 innerTextField()
@@ -701,12 +682,12 @@ fun ModernStatusCard(message: String, modifier: Modifier = Modifier) {
 }
 
 // Lightweight JSON syntax highlighting using VisualTransformation
-private fun JsonSyntaxHighlightTransformation(isDarkMode: Boolean): VisualTransformation {
-    val keyColor = if (isDarkMode) Color(0xFF9CDCFE) else Color(0xFF1E88E5)
-    val stringColor = if (isDarkMode) Color(0xFFCE9178) else Color(0xFF2E7D32)
-    val numberColor = if (isDarkMode) Color(0xFFB5CEA8) else Color(0xFF6A1B9A)
-    val literalColor = if (isDarkMode) Color(0xFFDCDCAA) else Color(0xFFEF6C00)
-    val punctuationColor = if (isDarkMode) Color(0xFF808080) else Color(0xFF9E9E9E)
+private fun JsonSyntaxHighlightTransformation(): VisualTransformation {
+    val keyColor = Color(0xFF1E88E5)
+    val stringColor = Color(0xFF2E7D32)
+    val numberColor = Color(0xFF6A1B9A)
+    val literalColor = Color(0xFFEF6C00)
+    val punctuationColor = Color(0xFF9E9E9E)
 
     return VisualTransformation { originalText ->
         val text = originalText.text

@@ -40,7 +40,6 @@ fun MobilePhonePreview(
     parsedComponent: Result<SduiComponent>,
     dispatcher: ActionDispatcher,
     formState: MutableMap<String, Any?>,
-    isDarkMode: Boolean,
     modifier: Modifier = Modifier,
 ) {
     // Mobile phone dimensions (typical Android phone aspect ratio)
@@ -54,11 +53,7 @@ fun MobilePhonePreview(
             .height(phoneHeight + 48.dp),
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 12.dp),
         colors = CardDefaults.elevatedCardColors(
-            containerColor = if (isDarkMode) {
-                Color(0xFF2D2D2D)
-            } else {
-                Color(0xFF1A1A1A)
-            },
+            containerColor = Color(0xFF1A1A1A),
         ),
         shape = RoundedCornerShape(28.dp),
     ) {
@@ -71,7 +66,6 @@ fun MobilePhonePreview(
             // Phone status bar simulation
             PhoneStatusBar(
                 phoneWidth = phoneWidth,
-                isDarkMode = isDarkMode,
             )
 
             // Phone screen content
@@ -80,27 +74,25 @@ fun MobilePhonePreview(
                 parsedComponent = parsedComponent,
                 dispatcher = dispatcher,
                 formState = formState,
-                isDarkMode = isDarkMode,
                 modifier = Modifier.weight(1f),
             )
 
             // Phone home indicator
             PhoneHomeIndicator(
                 phoneWidth = phoneWidth,
-                isDarkMode = isDarkMode,
             )
         }
     }
 }
 
 @Composable
-private fun PhoneStatusBar(phoneWidth: androidx.compose.ui.unit.Dp, isDarkMode: Boolean) {
+private fun PhoneStatusBar(phoneWidth: androidx.compose.ui.unit.Dp) {
     Box(
         modifier = Modifier
             .width(phoneWidth)
             .height(24.dp)
             .background(
-                color = if (isDarkMode) Color(0xFF121212) else Color.White,
+                color = Color.White,
                 shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
             ),
     ) {
@@ -115,7 +107,7 @@ private fun PhoneStatusBar(phoneWidth: androidx.compose.ui.unit.Dp, isDarkMode: 
             Text(
                 text = "9:41",
                 style = MaterialTheme.typography.bodySmall,
-                color = if (isDarkMode) Color.White else Color.Black,
+                color = Color.Black,
                 fontSize = 12.sp,
             )
             Row(
@@ -128,11 +120,7 @@ private fun PhoneStatusBar(phoneWidth: androidx.compose.ui.unit.Dp, isDarkMode: 
                         modifier = Modifier
                             .size(8.dp)
                             .background(
-                                color = if (isDarkMode) {
-                                    Color.White.copy(alpha = 0.7f)
-                                } else {
-                                    Color.Black.copy(alpha = 0.7f)
-                                },
+                                color = Color.Black.copy(alpha = 0.7f),
                                 shape = RoundedCornerShape(1.dp),
                             ),
                     )
@@ -148,14 +136,13 @@ private fun PhoneScreen(
     parsedComponent: Result<SduiComponent>,
     dispatcher: ActionDispatcher,
     formState: MutableMap<String, Any?>,
-    isDarkMode: Boolean,
     modifier: Modifier = Modifier,
 ) {
     ElevatedCard(
         modifier = modifier.width(phoneWidth),
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 0.dp),
         colors = CardDefaults.elevatedCardColors(
-            containerColor = if (isDarkMode) Color(0xFF121212) else Color.White,
+            containerColor = Color.White,
         ),
         shape = RectangleShape,
     ) {
@@ -216,13 +203,13 @@ private fun MobilePreviewEmptyState() {
 }
 
 @Composable
-private fun PhoneHomeIndicator(phoneWidth: Dp, isDarkMode: Boolean) {
+private fun PhoneHomeIndicator(phoneWidth: Dp) {
     Box(
         modifier = Modifier
             .width(phoneWidth)
             .height(24.dp)
             .background(
-                color = if (isDarkMode) Color(0xFF121212) else Color.White,
+                color = Color.White,
                 shape = RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp),
             ),
         contentAlignment = Alignment.Center,
@@ -233,11 +220,7 @@ private fun PhoneHomeIndicator(phoneWidth: Dp, isDarkMode: Boolean) {
                 .width(120.dp)
                 .height(4.dp)
                 .background(
-                    color = if (isDarkMode) {
-                        Color.White.copy(alpha = 0.3f)
-                    } else {
-                        Color.Black.copy(alpha = 0.3f)
-                    },
+                    color = Color.Black.copy(alpha = 0.3f),
                     shape = RoundedCornerShape(2.dp),
                 ),
         )
