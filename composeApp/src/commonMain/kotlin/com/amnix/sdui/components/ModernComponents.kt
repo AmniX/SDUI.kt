@@ -2,14 +2,19 @@ package com.amnix.sdui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -27,9 +32,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.amnix.sdui.data.DemoExample
@@ -470,37 +485,102 @@ fun ModernJsonEditor(
                     )
                 }
 
-                // JSON Text Field with code editor styling
-                OutlinedTextField(
-                    value = jsonInput,
-                    onValueChange = onJsonChange,
+                // JSON Code Editor with line numbers and syntax highlighting
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(if (parseError != null) 580.dp else 650.dp), // Reduce height when error is shown
-                    textStyle = TextStyle(
-                        fontFamily = FontFamily.Monospace,
-                        fontSize = 14.sp,
-                        lineHeight = 20.sp,
-                        color = if (isDarkMode) Color(0xFFE5E7EB) else Color(0xFF1F2937),
-                    ),
-                    placeholder = {
+                        .height(if (parseError != null) 580.dp else 650.dp),
+                ) {
+                    val verticalScrollState = rememberScrollState()
+                    val horizontalScrollState = rememberScrollState()
+
+                    val totalLines = jsonInput.lines().size
+                    val numDigits = maxOf(2, totalLines.toString().length)
+                    val gutterMinWidth = 40.dp
+                    // Generous per-digit width to prevent wrapping, plus inner padding
+                    val gutterWidth = maxOf(
+                        gutterMinWidth,
+                        (16.dp * numDigits.toFloat()) + 16.dp,
+                    )
+
+                    // Line number gutter (shares vertical scroll with editor)
+                    Box(
+                        modifier = Modifier
+                            .width(gutterWidth)
+                            .background(
+                                color = if (isDarkMode) Color(0xFF252526) else Color(0xFFF5F5F5),
+                                shape = RoundedCornerShape(bottomStart = 12.dp),
+                            )
+                            .padding(start = 8.dp, end = 8.dp)
+                            .verticalScroll(verticalScrollState)
+                    ) {
+                        val lineNumbersText = buildString {
+                            val numDigits = totalLines.toString().length
+                            for (lineIndex in 1..totalLines) {
+                                append(lineIndex.toString().padStart(numDigits, ' '))
+                                if (lineIndex != totalLines) append('\n')
+                            }
+                        }
                         Text(
-                            "{\n  \"type\": \"column\",\n  \"children\": [\n    // Add your JSON here...\n  ]\n}",
-                            fontFamily = FontFamily.Monospace,
-                            fontSize = 14.sp,
-                            color = if (isDarkMode) Color(0xFF6B7280) else Color(0xFF9CA3AF),
+                            text = lineNumbersText,
+                            style = TextStyle(
+                                fontFamily = FontFamily.Monospace,
+                                fontSize = 14.sp,
+                                lineHeight = 20.sp,
+                                lineHeightStyle = LineHeightStyle(
+                                    alignment = LineHeightStyle.Alignment.Center,
+                                    trim = LineHeightStyle.Trim.None,
+                                ),
+                                color = if (isDarkMode) Color(0xFF6B7280) else Color(0xFF9CA3AF),
+                                textAlign = TextAlign.Right,
+                            ),
+                            modifier = Modifier
+                                .padding(vertical = 12.dp)
+                                .padding(end = 4.dp),
+                            softWrap = false,
+                            overflow = TextOverflow.Clip,
                         )
-                    },
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        focusedBorderColor = Color.Transparent,
-                        unfocusedBorderColor = Color.Transparent,
-                        cursorColor = if (isDarkMode) Color(0xFF60A5FA) else Color(0xFF3B82F6),
-                    ),
-                    shape = RoundedCornerShape(0.dp),
-                    isError = parseError != null,
-                )
+                    }
+
+                    // Editor area (shares same verticalScrollState with gutter)
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .verticalScroll(verticalScrollState)
+                            .horizontalScroll(horizontalScrollState)
+                            .padding(vertical = 12.dp, horizontal = 12.dp),
+                    ) {
+                        BasicTextField(
+                            value = jsonInput,
+                            onValueChange = onJsonChange,
+                            textStyle = TextStyle(
+                                fontFamily = FontFamily.Monospace,
+                                fontSize = 14.sp,
+                                lineHeight = 20.sp,
+                                lineHeightStyle = LineHeightStyle(
+                                    alignment = LineHeightStyle.Alignment.Center,
+                                    trim = LineHeightStyle.Trim.None,
+                                ),
+                                color = if (isDarkMode) Color(0xFFE5E7EB) else Color(0xFF1F2937),
+                            ),
+                            cursorBrush = SolidColor(if (isDarkMode) Color(0xFF60A5FA) else Color(0xFF3B82F6)),
+                            visualTransformation = JsonSyntaxHighlightTransformation(isDarkMode),
+                            modifier = Modifier.fillMaxWidth(),
+                            decorationBox = { innerTextField ->
+                                if (jsonInput.isEmpty()) {
+                                    Text(
+                                        "{\n  \"type\": \"column\",\n  \"children\": [\n    // Add your JSON here...\n  ]\n}",
+                                        fontFamily = FontFamily.Monospace,
+                                        fontSize = 14.sp,
+                                        lineHeight = 20.sp,
+                                        color = if (isDarkMode) Color(0xFF6B7280) else Color(0xFF9CA3AF),
+                                    )
+                                }
+                                innerTextField()
+                            },
+                        )
+                    }
+                }
                 
                 // Inline error display at bottom of editor
                 if (parseError != null) {
@@ -617,6 +697,125 @@ fun ModernStatusCard(message: String, modifier: Modifier = Modifier) {
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
         }
+    }
+}
+
+// Lightweight JSON syntax highlighting using VisualTransformation
+private fun JsonSyntaxHighlightTransformation(isDarkMode: Boolean): VisualTransformation {
+    val keyColor = if (isDarkMode) Color(0xFF9CDCFE) else Color(0xFF1E88E5)
+    val stringColor = if (isDarkMode) Color(0xFFCE9178) else Color(0xFF2E7D32)
+    val numberColor = if (isDarkMode) Color(0xFFB5CEA8) else Color(0xFF6A1B9A)
+    val literalColor = if (isDarkMode) Color(0xFFDCDCAA) else Color(0xFFEF6C00)
+    val punctuationColor = if (isDarkMode) Color(0xFF808080) else Color(0xFF9E9E9E)
+
+    return VisualTransformation { originalText ->
+        val text = originalText.text
+        if (text.isEmpty()) {
+            return@VisualTransformation TransformedText(originalText, OffsetMapping.Identity)
+        }
+
+        val builder = AnnotatedString.Builder()
+        builder.append(text)
+
+        var i = 0
+        val n = text.length
+        var inString = false
+        var stringStart = -1
+        var escape = false
+
+        fun isWordBoundary(idx: Int): Boolean {
+            return idx < 0 || idx >= n || !text[idx].isLetter()
+        }
+
+        while (i < n) {
+            val c = text[i]
+            if (inString) {
+                if (escape) {
+                    escape = false
+                } else if (c == '\\') {
+                    escape = true
+                } else if (c == '"') {
+                    // End of string
+                    val end = i + 1
+                    // Determine if this string is a key (followed by optional spaces then ':')
+                    var j = end
+                    while (j < n && text[j].isWhitespace()) j++
+                    val isKey = j < n && text[j] == ':'
+                    builder.addStyle(
+                        SpanStyle(color = if (isKey) keyColor else stringColor),
+                        stringStart,
+                        end,
+                    )
+                    inString = false
+                }
+                i++
+                continue
+            } else {
+                when (c) {
+                    '"' -> {
+                        inString = true
+                        stringStart = i
+                        i++
+                        continue
+                    }
+                    '{', '}', '[', ']', ':', ',' -> {
+                        builder.addStyle(SpanStyle(color = punctuationColor), i, i + 1)
+                        i++
+                        continue
+                    }
+                    '-', in '0'..'9' -> {
+                        // number
+                        val start = i
+                        var k = i
+                        var hasDigits = false
+                        if (text[k] == '-') k++
+                        while (k < n && text[k].isDigit()) { k++; hasDigits = true }
+                        if (k < n && text[k] == '.') {
+                            k++
+                            while (k < n && text[k].isDigit()) { k++; hasDigits = true }
+                        }
+                        if (hasDigits) {
+                            // exponent
+                            if (k < n && (text[k] == 'e' || text[k] == 'E')) {
+                                k++
+                                if (k < n && (text[k] == '+' || text[k] == '-')) k++
+                                while (k < n && text[k].isDigit()) k++
+                            }
+                            builder.addStyle(SpanStyle(color = numberColor), start, k)
+                            i = k
+                            continue
+                        }
+                    }
+                    't' -> {
+                        // true
+                        if (i + 3 < n && text.substring(i, i + 4) == "true" && isWordBoundary(i - 1) && isWordBoundary(i + 4)) {
+                            builder.addStyle(SpanStyle(color = literalColor), i, i + 4)
+                            i += 4
+                            continue
+                        }
+                    }
+                    'f' -> {
+                        // false
+                        if (i + 4 < n && text.substring(i, i + 5) == "false" && isWordBoundary(i - 1) && isWordBoundary(i + 5)) {
+                            builder.addStyle(SpanStyle(color = literalColor), i, i + 5)
+                            i += 5
+                            continue
+                        }
+                    }
+                    'n' -> {
+                        // null
+                        if (i + 3 < n && text.substring(i, i + 4) == "null" && isWordBoundary(i - 1) && isWordBoundary(i + 4)) {
+                            builder.addStyle(SpanStyle(color = literalColor), i, i + 4)
+                            i += 4
+                            continue
+                        }
+                    }
+                }
+                i++
+            }
+        }
+
+        TransformedText(builder.toAnnotatedString(), OffsetMapping.Identity)
     }
 }
 
