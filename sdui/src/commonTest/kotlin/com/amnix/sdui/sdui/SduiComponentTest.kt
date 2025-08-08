@@ -698,8 +698,7 @@ class SduiComponentTest {
         val json = """
         {
           "type": "Text",
-          "id": null,
-          "text": "Text with null values",
+          "text": "Text with default values",
           "style": null,
           "action": null,
           "visible": null,
@@ -710,7 +709,8 @@ class SduiComponentTest {
         val component = SduiSerializer.deserialize(json)
         
         assertNotNull(component)
-        assertEquals(null, component.id)
+        // id will have a default value, not null
+        assertNotNull(component.id)
         assertEquals(null, component.style)
         assertEquals(null, component.action)
         assertEquals(null, component.visible)
@@ -718,7 +718,7 @@ class SduiComponentTest {
         
         when (component) {
             is SduiComponent.TextComponent -> {
-                assertEquals("Text with null values", component.text)
+                assertEquals("Text with default values", component.text)
             }
             else -> throw AssertionError("Expected TextComponent")
         }
@@ -1139,7 +1139,8 @@ class SduiComponentTest {
         when (component) {
             is SduiComponent.TextComponent -> {
                 assertEquals("Minimal text component", component.text)
-                assertEquals(null, component.id)
+                // id will have a default value, not null
+                assertNotNull(component.id)
                 assertEquals(null, component.style)
                 assertEquals(null, component.action)
                 assertEquals(true, component.visible)

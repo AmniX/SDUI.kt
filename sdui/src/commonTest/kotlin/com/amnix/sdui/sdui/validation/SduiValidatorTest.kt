@@ -226,7 +226,10 @@ class SduiValidatorTest {
     
     @Test
     fun `test valid layout components with children`() {
-        val child = SduiComponent.TextComponent(text = "Child text")
+        val child = SduiComponent.TextComponent(
+            id = "child_text",
+            text = "Child text"
+        )
         
         val column = SduiComponent.ColumnComponent(
             id = "test_column",
@@ -274,7 +277,10 @@ class SduiValidatorTest {
     
     @Test
     fun `test recursive validation with nested invalid components`() {
-        val invalidChild = SduiComponent.TextComponent(text = "")
+        val invalidChild = SduiComponent.TextComponent(
+            id = "invalid_child",
+            text = ""
+        )
         val column = SduiComponent.ColumnComponent(
             id = "test_column",
             children = listOf(invalidChild)
@@ -282,13 +288,16 @@ class SduiValidatorTest {
         
         val errors = validator.validate(column)
         assertEquals(1, errors.size) // One for invalid child
-        assertTrue(errors.any { it.contains("Child[0]: Text component text must not be blank") })
+        assertTrue(errors.any { it.contains("Child[0]:") && it.contains("Text component text must not be blank") })
         assertFalse(column.isValid())
     }
     
     @Test
     fun `test valid list component`() {
-        val item = SduiComponent.TextComponent(text = "List item")
+        val item = SduiComponent.TextComponent(
+            id = "list_item",
+            text = "List item"
+        )
         val list = SduiComponent.ListComponent(
             id = "test_list",
             items = listOf(item)
@@ -311,7 +320,10 @@ class SduiValidatorTest {
     
     @Test
     fun `test valid grid component`() {
-        val item = SduiComponent.TextComponent(text = "Grid item")
+        val item = SduiComponent.TextComponent(
+            id = "grid_item",
+            text = "Grid item"
+        )
         val grid = SduiComponent.GridComponent(
             id = "test_grid",
             columns = 2,
@@ -325,7 +337,10 @@ class SduiValidatorTest {
     
     @Test
     fun `test invalid grid component with zero columns`() {
-        val item = SduiComponent.TextComponent(text = "Grid item")
+        val item = SduiComponent.TextComponent(
+            id = "grid_item",
+            text = "Grid item"
+        )
         val grid = SduiComponent.GridComponent(
             id = "test_grid",
             columns = 0,
@@ -535,10 +550,22 @@ class SduiValidatorTest {
     @Test
     fun `test multiple components validation`() {
         val components = listOf(
-            SduiComponent.TextComponent(text = "Valid text"),
-            SduiComponent.TextComponent(text = ""), // Invalid
-            SduiComponent.ButtonComponent(text = "Valid button"),
-            SduiComponent.ButtonComponent(text = "") // Invalid
+            SduiComponent.TextComponent(
+                id = "valid_text",
+                text = "Valid text"
+            ),
+            SduiComponent.TextComponent(
+                id = "invalid_text",
+                text = ""
+            ), // Invalid
+            SduiComponent.ButtonComponent(
+                id = "valid_button",
+                text = "Valid button"
+            ),
+            SduiComponent.ButtonComponent(
+                id = "invalid_button",
+                text = ""
+            ) // Invalid
         )
         
         val errors = validator.validate(components)
