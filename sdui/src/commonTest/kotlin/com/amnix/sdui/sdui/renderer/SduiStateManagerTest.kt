@@ -1,12 +1,12 @@
 package com.amnix.sdui.sdui.renderer
 
-import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlinx.coroutines.test.runTest
 
 @OptIn(kotlin.time.ExperimentalTime::class)
 class SduiStateManagerTest {
@@ -98,39 +98,38 @@ class SduiStateManagerTest {
     }
 
     @Test
-    fun testStateManagerListenerWithTimestamps() =
-        runTest {
-            val stateManager = SduiStateManager()
-            val events = mutableListOf<StateChangeEvent>()
+    fun testStateManagerListenerWithTimestamps() = runTest {
+        val stateManager = SduiStateManager()
+        val events = mutableListOf<StateChangeEvent>()
 
-            stateManager.addListener(
-                object : StateChangeListener {
-                    override fun onStateChanged(event: StateChangeEvent) {
-                        events.add(event)
-                    }
-                },
-            )
+        stateManager.addListener(
+            object : StateChangeListener {
+                override fun onStateChanged(event: StateChangeEvent) {
+                    events.add(event)
+                }
+            },
+        )
 
-            val timestamp1 =
-                kotlin.time.Clock.System
-                    .now()
-                    .toEpochMilliseconds()
-            stateManager.updateState("timestamp1", timestamp1.toString())
+        val timestamp1 =
+            kotlin.time.Clock.System
+                .now()
+                .toEpochMilliseconds()
+        stateManager.updateState("timestamp1", timestamp1.toString())
 
-            // Small delay to ensure different timestamps
-            kotlinx.coroutines.delay(10)
+        // Small delay to ensure different timestamps
+        kotlinx.coroutines.delay(10)
 
-            val timestamp2 =
-                kotlin.time.Clock.System
-                    .now()
-                    .toEpochMilliseconds()
-            stateManager.updateState("timestamp2", timestamp2.toString())
+        val timestamp2 =
+            kotlin.time.Clock.System
+                .now()
+                .toEpochMilliseconds()
+        stateManager.updateState("timestamp2", timestamp2.toString())
 
-            assertEquals(2, events.size)
-            assertTrue(events[0].timestamp <= events[1].timestamp)
-            assertEquals("timestamp1", events[0].key)
-            assertEquals("timestamp2", events[1].key)
-        }
+        assertEquals(2, events.size)
+        assertTrue(events[0].timestamp <= events[1].timestamp)
+        assertEquals("timestamp1", events[0].key)
+        assertEquals("timestamp2", events[1].key)
+    }
 
     @Test
     fun testStateManagerClearWithTimestamps() {
@@ -218,4 +217,4 @@ class SduiStateManagerTest {
         assertEquals("UTC", stringMap["timezone"])
         assertEquals("true", stringMap["isActive"])
     }
-} 
+}

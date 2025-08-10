@@ -6,9 +6,7 @@ import kotlinx.serialization.Serializable
 sealed class SduiAction {
     @Serializable
     @kotlinx.serialization.SerialName("navigate")
-    data class Navigate(
-        val payload: Map<String, String>? = null,
-    ) : SduiAction() {
+    data class Navigate(val payload: Map<String, String>? = null) : SduiAction() {
         val route: String?
             get() = payload?.get("route")
     }
@@ -26,29 +24,17 @@ sealed class SduiAction {
 
     @Serializable
     @kotlinx.serialization.SerialName("show_dialog")
-    data class ShowDialog(
-        val title: String,
-        val message: String,
-        val type: String = "info",
-    ) : SduiAction()
+    data class ShowDialog(val title: String, val message: String, val type: String = "info") : SduiAction()
 
     @Serializable
     @kotlinx.serialization.SerialName("update_state")
-    data class UpdateState(
-        val key: String,
-        val value: String,
-    ) : SduiAction()
+    data class UpdateState(val key: String, val value: String) : SduiAction()
 
     @Serializable
     @kotlinx.serialization.SerialName("reset")
-    data class Reset(
-        val payload: Map<String, String>? = null,
-    ) : SduiAction()
+    data class Reset(val payload: Map<String, String>? = null) : SduiAction()
 
     @Serializable
     @kotlinx.serialization.SerialName("custom")
-    data class Custom(
-        val action: String,
-        val data: Map<String, String>? = null,
-    ) : SduiAction()
-} 
+    data class Custom(val action: String, val data: Map<String, String>? = null) : SduiAction()
+}

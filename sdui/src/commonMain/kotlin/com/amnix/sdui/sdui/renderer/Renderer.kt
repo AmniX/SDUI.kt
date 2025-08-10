@@ -1,24 +1,39 @@
 package com.amnix.sdui.sdui.renderer
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Slider
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -26,9 +41,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.amnix.sdui.sdui.components.SduiComponent
-import com.amnix.sdui.sdui.model.SduiAction
 import com.amnix.sdui.sdui.validation.isValid
-import kotlin.random.Random
 
 /**
  * Main SDUI renderer function
@@ -72,20 +85,20 @@ private fun SduiTextComponent(component: SduiComponent.TextComponent) {
         TextStyle(
             fontSize = component.style?.fontSize?.sp ?: 16.sp,
             fontWeight =
-                when (component.style?.fontWeight) {
-                    "bold" -> FontWeight.Bold
-                    "light" -> FontWeight.Light
-                    "medium" -> FontWeight.Medium
-                    else -> FontWeight.Normal
-                },
+            when (component.style?.fontWeight) {
+                "bold" -> FontWeight.Bold
+                "light" -> FontWeight.Light
+                "medium" -> FontWeight.Medium
+                else -> FontWeight.Normal
+            },
             color = component.style?.textColor?.let { parseColor(it) } ?: Color.Black,
             textAlign =
-                when (component.style?.alignment) {
-                    "center" -> TextAlign.Center
-                    "start", "left" -> TextAlign.Start
-                    "end", "right" -> TextAlign.End
-                    else -> TextAlign.Start
-                },
+            when (component.style?.alignment) {
+                "center" -> TextAlign.Center
+                "start", "left" -> TextAlign.Start
+                "end", "right" -> TextAlign.End
+                else -> TextAlign.Start
+            },
         )
 
     Text(
@@ -94,11 +107,11 @@ private fun SduiTextComponent(component: SduiComponent.TextComponent) {
         modifier = Modifier.applyStyle(component.style),
         maxLines = component.maxLines ?: Int.MAX_VALUE,
         overflow =
-            when (component.textOverflow) {
-                "ellipsis" -> TextOverflow.Ellipsis
-                "clip" -> TextOverflow.Clip
-                else -> TextOverflow.Clip
-            },
+        when (component.textOverflow) {
+            "ellipsis" -> TextOverflow.Ellipsis
+            "clip" -> TextOverflow.Clip
+            else -> TextOverflow.Clip
+        },
     )
 }
 
@@ -167,9 +180,9 @@ private fun SduiImageComponent(component: SduiComponent.ImageComponent) {
     // Simple placeholder for image - in a real implementation, you'd use a proper image loader
     Box(
         modifier =
-            Modifier
-                .applyStyle(component.style)
-                .background(Color.LightGray),
+        Modifier
+            .applyStyle(component.style)
+            .background(Color.LightGray),
         contentAlignment = Alignment.Center,
     ) {
         Text(
@@ -180,10 +193,7 @@ private fun SduiImageComponent(component: SduiComponent.ImageComponent) {
 }
 
 @Composable
-private fun SduiTextFieldComponent(
-    component: SduiComponent.TextFieldComponent,
-    formState: MutableMap<String, Any?>,
-) {
+private fun SduiTextFieldComponent(component: SduiComponent.TextFieldComponent, formState: MutableMap<String, Any?>) {
     val (value, setValue) =
         FormState.rememberFormValue(
             key = component.id,
@@ -199,12 +209,12 @@ private fun SduiTextFieldComponent(
         modifier = Modifier.applyStyle(component.style),
         maxLines = component.maxLines ?: 1,
         visualTransformation =
-            if (component.isPassword == true) {
-                androidx.compose.ui.text.input
-                    .PasswordVisualTransformation()
-            } else {
-                androidx.compose.ui.text.input.VisualTransformation.None
-            },
+        if (component.isPassword == true) {
+            androidx.compose.ui.text.input
+                .PasswordVisualTransformation()
+        } else {
+            androidx.compose.ui.text.input.VisualTransformation.None
+        },
     )
 }
 
@@ -212,10 +222,10 @@ private fun SduiTextFieldComponent(
 private fun SduiSpacerComponent(component: SduiComponent.SpacerComponent) {
     Spacer(
         modifier =
-            Modifier
-                .applyStyle(component.style)
-                .width(component.width?.dp ?: 0.dp)
-                .height(component.height?.dp ?: 0.dp),
+        Modifier
+            .applyStyle(component.style)
+            .width(component.width?.dp ?: 0.dp)
+            .height(component.height?.dp ?: 0.dp),
     )
 }
 
@@ -226,9 +236,9 @@ private fun SduiDividerComponent(component: SduiComponent.DividerComponent) {
         modifier = Modifier.applyStyle(component.style),
         thickness = component.thickness?.dp ?: 1.dp,
         color =
-            component.color?.let { parseColor(it) } ?: MaterialTheme.colorScheme.onSurface.copy(
-                alpha = 0.12f,
-            ),
+        component.color?.let { parseColor(it) } ?: MaterialTheme.colorScheme.onSurface.copy(
+            alpha = 0.12f,
+        ),
     )
 }
 
@@ -299,10 +309,7 @@ private fun SduiGridComponent(
 }
 
 @Composable
-private fun SduiSwitchComponent(
-    component: SduiComponent.SwitchComponent,
-    formState: MutableMap<String, Any?>,
-) {
+private fun SduiSwitchComponent(component: SduiComponent.SwitchComponent, formState: MutableMap<String, Any?>) {
     val (checked, setChecked) =
         FormState.rememberFormValue(
             key = component.id,
@@ -327,10 +334,7 @@ private fun SduiSwitchComponent(
 }
 
 @Composable
-private fun SduiCheckboxComponent(
-    component: SduiComponent.CheckboxComponent,
-    formState: MutableMap<String, Any?>,
-) {
+private fun SduiCheckboxComponent(component: SduiComponent.CheckboxComponent, formState: MutableMap<String, Any?>) {
     val (checked, setChecked) =
         FormState.rememberFormValue(
             key = component.id,
@@ -403,10 +407,7 @@ private fun SduiProgressBarComponent(component: SduiComponent.ProgressBarCompone
 }
 
 @Composable
-private fun SduiSliderComponent(
-    component: SduiComponent.SliderComponent,
-    formState: MutableMap<String, Any?>,
-) {
+private fun SduiSliderComponent(component: SduiComponent.SliderComponent, formState: MutableMap<String, Any?>) {
     val (value, setValue) =
         FormState.rememberFormValue(
             key = component.id,
@@ -422,8 +423,8 @@ private fun SduiSliderComponent(
             onValueChange = setValue,
             valueRange = component.minValue..component.maxValue,
             steps =
-                component.step?.let { ((component.maxValue - component.minValue) / it).toInt() - 1 }
-                    ?: 0,
+            component.step?.let { ((component.maxValue - component.minValue) / it).toInt() - 1 }
+                ?: 0,
             enabled = component.enabled ?: true,
         )
         component.label?.let { label ->
@@ -433,10 +434,7 @@ private fun SduiSliderComponent(
 }
 
 @Composable
-private fun SduiChipComponent(
-    component: SduiComponent.ChipComponent,
-    formState: MutableMap<String, Any?>,
-) {
+private fun SduiChipComponent(component: SduiComponent.ChipComponent, formState: MutableMap<String, Any?>) {
     val (selected, setSelected) =
         FormState.rememberFormValue(
             key = component.id,
@@ -451,4 +449,4 @@ private fun SduiChipComponent(
         enabled = component.enabled ?: true,
         modifier = Modifier.applyStyle(component.style),
     )
-} 
+}

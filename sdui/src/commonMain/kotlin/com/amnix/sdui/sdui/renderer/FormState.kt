@@ -40,30 +40,20 @@ object FormState {
      * Get a form value with type safety
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T> getFormValue(
-        key: String,
-        formState: Map<String, Any?>,
-        defaultValue: T,
-    ): T = formState[key] as? T ?: defaultValue
+    fun <T> getFormValue(key: String, formState: Map<String, Any?>, defaultValue: T): T =
+        formState[key] as? T ?: defaultValue
 
     /**
      * Set a form value
      */
-    fun setFormValue(
-        key: String,
-        value: Any?,
-        formState: MutableMap<String, Any?>,
-    ) {
+    fun setFormValue(key: String, value: Any?, formState: MutableMap<String, Any?>) {
         formState[key] = value
     }
 
     /**
      * Clear a form value
      */
-    fun clearFormValue(
-        key: String,
-        formState: MutableMap<String, Any?>,
-    ) {
+    fun clearFormValue(key: String, formState: MutableMap<String, Any?>) {
         formState.remove(key)
     }
 
@@ -83,4 +73,4 @@ object FormState {
      * Get form values as a map
      */
     fun getFormValues(formState: Map<String, Any?>): Map<String, Any?> = formState.toMap()
-} 
+}

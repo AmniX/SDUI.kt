@@ -82,7 +82,8 @@ class SduiValidatorTest {
         val component =
             SduiComponent.ImageComponent(
                 id = "test_image",
-                url = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
+                url = "data:image/png;base64," +
+                    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
             )
 
         val errors = validator.validate(component)
@@ -631,4 +632,4 @@ class SduiValidatorTest {
         assertTrue(errors[0].contains("[my_text_component]"))
         assertTrue(errors[0].contains("Text component text must not be blank"))
     }
-} 
+}

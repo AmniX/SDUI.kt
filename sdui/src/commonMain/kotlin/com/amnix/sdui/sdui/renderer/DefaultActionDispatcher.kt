@@ -1,9 +1,9 @@
 package com.amnix.sdui.sdui.renderer
 
 import com.amnix.sdui.sdui.model.SduiAction
+import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlin.time.ExperimentalTime
 
 /**
  * API response data class for handling HTTP responses
@@ -24,7 +24,12 @@ class DefaultActionDispatcher(
     private val onNavigate: (String, Map<String, String>?) -> Unit,
     private val onShowDialog: (title: String, message: String, type: String) -> Unit,
     private val submitForm: suspend (formData: Map<String, Any?>) -> Result<Unit>,
-    private val callApi: suspend (url: String, method: String, headers: Map<String, String>?, body: Map<String, Any?>?) -> ApiResponse,
+    private val callApi: suspend (
+        url: String,
+        method: String,
+        headers: Map<String, String>?,
+        body: Map<String, Any?>?,
+    ) -> ApiResponse,
     private val customHandlers: Map<String, (Map<String, String>?) -> Unit> = emptyMap(),
     private val coroutineScope: CoroutineScope? = null,
     private val stateManager: SduiStateManager? = null,
@@ -203,7 +208,10 @@ class DefaultActionDispatcher(
                     // Update error state
                     stateManager?.updateState("isSubmitting", false)
                     stateManager?.updateState("formSubmissionStatus", "error")
-                    stateManager?.updateState("formSubmissionError", result.exceptionOrNull()?.message ?: "Unknown error")
+                    stateManager?.updateState(
+                        "formSubmissionError",
+                        result.exceptionOrNull()?.message ?: "Unknown error",
+                    )
 
                     println("Form submission failed: ${result.exceptionOrNull()?.message}")
                 }
@@ -269,17 +277,16 @@ class DefaultActionDispatcher(
     /**
      * Parse query string into a map of key-value pairs
      */
-    private fun parseQueryString(queryString: String): Map<String, String> =
-        queryString
-            .split("&")
-            .mapNotNull { param ->
-                val keyValue = param.split("=", limit = 2)
-                if (keyValue.size == 2) {
-                    keyValue[0] to keyValue[1]
-                } else {
-                    null
-                }
-            }.toMap()
+    private fun parseQueryString(queryString: String): Map<String, String> = queryString
+        .split("&")
+        .mapNotNull { param ->
+            val keyValue = param.split("=", limit = 2)
+            if (keyValue.size == 2) {
+                keyValue[0] to keyValue[1]
+            } else {
+                null
+            }
+        }.toMap()
 
     /**
      * Get current state value
@@ -338,12 +345,11 @@ object ActionDispatcherProvider {
     /**
      * Create a logging dispatcher for development/debugging
      */
-    fun createLoggingDispatcher(): ActionDispatcher =
-        object : ActionDispatcher {
-            override fun dispatch(action: SduiAction) {
-                println("SDUI Action (Logging): $action")
-            }
+    fun createLoggingDispatcher(): ActionDispatcher = object : ActionDispatcher {
+        override fun dispatch(action: SduiAction) {
+            println("SDUI Action (Logging): $action")
         }
+    }
 
     /**
      * Create a default dispatcher with provided callbacks
@@ -352,18 +358,22 @@ object ActionDispatcherProvider {
         onNavigate: (String, Map<String, String>?) -> Unit,
         onShowDialog: (title: String, message: String, type: String) -> Unit,
         submitForm: suspend (formData: Map<String, Any?>) -> Result<Unit>,
-        callApi: suspend (url: String, method: String, headers: Map<String, String>?, body: Map<String, Any?>?) -> ApiResponse,
+        callApi: suspend (
+            url: String,
+            method: String,
+            headers: Map<String, String>?,
+            body: Map<String, Any?>?,
+        ) -> ApiResponse,
         customHandlers: Map<String, (Map<String, String>?) -> Unit> = emptyMap(),
         coroutineScope: CoroutineScope? = null,
         stateManager: SduiStateManager? = null,
-    ): ActionDispatcher =
-        DefaultActionDispatcher(
-            onNavigate = onNavigate,
-            onShowDialog = onShowDialog,
-            submitForm = submitForm,
-            callApi = callApi,
-            customHandlers = customHandlers,
-            coroutineScope = coroutineScope,
-            stateManager = stateManager,
-        )
-} 
+    ): ActionDispatcher = DefaultActionDispatcher(
+        onNavigate = onNavigate,
+        onShowDialog = onShowDialog,
+        submitForm = submitForm,
+        callApi = callApi,
+        customHandlers = customHandlers,
+        coroutineScope = coroutineScope,
+        stateManager = stateManager,
+    )
+}

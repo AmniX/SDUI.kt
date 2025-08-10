@@ -25,4 +25,4 @@ class LoggingActionDispatcher : ActionDispatcher {
     override fun dispatch(action: SduiAction) {
         println("SDUI Action dispatched: $action")
     }
-} 
+}

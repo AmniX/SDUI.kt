@@ -2,17 +2,13 @@ package com.amnix.sdui.sdui.renderer
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -20,12 +16,8 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.amnix.sdui.sdui.model.Margin
-import com.amnix.sdui.sdui.model.Padding
 import com.amnix.sdui.sdui.model.Style
 
 /**
@@ -201,58 +193,55 @@ fun Modifier.applyStyle(style: Style?): Modifier {
 /**
  * Parse color string to Compose Color
  */
-fun parseColor(colorString: String): Color =
-    try {
-        when {
-            colorString.startsWith("#") -> {
-                val hex = colorString.removePrefix("#")
-                when (hex.length) {
-                    3 ->
-                        Color(
-                            red = hex[0].toString().repeat(2).toInt(16) / 255f,
-                            green = hex[1].toString().repeat(2).toInt(16) / 255f,
-                            blue = hex[2].toString().repeat(2).toInt(16) / 255f,
-                        )
-                    6 ->
-                        Color(
-                            red = hex.substring(0, 2).toInt(16) / 255f,
-                            green = hex.substring(2, 4).toInt(16) / 255f,
-                            blue = hex.substring(4, 6).toInt(16) / 255f,
-                        )
-                    8 ->
-                        Color(
-                            red = hex.substring(2, 4).toInt(16) / 255f,
-                            green = hex.substring(4, 6).toInt(16) / 255f,
-                            blue = hex.substring(6, 8).toInt(16) / 255f,
-                            alpha = hex.substring(0, 2).toInt(16) / 255f,
-                        )
-                    else -> Color.Black
-                }
+fun parseColor(colorString: String): Color = try {
+    when {
+        colorString.startsWith("#") -> {
+            val hex = colorString.removePrefix("#")
+            when (hex.length) {
+                3 ->
+                    Color(
+                        red = hex[0].toString().repeat(2).toInt(16) / 255f,
+                        green = hex[1].toString().repeat(2).toInt(16) / 255f,
+                        blue = hex[2].toString().repeat(2).toInt(16) / 255f,
+                    )
+                6 ->
+                    Color(
+                        red = hex.substring(0, 2).toInt(16) / 255f,
+                        green = hex.substring(2, 4).toInt(16) / 255f,
+                        blue = hex.substring(4, 6).toInt(16) / 255f,
+                    )
+                8 ->
+                    Color(
+                        red = hex.substring(2, 4).toInt(16) / 255f,
+                        green = hex.substring(4, 6).toInt(16) / 255f,
+                        blue = hex.substring(6, 8).toInt(16) / 255f,
+                        alpha = hex.substring(0, 2).toInt(16) / 255f,
+                    )
+                else -> Color.Black
             }
-            else -> Color.Black
         }
-    } catch (e: Exception) {
-        Color.Black
+        else -> Color.Black
     }
+} catch (e: Exception) {
+    Color.Black
+}
 
 /**
  * Get horizontal alignment from string
  */
-fun parseHorizontalAlignment(alignment: String?): Alignment.Horizontal =
-    when (alignment?.lowercase()) {
-        "start", "left" -> Alignment.Start
-        "center" -> Alignment.CenterHorizontally
-        "end", "right" -> Alignment.End
-        else -> Alignment.CenterHorizontally
-    }
+fun parseHorizontalAlignment(alignment: String?): Alignment.Horizontal = when (alignment?.lowercase()) {
+    "start", "left" -> Alignment.Start
+    "center" -> Alignment.CenterHorizontally
+    "end", "right" -> Alignment.End
+    else -> Alignment.CenterHorizontally
+}
 
 /**
  * Get vertical alignment from string
  */
-fun parseVerticalAlignment(alignment: String?): Alignment.Vertical =
-    when (alignment?.lowercase()) {
-        "top" -> Alignment.Top
-        "center" -> Alignment.CenterVertically
-        "bottom" -> Alignment.Bottom
-        else -> Alignment.CenterVertically
-    } 
+fun parseVerticalAlignment(alignment: String?): Alignment.Vertical = when (alignment?.lowercase()) {
+    "top" -> Alignment.Top
+    "center" -> Alignment.CenterVertically
+    "bottom" -> Alignment.Bottom
+    else -> Alignment.CenterVertically
+}

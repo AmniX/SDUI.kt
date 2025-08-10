@@ -55,21 +55,14 @@ class DefaultSduiValidator : SduiValidator {
         return errors
     }
 
-    private fun validateCommonFields(
-        component: SduiComponent,
-        errors: MutableList<String>,
-    ) {
+    private fun validateCommonFields(component: SduiComponent, errors: MutableList<String>) {
         // Validate style properties
         component.style?.let { style ->
             validateStyle(style, component.id, errors)
         }
     }
 
-    private fun validateStyle(
-        style: Style,
-        componentId: String?,
-        errors: MutableList<String>,
-    ) {
+    private fun validateStyle(style: Style, componentId: String?, errors: MutableList<String>) {
         val idPrefix = componentId?.let { "[$it] " } ?: ""
 
         // Validate width and height values
@@ -124,10 +117,7 @@ class DefaultSduiValidator : SduiValidator {
         }
     }
 
-    private fun validateTextComponent(
-        component: SduiComponent.TextComponent,
-        errors: MutableList<String>,
-    ) {
+    private fun validateTextComponent(component: SduiComponent.TextComponent, errors: MutableList<String>) {
         val idPrefix = component.id?.let { "[$it] " } ?: ""
 
         if (component.text.isBlank()) {
@@ -135,10 +125,7 @@ class DefaultSduiValidator : SduiValidator {
         }
     }
 
-    private fun validateButtonComponent(
-        component: SduiComponent.ButtonComponent,
-        errors: MutableList<String>,
-    ) {
+    private fun validateButtonComponent(component: SduiComponent.ButtonComponent, errors: MutableList<String>) {
         val idPrefix = component.id?.let { "[$it] " } ?: ""
 
         if (component.text.isBlank()) {
@@ -146,10 +133,7 @@ class DefaultSduiValidator : SduiValidator {
         }
     }
 
-    private fun validateColumnComponent(
-        component: SduiComponent.ColumnComponent,
-        errors: MutableList<String>,
-    ) {
+    private fun validateColumnComponent(component: SduiComponent.ColumnComponent, errors: MutableList<String>) {
         val idPrefix = component.id?.let { "[$it] " } ?: ""
 
         if (component.children.isEmpty()) {
@@ -165,10 +149,7 @@ class DefaultSduiValidator : SduiValidator {
         }
     }
 
-    private fun validateRowComponent(
-        component: SduiComponent.RowComponent,
-        errors: MutableList<String>,
-    ) {
+    private fun validateRowComponent(component: SduiComponent.RowComponent, errors: MutableList<String>) {
         val idPrefix = component.id?.let { "[$it] " } ?: ""
 
         if (component.children.isEmpty()) {
@@ -184,10 +165,7 @@ class DefaultSduiValidator : SduiValidator {
         }
     }
 
-    private fun validateImageComponent(
-        component: SduiComponent.ImageComponent,
-        errors: MutableList<String>,
-    ) {
+    private fun validateImageComponent(component: SduiComponent.ImageComponent, errors: MutableList<String>) {
         val idPrefix = component.id?.let { "[$it] " } ?: ""
 
         if (component.url.isBlank()) {
@@ -197,10 +175,7 @@ class DefaultSduiValidator : SduiValidator {
         }
     }
 
-    private fun validateTextFieldComponent(
-        component: SduiComponent.TextFieldComponent,
-        errors: MutableList<String>,
-    ) {
+    private fun validateTextFieldComponent(component: SduiComponent.TextFieldComponent, errors: MutableList<String>) {
         val idPrefix = component.id?.let { "[$it] " } ?: ""
 
         // If isPassword is true, value should be null or blank for security
@@ -209,10 +184,7 @@ class DefaultSduiValidator : SduiValidator {
         }
     }
 
-    private fun validateSpacerComponent(
-        component: SduiComponent.SpacerComponent,
-        errors: MutableList<String>,
-    ) {
+    private fun validateSpacerComponent(component: SduiComponent.SpacerComponent, errors: MutableList<String>) {
         val idPrefix = component.id?.let { "[$it] " } ?: ""
 
         if (component.width == null && component.height == null) {
@@ -220,10 +192,7 @@ class DefaultSduiValidator : SduiValidator {
         }
     }
 
-    private fun validateDividerComponent(
-        component: SduiComponent.DividerComponent,
-        errors: MutableList<String>,
-    ) {
+    private fun validateDividerComponent(component: SduiComponent.DividerComponent, errors: MutableList<String>) {
         val idPrefix = component.id?.let { "[$it] " } ?: ""
 
         component.thickness?.let { thickness ->
@@ -233,10 +202,7 @@ class DefaultSduiValidator : SduiValidator {
         }
     }
 
-    private fun validateBoxComponent(
-        component: SduiComponent.BoxComponent,
-        errors: MutableList<String>,
-    ) {
+    private fun validateBoxComponent(component: SduiComponent.BoxComponent, errors: MutableList<String>) {
         val idPrefix = component.id?.let { "[$it] " } ?: ""
 
         if (component.children.isEmpty()) {
@@ -252,10 +218,7 @@ class DefaultSduiValidator : SduiValidator {
         }
     }
 
-    private fun validateCardComponent(
-        component: SduiComponent.CardComponent,
-        errors: MutableList<String>,
-    ) {
+    private fun validateCardComponent(component: SduiComponent.CardComponent, errors: MutableList<String>) {
         val idPrefix = component.id?.let { "[$it] " } ?: ""
 
         if (component.children.isEmpty()) {
@@ -271,10 +234,7 @@ class DefaultSduiValidator : SduiValidator {
         }
     }
 
-    private fun validateListComponent(
-        component: SduiComponent.ListComponent,
-        errors: MutableList<String>,
-    ) {
+    private fun validateListComponent(component: SduiComponent.ListComponent, errors: MutableList<String>) {
         val idPrefix = component.id?.let { "[$it] " } ?: ""
 
         if (component.items.isEmpty()) {
@@ -290,10 +250,7 @@ class DefaultSduiValidator : SduiValidator {
         }
     }
 
-    private fun validateGridComponent(
-        component: SduiComponent.GridComponent,
-        errors: MutableList<String>,
-    ) {
+    private fun validateGridComponent(component: SduiComponent.GridComponent, errors: MutableList<String>) {
         val idPrefix = component.id?.let { "[$it] " } ?: ""
 
         if (component.columns <= 0) {
@@ -313,17 +270,11 @@ class DefaultSduiValidator : SduiValidator {
         }
     }
 
-    private fun validateSwitchComponent(
-        component: SduiComponent.SwitchComponent,
-        errors: MutableList<String>,
-    ) {
+    private fun validateSwitchComponent(component: SduiComponent.SwitchComponent, errors: MutableList<String>) {
         // No specific validation rules for Switch component
     }
 
-    private fun validateCheckboxComponent(
-        component: SduiComponent.CheckboxComponent,
-        errors: MutableList<String>,
-    ) {
+    private fun validateCheckboxComponent(component: SduiComponent.CheckboxComponent, errors: MutableList<String>) {
         // No specific validation rules for Checkbox component
     }
 
@@ -349,14 +300,13 @@ class DefaultSduiValidator : SduiValidator {
         }
     }
 
-    private fun validateSliderComponent(
-        component: SduiComponent.SliderComponent,
-        errors: MutableList<String>,
-    ) {
+    private fun validateSliderComponent(component: SduiComponent.SliderComponent, errors: MutableList<String>) {
         val idPrefix = component.id?.let { "[$it] " } ?: ""
 
         if (component.minValue >= component.maxValue) {
-            errors.add("${idPrefix}Slider minValue must be < maxValue, got: min=${component.minValue}, max=${component.maxValue}")
+            errors.add(
+                "${idPrefix}Slider minValue must be < maxValue, got: min=${component.minValue}, max=${component.maxValue}",
+            )
         } else if (component.value < component.minValue || component.value > component.maxValue) {
             errors.add(
                 "${idPrefix}Slider value must be between minValue and maxValue, got: value=${component.value}, min=${component.minValue}, max=${component.maxValue}",
@@ -370,10 +320,7 @@ class DefaultSduiValidator : SduiValidator {
         }
     }
 
-    private fun validateChipComponent(
-        component: SduiComponent.ChipComponent,
-        errors: MutableList<String>,
-    ) {
+    private fun validateChipComponent(component: SduiComponent.ChipComponent, errors: MutableList<String>) {
         val idPrefix = component.id?.let { "[$it] " } ?: ""
 
         if (component.text.isBlank()) {
@@ -381,32 +328,34 @@ class DefaultSduiValidator : SduiValidator {
         }
     }
 
-    private fun isValidUrl(url: String): Boolean = url.startsWith("http://") || url.startsWith("https://") || url.startsWith("data:")
+    private fun isValidUrl(url: String): Boolean =
+        url.startsWith("http://") || url.startsWith("https://") || url.startsWith("data:")
 
-    private fun isValidDimension(dimension: String): Boolean =
-        when {
-            dimension == "100%" -> true
-            dimension.endsWith("%") -> {
-                val percentage = dimension.removeSuffix("%").toFloatOrNull()
-                percentage != null && percentage >= 0 && percentage <= 100
-            }
-            dimension.endsWith("dp") -> {
-                val dpValue = dimension.removeSuffix("dp").toFloatOrNull()
-                dpValue != null && dpValue >= 0
-            }
-            else -> {
-                val numericValue = dimension.toFloatOrNull()
-                numericValue != null && numericValue >= 0
-            }
+    private fun isValidDimension(dimension: String): Boolean = when {
+        dimension == "100%" -> true
+        dimension.endsWith("%") -> {
+            val percentage = dimension.removeSuffix("%").toFloatOrNull()
+            percentage != null && percentage >= 0 && percentage <= 100
         }
+        dimension.endsWith("dp") -> {
+            val dpValue = dimension.removeSuffix("dp").toFloatOrNull()
+            dpValue != null && dpValue >= 0
+        }
+        else -> {
+            val numericValue = dimension.toFloatOrNull()
+            numericValue != null && numericValue >= 0
+        }
+    }
 }
 
 /**
  * Extension function to validate a component using the default validator
  */
-fun SduiComponent.isValid(validator: SduiValidator = DefaultSduiValidator()): Boolean = validator.validate(this).isEmpty()
+fun SduiComponent.isValid(validator: SduiValidator = DefaultSduiValidator()): Boolean =
+    validator.validate(this).isEmpty()
 
 /**
  * Extension function to get validation errors for a component
  */
-fun SduiComponent.getValidationErrors(validator: SduiValidator = DefaultSduiValidator()): List<String> = validator.validate(this) 
+fun SduiComponent.getValidationErrors(validator: SduiValidator = DefaultSduiValidator()): List<String> =
+    validator.validate(this)

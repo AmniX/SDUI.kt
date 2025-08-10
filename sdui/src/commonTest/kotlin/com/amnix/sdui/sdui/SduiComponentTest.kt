@@ -1,8 +1,6 @@
 package com.amnix.sdui.sdui
 
 import com.amnix.sdui.sdui.components.SduiComponent
-import com.amnix.sdui.sdui.model.Margin
-import com.amnix.sdui.sdui.model.Padding
 import com.amnix.sdui.sdui.model.SduiAction
 import com.amnix.sdui.sdui.model.Style
 import kotlin.test.Test
@@ -852,10 +850,10 @@ class SduiComponentTest {
                 id = "test_text",
                 text = "Test text",
                 style =
-                    Style(
-                        fontSize = 16.0f,
-                        textColor = "#000000",
-                    ),
+                Style(
+                    fontSize = 16.0f,
+                    textColor = "#000000",
+                ),
             )
 
         // Test serialize
@@ -1660,4 +1658,4 @@ class SduiComponentTest {
             else -> throw AssertionError("Expected TextComponent")
         }
     }
-} 
+}

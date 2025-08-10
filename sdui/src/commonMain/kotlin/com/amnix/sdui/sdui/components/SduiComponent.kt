@@ -2,8 +2,8 @@ package com.amnix.sdui.sdui.components
 
 import com.amnix.sdui.sdui.model.SduiAction
 import com.amnix.sdui.sdui.model.Style
-import kotlinx.serialization.Serializable
 import kotlin.random.Random
+import kotlinx.serialization.Serializable
 
 @Serializable
 sealed class SduiComponent {
@@ -251,4 +251,4 @@ sealed class SduiComponent {
         val enabled: Boolean? = true,
         val icon: String? = null,
     ) : SduiComponent()
-} 
+}

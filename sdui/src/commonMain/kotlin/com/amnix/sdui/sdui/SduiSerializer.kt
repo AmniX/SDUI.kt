@@ -20,4 +20,4 @@ object SduiSerializer {
 
     fun deserializeList(jsonString: String): List<SduiComponent> =
         json.decodeFromString(kotlinx.serialization.builtins.ListSerializer(SduiComponent.serializer()), jsonString)
-} 
+}

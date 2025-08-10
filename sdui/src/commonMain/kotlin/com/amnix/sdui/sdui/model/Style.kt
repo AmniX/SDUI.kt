@@ -54,4 +54,4 @@ data class Margin(
     val horizontal: Float? = null,
     val vertical: Float? = null,
     val all: Float? = null,
-) 
+)

@@ -183,33 +183,33 @@ fun SduiFormExample() {
             SduiComponent.ColumnComponent(
                 id = "example_form",
                 children =
-                    listOf(
-                        SduiComponent.TextComponent(
-                            id = "form_title",
-                            text = "Example Form",
-                            style =
-                                com.amnix.sdui.sdui.model.Style(
-                                    fontSize = 20f,
-                                    fontWeight = "bold",
-                                ),
-                        ),
-                        SduiComponent.TextFieldComponent(
-                            id = "name_input",
-                            placeholder = "Enter name",
-                            value = "",
-                        ),
-                        SduiComponent.ButtonComponent(
-                            id = "submit_btn",
-                            text = "Submit",
-                            action =
-                                SduiAction.ApiCall(
-                                    url = "/api/submit",
-                                    method = "POST",
-                                ),
+                listOf(
+                    SduiComponent.TextComponent(
+                        id = "form_title",
+                        text = "Example Form",
+                        style =
+                        com.amnix.sdui.sdui.model.Style(
+                            fontSize = 20f,
+                            fontWeight = "bold",
                         ),
                     ),
+                    SduiComponent.TextFieldComponent(
+                        id = "name_input",
+                        placeholder = "Enter name",
+                        value = "",
+                    ),
+                    SduiComponent.ButtonComponent(
+                        id = "submit_btn",
+                        text = "Submit",
+                        action =
+                        SduiAction.ApiCall(
+                            url = "/api/submit",
+                            method = "POST",
+                        ),
+                    ),
+                ),
             )
 
         RenderSduiComponent(formComponent, dispatcher, formState)
     }
-} 
+}
