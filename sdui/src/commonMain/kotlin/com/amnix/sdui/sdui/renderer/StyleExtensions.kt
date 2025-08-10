@@ -63,31 +63,75 @@ fun Modifier.applyStyle(style: Style?): Modifier {
     
     // Apply width and height constraints
     style.width?.let { width ->
-        modifier = modifier.width(width.dp)
+        when {
+            width == "100%" -> modifier = modifier.fillMaxWidth()
+            width.endsWith("%") -> {
+                val percentage = width.removeSuffix("%").toFloatOrNull() ?: 100f
+                modifier = modifier.width((percentage / 100f).dp)
+            }
+            width.endsWith("dp") -> {
+                val dpValue = width.removeSuffix("dp").toFloatOrNull() ?: 0f
+                modifier = modifier.width(dpValue.dp)
+            }
+            else -> {
+                val dpValue = width.toFloatOrNull() ?: 0f
+                modifier = modifier.width(dpValue.dp)
+            }
+        }
     }
     
     style.height?.let { height ->
-        modifier = modifier.height(height.dp)
+        when {
+            height == "100%" -> modifier = modifier.fillMaxHeight()
+            height.endsWith("%") -> {
+                val percentage = height.removeSuffix("%").toFloatOrNull() ?: 100f
+                modifier = modifier.height((percentage / 100f).dp)
+            }
+            height.endsWith("dp") -> {
+                val dpValue = height.removeSuffix("dp").toFloatOrNull() ?: 0f
+                modifier = modifier.height(dpValue.dp)
+            }
+            else -> {
+                val dpValue = height.toFloatOrNull() ?: 0f
+                modifier = modifier.height(dpValue.dp)
+            }
+        }
     }
     
     // Apply min/max constraints
     style.minWidth?.let { minWidth ->
-        modifier = modifier.defaultMinSize(minWidth = minWidth.dp)
+        val dpValue = when {
+            minWidth.endsWith("dp") -> minWidth.removeSuffix("dp").toFloatOrNull() ?: 0f
+            else -> minWidth.toFloatOrNull() ?: 0f
+        }
+        modifier = modifier.defaultMinSize(minWidth = dpValue.dp)
     }
     
     style.minHeight?.let { minHeight ->
-        modifier = modifier.defaultMinSize(minHeight = minHeight.dp)
+        val dpValue = when {
+            minHeight.endsWith("dp") -> minHeight.removeSuffix("dp").toFloatOrNull() ?: 0f
+            else -> minHeight.toFloatOrNull() ?: 0f
+        }
+        modifier = modifier.defaultMinSize(minHeight = dpValue.dp)
     }
     
     style.maxWidth?.let { maxWidth ->
-        if (maxWidth > 0) {
-            modifier = modifier.width(maxWidth.dp)
+        val dpValue = when {
+            maxWidth.endsWith("dp") -> maxWidth.removeSuffix("dp").toFloatOrNull() ?: 0f
+            else -> maxWidth.toFloatOrNull() ?: 0f
+        }
+        if (dpValue > 0) {
+            modifier = modifier.width(dpValue.dp)
         }
     }
     
     style.maxHeight?.let { maxHeight ->
-        if (maxHeight > 0) {
-            modifier = modifier.height(maxHeight.dp)
+        val dpValue = when {
+            maxHeight.endsWith("dp") -> maxHeight.removeSuffix("dp").toFloatOrNull() ?: 0f
+            else -> maxHeight.toFloatOrNull() ?: 0f
+        }
+        if (dpValue > 0) {
+            modifier = modifier.height(dpValue.dp)
         }
     }
     

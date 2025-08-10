@@ -36,6 +36,7 @@ class DefaultActionDispatcher(
             is SduiAction.ApiCall -> handleApiCall(action)
             is SduiAction.ShowDialog -> handleShowDialog(action)
             is SduiAction.UpdateState -> handleUpdateState(action)
+            is SduiAction.Reset -> handleReset(action)
             is SduiAction.Custom -> handleCustomAction(action)
         }
     }
@@ -45,9 +46,10 @@ class DefaultActionDispatcher(
      */
     private fun handleNavigate(action: SduiAction.Navigate) {
         try {
-            onNavigate(action.route, action.arguments)
+            val route = action.route ?: "home"
+            onNavigate(route, action.payload)
         } catch (e: Exception) {
-            println("Navigation failed for route '${action.route}': ${e.message}")
+            println("Navigation failed for route '${action.route ?: "home"}': ${e.message}")
         }
     }
 
@@ -133,6 +135,19 @@ class DefaultActionDispatcher(
             }
         } catch (e: Exception) {
             println("State update failed for key '${action.key}': ${e.message}")
+        }
+    }
+
+    /**
+     * Handle reset actions by clearing form state
+     */
+    private fun handleReset(action: SduiAction.Reset) {
+        try {
+            // Clear form state
+            stateManager?.clearState()
+            println("Form state reset")
+        } catch (e: Exception) {
+            println("Reset action failed: ${e.message}")
         }
     }
 

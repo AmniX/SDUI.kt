@@ -146,7 +146,7 @@ class CustomActionDispatcher : ActionDispatcher {
             }
             is SduiAction.Navigate -> {
                 println("Navigating to: ${action.route}")
-                println("Arguments: ${action.arguments}")
+                println("Payload: ${action.payload}")
             }
             is SduiAction.ShowDialog -> {
                 println("Showing dialog: ${action.title}")
@@ -154,6 +154,10 @@ class CustomActionDispatcher : ActionDispatcher {
             }
             is SduiAction.UpdateState -> {
                 println("Updating state: ${action.key} = ${action.value}")
+            }
+            is SduiAction.Reset -> {
+                println("Resetting form state")
+                println("Payload: ${action.payload}")
             }
             is SduiAction.Custom -> {
                 println("Custom action: ${action.action}")

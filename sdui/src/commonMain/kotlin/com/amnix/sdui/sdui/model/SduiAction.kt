@@ -7,9 +7,11 @@ sealed class SduiAction {
     @Serializable
     @kotlinx.serialization.SerialName("navigate")
     data class Navigate(
-        val route: String,
-        val arguments: Map<String, String>? = null
-    ) : SduiAction()
+        val payload: Map<String, String>? = null
+    ) : SduiAction() {
+        val route: String?
+            get() = payload?.get("route")
+    }
     
     @Serializable
     @kotlinx.serialization.SerialName("api_call")
@@ -35,6 +37,12 @@ sealed class SduiAction {
     data class UpdateState(
         val key: String,
         val value: String
+    ) : SduiAction()
+    
+    @Serializable
+    @kotlinx.serialization.SerialName("reset")
+    data class Reset(
+        val payload: Map<String, String>? = null
     ) : SduiAction()
     
     @Serializable

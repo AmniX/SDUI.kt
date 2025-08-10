@@ -65,40 +65,40 @@ class DefaultSduiValidator : SduiValidator {
     private fun validateStyle(style: Style, componentId: String?, errors: MutableList<String>) {
         val idPrefix = componentId?.let { "[$it] " } ?: ""
         
-        // Validate width and height are non-negative
+        // Validate width and height values
         style.width?.let { width ->
-            if (width < 0) {
-                errors.add("${idPrefix}Style width must be >= 0, got: $width")
+            if (!isValidDimension(width)) {
+                errors.add("${idPrefix}Style width must be a valid dimension, got: $width")
             }
         }
         
         style.height?.let { height ->
-            if (height < 0) {
-                errors.add("${idPrefix}Style height must be >= 0, got: $height")
+            if (!isValidDimension(height)) {
+                errors.add("${idPrefix}Style height must be a valid dimension, got: $height")
             }
         }
         
         style.maxWidth?.let { maxWidth ->
-            if (maxWidth < 0) {
-                errors.add("${idPrefix}Style maxWidth must be >= 0, got: $maxWidth")
+            if (!isValidDimension(maxWidth)) {
+                errors.add("${idPrefix}Style maxWidth must be a valid dimension, got: $maxWidth")
             }
         }
         
         style.maxHeight?.let { maxHeight ->
-            if (maxHeight < 0) {
-                errors.add("${idPrefix}Style maxHeight must be >= 0, got: $maxHeight")
+            if (!isValidDimension(maxHeight)) {
+                errors.add("${idPrefix}Style maxHeight must be a valid dimension, got: $maxHeight")
             }
         }
         
         style.minWidth?.let { minWidth ->
-            if (minWidth < 0) {
-                errors.add("${idPrefix}Style minWidth must be >= 0, got: $minWidth")
+            if (!isValidDimension(minWidth)) {
+                errors.add("${idPrefix}Style minWidth must be a valid dimension, got: $minWidth")
             }
         }
         
         style.minHeight?.let { minHeight ->
-            if (minHeight < 0) {
-                errors.add("${idPrefix}Style minHeight must be >= 0, got: $minHeight")
+            if (!isValidDimension(minHeight)) {
+                errors.add("${idPrefix}Style minHeight must be a valid dimension, got: $minHeight")
             }
         }
         
@@ -320,6 +320,24 @@ class DefaultSduiValidator : SduiValidator {
     
     private fun isValidUrl(url: String): Boolean {
         return url.startsWith("http://") || url.startsWith("https://") || url.startsWith("data:")
+    }
+    
+    private fun isValidDimension(dimension: String): Boolean {
+        return when {
+            dimension == "100%" -> true
+            dimension.endsWith("%") -> {
+                val percentage = dimension.removeSuffix("%").toFloatOrNull()
+                percentage != null && percentage >= 0 && percentage <= 100
+            }
+            dimension.endsWith("dp") -> {
+                val dpValue = dimension.removeSuffix("dp").toFloatOrNull()
+                dpValue != null && dpValue >= 0
+            }
+            else -> {
+                val numericValue = dimension.toFloatOrNull()
+                numericValue != null && numericValue >= 0
+            }
+        }
     }
 }
 
