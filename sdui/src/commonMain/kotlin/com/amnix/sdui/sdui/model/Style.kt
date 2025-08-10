@@ -31,7 +31,7 @@ data class Style(
     val opacity: Float? = null,
     val rotation: Float? = null,
     val scale: Float? = null,
-    val zIndex: Int? = null
+    val zIndex: Int? = null,
 )
 
 @Serializable
@@ -42,7 +42,7 @@ data class Padding(
     val end: Float? = null,
     val horizontal: Float? = null,
     val vertical: Float? = null,
-    val all: Float? = null
+    val all: Float? = null,
 )
 
 @Serializable
@@ -53,5 +53,5 @@ data class Margin(
     val end: Float? = null,
     val horizontal: Float? = null,
     val vertical: Float? = null,
-    val all: Float? = null
+    val all: Float? = null,
 ) 

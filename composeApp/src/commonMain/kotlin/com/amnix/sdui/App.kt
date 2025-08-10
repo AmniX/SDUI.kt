@@ -15,24 +15,23 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.amnix.sdui.screens.SduiPlaygroundScreen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-
 import sdui_kt.composeapp.generated.resources.Res
 import sdui_kt.composeapp.generated.resources.compose_multiplatform
-import com.amnix.sdui.screens.SduiPlaygroundScreen
 
 @Composable
 @Preview
 fun App() {
     var isDarkMode by remember { mutableStateOf(false) }
-    
+
     MaterialTheme(
-        colorScheme = if (isDarkMode) darkColorScheme() else lightColorScheme()
+        colorScheme = if (isDarkMode) darkColorScheme() else lightColorScheme(),
     ) {
         SduiPlaygroundScreen(
             isDarkMode = isDarkMode,
-            onDarkModeChange = { isDarkMode = it }
+            onDarkModeChange = { isDarkMode = it },
         )
     }
 }

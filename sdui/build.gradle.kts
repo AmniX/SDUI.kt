@@ -19,27 +19,27 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_21)
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
-        iosSimulatorArm64()
+        iosSimulatorArm64(),
     ).forEach {
         it.binaries.framework {
             baseName = "sdui"
             isStatic = true
         }
     }
-    
+
     jvm()
-    
+
     wasmJs {
         browser()
         nodejs()
         d8()
         binaries.executable()
     }
-    
+
     sourceSets {
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -51,25 +51,25 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)
         }
-        
+
         commonTest.dependencies {
             implementation(libs.kotlin.test)
             implementation(libs.kotlinx.coroutines.test)
         }
-        
+
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
         }
-        
+
         iosMain.dependencies {
             // iOS-specific dependencies if needed
         }
-        
+
         jvmMain.dependencies {
             implementation(libs.kotlinx.coroutinesSwing)
         }
-        
+
         wasmJsMain.dependencies {
             // Web-specific dependencies if needed
         }
@@ -78,12 +78,18 @@ kotlin {
 
 android {
     namespace = "com.amnix.sdui"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-    
+    compileSdk =
+        libs.versions.android.compileSdk
+            .get()
+            .toInt()
+
     defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
+        minSdk =
+            libs.versions.android.minSdk
+                .get()
+                .toInt()
     }
-    
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21

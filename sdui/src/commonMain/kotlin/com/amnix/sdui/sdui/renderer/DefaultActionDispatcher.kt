@@ -12,14 +12,14 @@ data class ApiResponse(
     val statusCode: Int,
     val body: String?,
     val headers: Map<String, String>? = null,
-    val isSuccess: Boolean = statusCode in 200..299
+    val isSuccess: Boolean = statusCode in 200..299,
 )
 
-@OptIn(ExperimentalTime::class)
 /**
  * Default implementation of ActionDispatcher that handles real-world behaviors
  * like navigation, form submission, API calls, and showing dialogs.
  */
+@OptIn(ExperimentalTime::class)
 class DefaultActionDispatcher(
     private val onNavigate: (String, Map<String, String>?) -> Unit,
     private val onShowDialog: (title: String, message: String, type: String) -> Unit,
@@ -27,9 +27,8 @@ class DefaultActionDispatcher(
     private val callApi: suspend (url: String, method: String, headers: Map<String, String>?, body: Map<String, Any?>?) -> ApiResponse,
     private val customHandlers: Map<String, (Map<String, String>?) -> Unit> = emptyMap(),
     private val coroutineScope: CoroutineScope? = null,
-    private val stateManager: SduiStateManager? = null
+    private val stateManager: SduiStateManager? = null,
 ) : ActionDispatcher {
-
     override fun dispatch(action: SduiAction) {
         when (action) {
             is SduiAction.Navigate -> handleNavigate(action)
@@ -58,22 +57,22 @@ class DefaultActionDispatcher(
      */
     private fun handleApiCall(action: SduiAction.ApiCall) {
         val scope = coroutineScope ?: return
-        
+
         scope.launch {
             try {
                 // Update loading state if state manager is available
                 stateManager?.updateState("isLoading", true)
-                
+
                 val response = callApi(action.url, action.method, action.headers, action.body)
-                
+
                 // Update loading state
                 stateManager?.updateState("isLoading", false)
-                
+
                 if (response.isSuccess) {
                     // Update success state
                     stateManager?.updateState("lastApiResponse", response.body ?: "")
                     stateManager?.updateState("apiStatus", "success")
-                    
+
                     // Handle success action
                     action.onSuccess?.let { successAction ->
                         dispatchActionFromString(successAction)
@@ -82,7 +81,7 @@ class DefaultActionDispatcher(
                     // Update error state
                     stateManager?.updateState("lastApiError", response.body ?: "Unknown error")
                     stateManager?.updateState("apiStatus", "error")
-                    
+
                     // Handle error action
                     action.onError?.let { errorAction ->
                         dispatchActionFromString(errorAction)
@@ -93,7 +92,7 @@ class DefaultActionDispatcher(
                 stateManager?.updateState("isLoading", false)
                 stateManager?.updateState("lastApiError", e.message ?: "Unknown error")
                 stateManager?.updateState("apiStatus", "error")
-                
+
                 println("API call failed for URL '${action.url}': ${e.message}")
                 // Handle error action on exception
                 action.onError?.let { errorAction ->
@@ -111,7 +110,7 @@ class DefaultActionDispatcher(
             // Update dialog state as JSON string
             val dialogData = """{"title":"${action.title}","message":"${action.message}","type":"${action.type}"}"""
             stateManager?.updateStateJson("currentDialog", dialogData)
-            
+
             onShowDialog(action.title, action.message, action.type)
         } catch (e: Exception) {
             println("Show dialog failed: ${e.message}")
@@ -127,7 +126,7 @@ class DefaultActionDispatcher(
                 // Parse the value to determine its type
                 val stateValue = SduiStateValue.fromString(action.value)
                 manager.updateState(action.key, stateValue)
-                
+
                 println("State updated: ${action.key} = ${action.value}")
             } ?: run {
                 // Fallback to logging if no state manager is provided
@@ -159,7 +158,7 @@ class DefaultActionDispatcher(
         if (handler != null) {
             try {
                 handler(action.data)
-                
+
                 // Update custom action state
                 stateManager?.updateState("lastCustomAction", action.action)
                 stateManager?.updateState("customActionData", action.data?.toString() ?: "")
@@ -178,28 +177,34 @@ class DefaultActionDispatcher(
      */
     fun submitFormData(formData: Map<String, Any?>) {
         val scope = coroutineScope ?: return
-        
+
         scope.launch {
             try {
                 // Update form submission state
                 stateManager?.updateState("isSubmitting", true)
                 stateManager?.updateState("formData", formData.toString())
-                
+
                 val result = submitForm(formData)
-                
+
                 if (result.isSuccess) {
                     // Update success state
                     stateManager?.updateState("isSubmitting", false)
                     stateManager?.updateState("formSubmissionStatus", "success")
-                    stateManager?.updateState("lastFormSubmission", kotlin.time.Clock.System.now().toEpochMilliseconds().toString())
-                    
+                    stateManager?.updateState(
+                        "lastFormSubmission",
+                        kotlin.time.Clock.System
+                            .now()
+                            .toEpochMilliseconds()
+                            .toString(),
+                    )
+
                     println("Form submitted successfully")
                 } else {
                     // Update error state
                     stateManager?.updateState("isSubmitting", false)
                     stateManager?.updateState("formSubmissionStatus", "error")
                     stateManager?.updateState("formSubmissionError", result.exceptionOrNull()?.message ?: "Unknown error")
-                    
+
                     println("Form submission failed: ${result.exceptionOrNull()?.message}")
                 }
             } catch (e: Exception) {
@@ -207,7 +212,7 @@ class DefaultActionDispatcher(
                 stateManager?.updateState("isSubmitting", false)
                 stateManager?.updateState("formSubmissionStatus", "error")
                 stateManager?.updateState("formSubmissionError", e.message ?: "Unknown error")
-                
+
                 println("Form submission error: ${e.message}")
             }
         }
@@ -231,9 +236,12 @@ class DefaultActionDispatcher(
                 // Parse route and arguments from actionData
                 val routeParts = actionData.split("?")
                 val route = routeParts[0]
-                val arguments = if (routeParts.size > 1) {
-                    parseQueryString(routeParts[1])
-                } else null
+                val arguments =
+                    if (routeParts.size > 1) {
+                        parseQueryString(routeParts[1])
+                    } else {
+                        null
+                    }
                 onNavigate(route, arguments)
             }
             "show_dialog" -> {
@@ -261,65 +269,52 @@ class DefaultActionDispatcher(
     /**
      * Parse query string into a map of key-value pairs
      */
-    private fun parseQueryString(queryString: String): Map<String, String> {
-        return queryString.split("&")
+    private fun parseQueryString(queryString: String): Map<String, String> =
+        queryString
+            .split("&")
             .mapNotNull { param ->
                 val keyValue = param.split("=", limit = 2)
                 if (keyValue.size == 2) {
                     keyValue[0] to keyValue[1]
-                } else null
-            }
-            .toMap()
-    }
+                } else {
+                    null
+                }
+            }.toMap()
 
     /**
      * Get current state value
      */
-    fun getState(key: String): SduiStateValue? {
-        return stateManager?.getState(key)
-    }
+    fun getState(key: String): SduiStateValue? = stateManager?.getState(key)
 
     /**
      * Get current state as string
      */
-    fun getStringState(key: String): String? {
-        return stateManager?.getStringState(key)
-    }
+    fun getStringState(key: String): String? = stateManager?.getStringState(key)
 
     /**
      * Get current state as boolean
      */
-    fun getBooleanState(key: String): Boolean? {
-        return stateManager?.getBooleanState(key)
-    }
+    fun getBooleanState(key: String): Boolean? = stateManager?.getBooleanState(key)
 
     /**
      * Get current state as integer
      */
-    fun getLongState(key: String): Long? {
-        return stateManager?.getLongState(key)
-    }
+    fun getLongState(key: String): Long? = stateManager?.getLongState(key)
 
     /**
      * Get current state as double
      */
-    fun getDoubleState(key: String): Double? {
-        return stateManager?.getDoubleState(key)
-    }
+    fun getDoubleState(key: String): Double? = stateManager?.getDoubleState(key)
 
     /**
      * Get current state as list
      */
-    fun getListState(key: String): List<String>? {
-        return stateManager?.getListState(key)
-    }
+    fun getListState(key: String): List<String>? = stateManager?.getListState(key)
 
     /**
      * Get current state as map
      */
-    fun getMapState(key: String): Map<String, String>? {
-        return stateManager?.getMapState(key)
-    }
+    fun getMapState(key: String): Map<String, String>? = stateManager?.getMapState(key)
 
     /**
      * Add a state change listener
@@ -340,17 +335,15 @@ class DefaultActionDispatcher(
  * Provider class to switch between different ActionDispatcher implementations
  */
 object ActionDispatcherProvider {
-    
     /**
      * Create a logging dispatcher for development/debugging
      */
-    fun createLoggingDispatcher(): ActionDispatcher {
-        return object : ActionDispatcher {
+    fun createLoggingDispatcher(): ActionDispatcher =
+        object : ActionDispatcher {
             override fun dispatch(action: SduiAction) {
                 println("SDUI Action (Logging): $action")
             }
         }
-    }
 
     /**
      * Create a default dispatcher with provided callbacks
@@ -362,16 +355,15 @@ object ActionDispatcherProvider {
         callApi: suspend (url: String, method: String, headers: Map<String, String>?, body: Map<String, Any?>?) -> ApiResponse,
         customHandlers: Map<String, (Map<String, String>?) -> Unit> = emptyMap(),
         coroutineScope: CoroutineScope? = null,
-        stateManager: SduiStateManager? = null
-    ): ActionDispatcher {
-        return DefaultActionDispatcher(
+        stateManager: SduiStateManager? = null,
+    ): ActionDispatcher =
+        DefaultActionDispatcher(
             onNavigate = onNavigate,
             onShowDialog = onShowDialog,
             submitForm = submitForm,
             callApi = callApi,
             customHandlers = customHandlers,
             coroutineScope = coroutineScope,
-            stateManager = stateManager
+            stateManager = stateManager,
         )
-    }
 } 

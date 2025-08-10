@@ -1,6 +1,6 @@
 package com.amnix.sdui
 
-class WasmPlatform: Platform {
+class WasmPlatform : Platform {
     override val name: String = "Web with Kotlin/Wasm"
 }
 

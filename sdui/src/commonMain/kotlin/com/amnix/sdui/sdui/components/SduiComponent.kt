@@ -12,7 +12,7 @@ sealed class SduiComponent {
     abstract val action: SduiAction?
     abstract val visible: Boolean?
     abstract val meta: Map<String, String>?
-    
+
     @Serializable
     @kotlinx.serialization.SerialName("text")
     data class TextComponent(
@@ -23,9 +23,9 @@ sealed class SduiComponent {
         override val meta: Map<String, String>? = null,
         val text: String,
         val maxLines: Int? = null,
-        val textOverflow: String? = null
+        val textOverflow: String? = null,
     ) : SduiComponent()
-    
+
     @Serializable
     @kotlinx.serialization.SerialName("button")
     data class ButtonComponent(
@@ -36,9 +36,9 @@ sealed class SduiComponent {
         override val meta: Map<String, String>? = null,
         val text: String,
         val enabled: Boolean? = true,
-        val loading: Boolean? = false
+        val loading: Boolean? = false,
     ) : SduiComponent()
-    
+
     @Serializable
     @kotlinx.serialization.SerialName("column")
     data class ColumnComponent(
@@ -48,9 +48,9 @@ sealed class SduiComponent {
         override val visible: Boolean? = true,
         override val meta: Map<String, String>? = null,
         val children: List<SduiComponent> = emptyList(),
-        val spacing: Float? = null
+        val spacing: Float? = null,
     ) : SduiComponent()
-    
+
     @Serializable
     @kotlinx.serialization.SerialName("row")
     data class RowComponent(
@@ -60,9 +60,9 @@ sealed class SduiComponent {
         override val visible: Boolean? = true,
         override val meta: Map<String, String>? = null,
         val children: List<SduiComponent> = emptyList(),
-        val spacing: Float? = null
+        val spacing: Float? = null,
     ) : SduiComponent()
-    
+
     @Serializable
     @kotlinx.serialization.SerialName("image")
     data class ImageComponent(
@@ -75,9 +75,9 @@ sealed class SduiComponent {
         val altText: String? = null,
         val contentDescription: String? = null,
         val placeholder: String? = null,
-        val errorPlaceholder: String? = null
+        val errorPlaceholder: String? = null,
     ) : SduiComponent()
-    
+
     @Serializable
     @kotlinx.serialization.SerialName("textField")
     data class TextFieldComponent(
@@ -91,9 +91,9 @@ sealed class SduiComponent {
         val enabled: Boolean? = true,
         val keyboardType: String? = null,
         val maxLines: Int? = 1,
-        val isPassword: Boolean? = false
+        val isPassword: Boolean? = false,
     ) : SduiComponent()
-    
+
     @Serializable
     @kotlinx.serialization.SerialName("spacer")
     data class SpacerComponent(
@@ -103,9 +103,9 @@ sealed class SduiComponent {
         override val visible: Boolean? = true,
         override val meta: Map<String, String>? = null,
         val width: Float? = null,
-        val height: Float? = null
+        val height: Float? = null,
     ) : SduiComponent()
-    
+
     @Serializable
     @kotlinx.serialization.SerialName("divider")
     data class DividerComponent(
@@ -115,9 +115,9 @@ sealed class SduiComponent {
         override val visible: Boolean? = true,
         override val meta: Map<String, String>? = null,
         val color: String? = null,
-        val thickness: Float? = null
+        val thickness: Float? = null,
     ) : SduiComponent()
-    
+
     @Serializable
     @kotlinx.serialization.SerialName("box")
     data class BoxComponent(
@@ -126,9 +126,9 @@ sealed class SduiComponent {
         override val action: SduiAction? = null,
         override val visible: Boolean? = true,
         override val meta: Map<String, String>? = null,
-        val children: List<SduiComponent> = emptyList()
+        val children: List<SduiComponent> = emptyList(),
     ) : SduiComponent()
-    
+
     @Serializable
     @kotlinx.serialization.SerialName("card")
     data class CardComponent(
@@ -138,9 +138,9 @@ sealed class SduiComponent {
         override val visible: Boolean? = true,
         override val meta: Map<String, String>? = null,
         val children: List<SduiComponent> = emptyList(),
-        val elevation: Float? = null
+        val elevation: Float? = null,
     ) : SduiComponent()
-    
+
     @Serializable
     @kotlinx.serialization.SerialName("list")
     data class ListComponent(
@@ -152,9 +152,9 @@ sealed class SduiComponent {
         val items: List<SduiComponent> = emptyList(),
         val itemSpacing: Float? = null,
         val scrollable: Boolean? = true,
-        val showScrollIndicator: Boolean? = true
+        val showScrollIndicator: Boolean? = true,
     ) : SduiComponent()
-    
+
     @Serializable
     @kotlinx.serialization.SerialName("grid")
     data class GridComponent(
@@ -166,9 +166,9 @@ sealed class SduiComponent {
         val items: List<SduiComponent> = emptyList(),
         val columns: Int = 2,
         val itemSpacing: Float? = null,
-        val scrollable: Boolean? = true
+        val scrollable: Boolean? = true,
     ) : SduiComponent()
-    
+
     @Serializable
     @kotlinx.serialization.SerialName("switch")
     data class SwitchComponent(
@@ -179,9 +179,9 @@ sealed class SduiComponent {
         override val meta: Map<String, String>? = null,
         val checked: Boolean = false,
         val enabled: Boolean? = true,
-        val label: String? = null
+        val label: String? = null,
     ) : SduiComponent()
-    
+
     @Serializable
     @kotlinx.serialization.SerialName("checkbox")
     data class CheckboxComponent(
@@ -192,9 +192,9 @@ sealed class SduiComponent {
         override val meta: Map<String, String>? = null,
         val checked: Boolean = false,
         val enabled: Boolean? = true,
-        val label: String? = null
+        val label: String? = null,
     ) : SduiComponent()
-    
+
     @Serializable
     @kotlinx.serialization.SerialName("radioButton")
     data class RadioButtonComponent(
@@ -206,9 +206,9 @@ sealed class SduiComponent {
         val selected: Boolean = false,
         val enabled: Boolean? = true,
         val label: String? = null,
-        val group: String? = null
+        val group: String? = null,
     ) : SduiComponent()
-    
+
     @Serializable
     @kotlinx.serialization.SerialName("progressBar")
     data class ProgressBarComponent(
@@ -219,9 +219,9 @@ sealed class SduiComponent {
         override val meta: Map<String, String>? = null,
         val progress: Float = 0f,
         val indeterminate: Boolean? = false,
-        val label: String? = null
+        val label: String? = null,
     ) : SduiComponent()
-    
+
     @Serializable
     @kotlinx.serialization.SerialName("slider")
     data class SliderComponent(
@@ -235,9 +235,9 @@ sealed class SduiComponent {
         val maxValue: Float = 100f,
         val step: Float? = null,
         val enabled: Boolean? = true,
-        val label: String? = null
+        val label: String? = null,
     ) : SduiComponent()
-    
+
     @Serializable
     @kotlinx.serialization.SerialName("chip")
     data class ChipComponent(
@@ -249,6 +249,6 @@ sealed class SduiComponent {
         val text: String,
         val selected: Boolean? = false,
         val enabled: Boolean? = true,
-        val icon: String? = null
+        val icon: String? = null,
     ) : SduiComponent()
 } 
