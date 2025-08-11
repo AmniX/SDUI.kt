@@ -337,6 +337,8 @@ fun ModernJsonEditor(
     formState: MutableMap<String, Any?>,
     onShowFormData: (String) -> Unit,
     parseError: Throwable? = null,
+    fontSize: Int = 14,
+    onFontSizeChange: (Int) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -394,6 +396,65 @@ fun ModernJsonEditor(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
+                // Font size controls
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
+                    OutlinedButton(
+                        onClick = { 
+                            if (fontSize > 8) onFontSizeChange(fontSize - 1)
+                        },
+                        modifier = Modifier.size(24.dp),
+                        contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                        ),
+                        border = androidx.compose.foundation.BorderStroke(
+                            1.dp, 
+                            MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                        ),
+                        shape = RoundedCornerShape(4.dp),
+                    ) {
+                        Text(
+                            text = "−",
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                    
+                    Text(
+                        text = "${fontSize}sp",
+                        style = MaterialTheme.typography.bodySmall,
+                        fontFamily = FontFamily.Monospace,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                        modifier = Modifier.width(36.dp),
+                        textAlign = TextAlign.Center,
+                    )
+                    
+                    OutlinedButton(
+                        onClick = { 
+                            if (fontSize < 24) onFontSizeChange(fontSize + 1)
+                        },
+                        modifier = Modifier.size(24.dp),
+                        contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                        ),
+                        border = androidx.compose.foundation.BorderStroke(
+                            1.dp, 
+                            MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                        ),
+                        shape = RoundedCornerShape(4.dp),
+                    ) {
+                        Text(
+                            text = "+",
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                }
+                
                 if (parseError != null) {
                     Text(
                         text = "⚠️",
@@ -506,8 +567,8 @@ fun ModernJsonEditor(
                             text = lineNumbersText,
                             style = TextStyle(
                                 fontFamily = FontFamily.Monospace,
-                                fontSize = 14.sp,
-                                lineHeight = 20.sp,
+                                fontSize = fontSize.sp,
+                                lineHeight = (fontSize * 1.4f).sp,
                                 lineHeightStyle = LineHeightStyle(
                                     alignment = LineHeightStyle.Alignment.Center,
                                     trim = LineHeightStyle.Trim.None,
@@ -536,8 +597,8 @@ fun ModernJsonEditor(
                             onValueChange = onJsonChange,
                             textStyle = TextStyle(
                                 fontFamily = FontFamily.Monospace,
-                                fontSize = 14.sp,
-                                lineHeight = 20.sp,
+                                fontSize = fontSize.sp,
+                                lineHeight = (fontSize * 1.4f).sp,
                                 lineHeightStyle = LineHeightStyle(
                                     alignment = LineHeightStyle.Alignment.Center,
                                     trim = LineHeightStyle.Trim.None,
@@ -552,8 +613,8 @@ fun ModernJsonEditor(
                                     Text(
                                         "{\n  \"type\": \"column\",\n  \"children\": [\n    Add your JSON here...\n  ]\n}",
                                         fontFamily = FontFamily.Monospace,
-                                        fontSize = 14.sp,
-                                        lineHeight = 20.sp,
+                                        fontSize = fontSize.sp,
+                                        lineHeight = (fontSize * 1.4f).sp,
                                         color = Color(0xFF9CA3AF),
                                     )
                                 }

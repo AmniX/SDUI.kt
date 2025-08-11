@@ -50,6 +50,8 @@ fun ResponsiveLayout(
     parsedComponent: Result<com.amnix.sdui.sdui.components.SduiComponent>,
     dispatcher: ActionDispatcher,
     formState: MutableMap<String, Any?>,
+    jsonFontSize: Int,
+    onJsonFontSizeChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     // Use BoxWithConstraints for responsive layout based on available width
@@ -79,6 +81,8 @@ fun ResponsiveLayout(
                 parsedComponent = parsedComponent,
                 dispatcher = dispatcher,
                 formState = formState,
+                jsonFontSize = jsonFontSize,
+                onJsonFontSizeChange = onJsonFontSizeChange,
             )
         } else {
             // Compact Layout: Single Column (Mobile, Narrow Tablets, Small Windows)
@@ -92,6 +96,8 @@ fun ResponsiveLayout(
                 parsedComponent = parsedComponent,
                 dispatcher = dispatcher,
                 formState = formState,
+                jsonFontSize = jsonFontSize,
+                onJsonFontSizeChange = onJsonFontSizeChange,
             )
         }
     }
@@ -111,6 +117,8 @@ fun WideLayout(
     parsedComponent: Result<com.amnix.sdui.sdui.components.SduiComponent>,
     dispatcher: ActionDispatcher,
     formState: MutableMap<String, Any?>,
+    jsonFontSize: Int,
+    onJsonFontSizeChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var isDropdownExpanded by remember { mutableStateOf(false) }
@@ -154,6 +162,8 @@ fun WideLayout(
                         formState = formState,
                         onShowFormData = onActionMessage,
                         parseError = parsedComponent.exceptionOrNull(),
+                        fontSize = jsonFontSize,
+                        onFontSizeChange = onJsonFontSizeChange,
                     )
 
                     // Status Messages
@@ -187,6 +197,8 @@ fun CompactLayout(
     parsedComponent: Result<com.amnix.sdui.sdui.components.SduiComponent>,
     dispatcher: ActionDispatcher,
     formState: MutableMap<String, Any?>,
+    jsonFontSize: Int,
+    onJsonFontSizeChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var isDropdownExpanded by remember { mutableStateOf(false) }
@@ -222,6 +234,8 @@ fun CompactLayout(
             formState = formState,
             onShowFormData = onActionMessage,
             parseError = parsedComponent.exceptionOrNull(),
+            fontSize = jsonFontSize,
+            onFontSizeChange = onJsonFontSizeChange,
         )
 
         // Action Message

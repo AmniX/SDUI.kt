@@ -20,6 +20,7 @@ fun SduiPlaygroundScreen() {
     var jsonInput by remember { mutableStateOf(selectedExample.json) }
     var actionMessage by remember { mutableStateOf<String?>(null) }
     var mobilePreviewDarkMode by remember { mutableStateOf(false) }
+    var jsonFontSize by remember { mutableStateOf(14) }
 
     // Load JSON from resources when example changes
     LaunchedEffect(selectedExample) {
@@ -79,5 +80,7 @@ fun SduiPlaygroundScreen() {
         parsedComponent = parsedComponent,
         dispatcher = dispatcher,
         formState = formState,
+        jsonFontSize = jsonFontSize,
+        onJsonFontSizeChange = { jsonFontSize = it },
     )
 }

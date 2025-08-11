@@ -1,14 +1,20 @@
 package com.amnix.sdui.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Alignment
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
@@ -20,8 +26,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.amnix.sdui.data.DemoExample
 import com.amnix.sdui.data.SduiDemoExamples
 
@@ -94,6 +103,8 @@ fun JsonEditorCard(
     formState: MutableMap<String, Any?>,
     onShowFormData: (String) -> Unit,
     parseError: Throwable? = null,
+    fontSize: Int = 14,
+    onFontSizeChange: (Int) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -101,11 +112,76 @@ fun JsonEditorCard(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = "JSON Configuration",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Medium,
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = "JSON Configuration",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Medium,
+                )
+                
+                // Font size controls
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
+                    OutlinedButton(
+                        onClick = { 
+                            if (fontSize > 8) onFontSizeChange(fontSize - 1)
+                        },
+                        modifier = Modifier.size(28.dp),
+                        contentPadding = PaddingValues(0.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                        ),
+                        border = BorderStroke(
+                            1.dp, 
+                            MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                        ),
+                        shape = RoundedCornerShape(4.dp),
+                    ) {
+                        Text(
+                            text = "−",
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                    
+                    Text(
+                        text = "${fontSize}sp",
+                        style = MaterialTheme.typography.bodySmall,
+                        fontFamily = FontFamily.Monospace,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                        modifier = Modifier.width(40.dp),
+                        textAlign = TextAlign.Center,
+                    )
+                    
+                    OutlinedButton(
+                        onClick = { 
+                            if (fontSize < 24) onFontSizeChange(fontSize + 1)
+                        },
+                        modifier = Modifier.size(28.dp),
+                        contentPadding = PaddingValues(0.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                        ),
+                        border = BorderStroke(
+                            1.dp, 
+                            MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                        ),
+                        shape = RoundedCornerShape(4.dp),
+                    ) {
+                        Text(
+                            text = "+",
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                }
+            }
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
@@ -114,9 +190,16 @@ fun JsonEditorCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(if (parseError != null) 200.dp else 250.dp),
-                placeholder = { Text("Enter SDUI JSON...") },
+                placeholder = { 
+                    Text(
+                        "Enter SDUI JSON...",
+                        fontSize = fontSize.sp,
+                        fontFamily = FontFamily.Monospace,
+                    ) 
+                },
                 textStyle = MaterialTheme.typography.bodyMedium.copy(
-                    fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
+                    fontFamily = FontFamily.Monospace,
+                    fontSize = fontSize.sp,
                 ),
                 isError = parseError != null,
             )
