@@ -9,7 +9,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.amnix.sdui.components.ResponsiveLayout
-import com.amnix.sdui.components.TerminalLogWindow
 import com.amnix.sdui.components.createLogEntry
 import com.amnix.sdui.components.LogEntry
 import com.amnix.sdui.components.LogType
@@ -24,7 +23,6 @@ import com.amnix.sdui.sdui.SerializationResult
 fun SduiPlaygroundScreen() {
     var selectedExample by remember { mutableStateOf(SduiDemoExamples.examples.first()) }
     var jsonInput by remember { mutableStateOf(selectedExample.json) }
-    var mobilePreviewDarkMode by remember { mutableStateOf(false) }
     var jsonFontSize by remember { mutableStateOf(14) }
     
     // Use a list to store all log entries instead of a single message
