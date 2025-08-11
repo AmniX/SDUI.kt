@@ -24,29 +24,9 @@ object SduiDemoExamples {
      */
     val examples = listOf(
         DemoExample(
-            name = "Basic Form",
-            description = "Simple form with text fields and buttons",
-            resourcePath = "files/sdui-examples/basic-form.json",
-        ),
-        DemoExample(
-            name = "UI Components",
-            description = "Showcase of various UI components",
-            resourcePath = "files/sdui-examples/ui-components.json",
-        ),
-        DemoExample(
-            name = "Card Layout",
-            description = "Cards with different content arrangements",
-            resourcePath = "files/sdui-examples/card-layout.json",
-        ),
-        DemoExample(
-            name = "Grid Layout",
-            description = "Grid arrangement of items",
-            resourcePath = "files/sdui-examples/grid-layout.json",
-        ),
-        DemoExample(
-            name = "List Example",
-            description = "Scrollable list of items",
-            resourcePath = "files/sdui-examples/list-example.json",
+            name = "Shapes Layout",
+            description = "Row with 4 different shapes using boxes",
+            resourcePath = "files/sdui-examples/shapes-layout.json",
         ),
     )
 
