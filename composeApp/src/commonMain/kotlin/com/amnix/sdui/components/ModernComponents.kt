@@ -816,46 +816,7 @@ private fun JsonSyntaxHighlightTransformation(): VisualTransformation {
     }
 }
 
-/**
- * Modern error display card
- */
-@Composable
-fun ModernErrorDisplay(error: Throwable, modifier: Modifier = Modifier) {
-    ElevatedCard(
-        modifier = modifier,
-        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp),
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.errorContainer,
-        ),
-        shape = RoundedCornerShape(12.dp),
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            IconContainer(
-                icon = "⚠️",
-                backgroundColor = MaterialTheme.colorScheme.error.copy(alpha = 0.2f),
-            )
-            Column {
-                Text(
-                    text = "JSON Parse Error",
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Medium,
-                    color = MaterialTheme.colorScheme.onErrorContainer,
-                )
-                Text(
-                    text = error.message ?: "Unknown error",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.8f),
-                )
-            }
-        }
-    }
-}
+
 
 /**
  * Section header with colored indicator dot
@@ -884,27 +845,4 @@ private fun SectionHeader(title: String, color: androidx.compose.ui.graphics.Col
     }
 }
 
-/**
- * Icon container with background
- */
-@Composable
-private fun IconContainer(
-    icon: String,
-    backgroundColor: androidx.compose.ui.graphics.Color,
-    modifier: Modifier = Modifier,
-) {
-    Box(
-        modifier = modifier
-            .size(32.dp)
-            .background(
-                color = backgroundColor,
-                shape = RoundedCornerShape(8.dp),
-            ),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(
-            text = icon,
-            style = MaterialTheme.typography.bodyMedium,
-        )
-    }
-}
+
