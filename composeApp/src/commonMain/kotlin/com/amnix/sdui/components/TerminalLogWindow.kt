@@ -46,32 +46,33 @@ fun TerminalLogWindow(
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            // Header with title and clear button
+            // Minimal header - just title and clear button in one row
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Action Logs",
-                    style = MaterialTheme.typography.titleMedium,
+                    text = "Logs",
+                    style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 
+                // Small clear button
                 Button(
                     onClick = onClearLogs,
-                    modifier = Modifier.height(32.dp)
+                    modifier = Modifier.height(28.dp)
                 ) {
                     Text(
                         text = "Clear",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Medium
                     )
                 }
             }
             
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             
             // Logs content area
             Box(
