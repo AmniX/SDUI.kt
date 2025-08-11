@@ -38,10 +38,13 @@ fun SduiPlaygroundScreen() {
             override fun dispatch(action: SduiAction) {
                 when (action) {
                     is SduiAction.Navigate -> {
-                        if (action.route == "success") {
+                        val route = action.route
+                        if (route == null) {
+                            actionMessage = "⚠️ Navigation action missing route"
+                        } else if (route == "success") {
                             actionMessage = "✅ Form submitted! Data: ${formState.toMap()}"
                         } else {
-                            actionMessage = "🧭 Navigation to: ${action.route}"
+                            actionMessage = "🧭 Navigation to: $route"
                         }
                     }
 
