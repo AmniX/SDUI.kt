@@ -169,6 +169,19 @@ object SduiValidator {
                 ))
             }
         }
+
+        // Validate fontWeight values
+        style.fontWeight?.let { fontWeight ->
+            if (!isValidFontWeight(fontWeight)) {
+                errors.add(ValidationError(
+                    message = "${idPrefix}Style fontWeight must be a valid font weight",
+                    componentId = componentId,
+                    field = "style.fontWeight",
+                    value = fontWeight,
+                    severity = ErrorSeverity.ERROR
+                ))
+            }
+        }
     }
 
     private fun validateTextComponent(component: SduiComponent.TextComponent, errors: MutableList<ValidationError>, warnings: MutableList<ValidationWarning>) {
@@ -260,4 +273,11 @@ object SduiValidator {
     }
     
     private fun isValidColor(color: String): Boolean = color.matches(Regex("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"))
+    
+    private fun isValidFontWeight(fontWeight: String): Boolean {
+        return when (fontWeight.lowercase()) {
+            "normal", "bold", "light", "medium", "thin", "ultralight", "semibold", "extrabold", "black" -> true
+            else -> false
+        }
+    }
 }

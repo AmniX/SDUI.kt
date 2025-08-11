@@ -79,7 +79,10 @@ fun SduiPlaygroundScreen() {
                 Result.success(result.data)
             }
             is SerializationResult.Error -> {
-                logs.add(createLogEntry("❌ ${result.message}: ${result.details ?: ""}", LogType.ERROR))
+                val errorMessage = "❌ ${result.message}: ${result.details ?: ""}"
+                logs.add(createLogEntry(errorMessage, LogType.ERROR))
+                // Debug: Also log the raw result for debugging
+                logs.add(createLogEntry("🔍 Debug - Raw error: $result", LogType.INFO))
                 Result.failure(IllegalArgumentException("${result.message}: ${result.details ?: ""}"))
             }
         }
