@@ -33,26 +33,6 @@ object SduiDemoExamples {
             description = "Interactive form with various input types",
             resourcePath = "files/sdui-examples/form-elements.json",
         ),
-        DemoExample(
-            name = "Card Gallery",
-            description = "Beautiful card layout with images and text",
-            resourcePath = "files/sdui-examples/card-gallery.json",
-        ),
-        DemoExample(
-            name = "Navigation Menu",
-            description = "Horizontal navigation with icons and labels",
-            resourcePath = "files/sdui-examples/navigation-menu.json",
-        ),
-        DemoExample(
-            name = "Data Table",
-            description = "Structured data display with headers and rows",
-            resourcePath = "files/sdui-examples/data-table.json",
-        ),
-        DemoExample(
-            name = "Progress Dashboard",
-            description = "Progress indicators and status displays",
-            resourcePath = "files/sdui-examples/progress-dashboard.json",
-        ),
     )
 
     /**
