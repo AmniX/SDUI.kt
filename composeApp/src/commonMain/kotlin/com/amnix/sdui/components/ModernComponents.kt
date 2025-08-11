@@ -556,7 +556,7 @@ fun ModernJsonEditor(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(if (parseError != null) 580.dp else 650.dp),
+                        .height(if (parseError != null) 300.dp else 350.dp),
                 ) {
                     val verticalScrollState = rememberScrollState()
                     val horizontalScrollState = rememberScrollState()

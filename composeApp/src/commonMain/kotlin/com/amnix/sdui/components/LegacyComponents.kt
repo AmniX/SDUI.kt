@@ -215,7 +215,7 @@ fun JsonEditorCard(
                 onValueChange = onJsonChange,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(if (parseError != null) 200.dp else 250.dp),
+                    .height(if (parseError != null) 120.dp else 150.dp),
                 placeholder = { 
                     Text(
                         "Enter SDUI JSON...",

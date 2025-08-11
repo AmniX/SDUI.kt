@@ -39,7 +39,7 @@ fun TerminalLogWindow(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .height(200.dp),
+            .height(300.dp),
         color = Color(0xFF1E1E1E),
         shape = MaterialTheme.shapes.medium
     ) {
