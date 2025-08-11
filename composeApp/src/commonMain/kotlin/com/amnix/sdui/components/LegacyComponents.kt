@@ -101,12 +101,13 @@ fun JsonEditorCard(
     onJsonChange: (String) -> Unit,
     selectedExample: DemoExample,
     formState: MutableMap<String, Any?>,
-    onShowFormData: (String) -> Unit,
-    parseError: Throwable? = null,
+    parsedComponent: Result<com.amnix.sdui.sdui.components.SduiComponent>,
     fontSize: Int = 14,
     onFontSizeChange: (Int) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
+    val parseError = parsedComponent.exceptionOrNull()
+    
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -250,34 +251,12 @@ fun JsonEditorCard(
                 ) {
                     Text("Reset to Example")
                 }
-
-                Button(
-                    onClick = {
-                        onShowFormData("📋 Form data: ${formState.toMap()}")
-                    },
-                ) {
-                    Text("Show Form Data")
-                }
             }
         }
     }
 }
 
-@Composable
-fun ActionMessageCard(message: String, modifier: Modifier = Modifier) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-        ),
-    ) {
-        Text(
-            text = message,
-            modifier = Modifier.padding(12.dp),
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-        )
-    }
-}
+
 
 @Composable
 fun ErrorCard(error: Throwable, modifier: Modifier = Modifier) {

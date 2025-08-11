@@ -1,6 +1,7 @@
 package com.amnix.sdui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -21,7 +22,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,10 +30,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.amnix.sdui.components.TerminalLogWindow
+import com.amnix.sdui.components.LogEntry
+import com.amnix.sdui.components.MobilePhonePreview
 import com.amnix.sdui.data.DemoExample
+import com.amnix.sdui.sdui.components.SduiComponent
 import com.amnix.sdui.sdui.renderer.ActionDispatcher
+import com.amnix.sdui.sdui.renderer.FormState
 import com.amnix.sdui.sdui.renderer.RenderSduiComponent
 
 /**
@@ -45,8 +51,8 @@ fun ResponsiveLayout(
     onExampleChange: (DemoExample) -> Unit,
     jsonInput: String,
     onJsonChange: (String) -> Unit,
-    actionMessage: String?,
-    onActionMessage: (String) -> Unit,
+    logs: List<LogEntry>,
+    onClearLogs: () -> Unit,
     parsedComponent: Result<com.amnix.sdui.sdui.components.SduiComponent>,
     dispatcher: ActionDispatcher,
     formState: MutableMap<String, Any?>,
@@ -76,8 +82,8 @@ fun ResponsiveLayout(
                 onExampleChange = onExampleChange,
                 jsonInput = jsonInput,
                 onJsonChange = onJsonChange,
-                actionMessage = actionMessage,
-                onActionMessage = onActionMessage,
+                logs = logs,
+                onClearLogs = onClearLogs,
                 parsedComponent = parsedComponent,
                 dispatcher = dispatcher,
                 formState = formState,
@@ -91,8 +97,8 @@ fun ResponsiveLayout(
                 onExampleChange = onExampleChange,
                 jsonInput = jsonInput,
                 onJsonChange = onJsonChange,
-                actionMessage = actionMessage,
-                onActionMessage = onActionMessage,
+                logs = logs,
+                onClearLogs = onClearLogs,
                 parsedComponent = parsedComponent,
                 dispatcher = dispatcher,
                 formState = formState,
@@ -112,8 +118,8 @@ fun WideLayout(
     onExampleChange: (DemoExample) -> Unit,
     jsonInput: String,
     onJsonChange: (String) -> Unit,
-    actionMessage: String?,
-    onActionMessage: (String) -> Unit,
+    logs: List<LogEntry>,
+    onClearLogs: () -> Unit,
     parsedComponent: Result<com.amnix.sdui.sdui.components.SduiComponent>,
     dispatcher: ActionDispatcher,
     formState: MutableMap<String, Any?>,
@@ -131,13 +137,12 @@ fun WideLayout(
             modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.spacedBy(0.dp),
         ) {
-            // Left Panel - Controls and JSON Editor (expanded for more JSON space)
+            // Left Panel - Controls and JSON Editor
             Surface(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight(),
                 color = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.6f),
-                shape = RoundedCornerShape(topEnd = 16.dp, bottomEnd = 16.dp),
             ) {
                 Column(
                     modifier = Modifier
@@ -154,30 +159,31 @@ fun WideLayout(
                         onExampleChange = onExampleChange,
                     )
 
-                    // JSON Editor with integrated error display
+                    // JSON Editor
                     ModernJsonEditor(
                         jsonInput = jsonInput,
                         onJsonChange = onJsonChange,
                         selectedExample = selectedExample,
                         formState = formState,
-                        onShowFormData = onActionMessage,
-                        parseError = parsedComponent.exceptionOrNull(),
+                        parsedComponent = parsedComponent,
                         fontSize = jsonFontSize,
                         onFontSizeChange = onJsonFontSizeChange,
                     )
 
-                    // Status Messages
-                    actionMessage?.let { message ->
-                        ModernStatusCard(message)
-                    }
+                    // Terminal Log Window
+                    TerminalLogWindow(
+                        logs = logs,
+                        onClearLogs = onClearLogs
+                    )
                 }
             }
 
-            // Right Panel - Mobile Preview (fixed width for phone simulation)
+            // Right Panel - Mobile Preview
             MobilePreviewPanel(
                 parsedComponent = parsedComponent,
                 dispatcher = dispatcher,
                 formState = formState,
+                modifier = Modifier.width(400.dp)
             )
         }
     }
@@ -192,8 +198,8 @@ fun CompactLayout(
     onExampleChange: (DemoExample) -> Unit,
     jsonInput: String,
     onJsonChange: (String) -> Unit,
-    actionMessage: String?,
-    onActionMessage: (String) -> Unit,
+    logs: List<LogEntry>,
+    onClearLogs: () -> Unit,
     parsedComponent: Result<com.amnix.sdui.sdui.components.SduiComponent>,
     dispatcher: ActionDispatcher,
     formState: MutableMap<String, Any?>,
@@ -226,22 +232,22 @@ fun CompactLayout(
             onExampleChange = onExampleChange,
         )
 
-        // JSON Editor with integrated error display
+        // JSON Editor
         JsonEditorCard(
             jsonInput = jsonInput,
             onJsonChange = onJsonChange,
             selectedExample = selectedExample,
             formState = formState,
-            onShowFormData = onActionMessage,
-            parseError = parsedComponent.exceptionOrNull(),
+            parsedComponent = parsedComponent,
             fontSize = jsonFontSize,
             onFontSizeChange = onJsonFontSizeChange,
         )
 
-        // Action Message
-        actionMessage?.let { message ->
-            ActionMessageCard(message)
-        }
+        // Terminal Log Window
+        TerminalLogWindow(
+            logs = logs,
+            onClearLogs = onClearLogs
+        )
 
         // Rendered UI with mobile preview theming
         parsedComponent.getOrNull()?.let { component ->

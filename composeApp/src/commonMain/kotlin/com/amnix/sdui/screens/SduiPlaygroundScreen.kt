@@ -3,11 +3,16 @@ package com.amnix.sdui.screens
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.amnix.sdui.components.ResponsiveLayout
+import com.amnix.sdui.components.TerminalLogWindow
+import com.amnix.sdui.components.createLogEntry
+import com.amnix.sdui.components.LogEntry
+import com.amnix.sdui.components.LogType
 import com.amnix.sdui.data.SduiDemoExamples
 import com.amnix.sdui.sdui.SduiSerializer
 import com.amnix.sdui.sdui.model.SduiAction
@@ -19,15 +24,20 @@ import com.amnix.sdui.sdui.SerializationResult
 fun SduiPlaygroundScreen() {
     var selectedExample by remember { mutableStateOf(SduiDemoExamples.examples.first()) }
     var jsonInput by remember { mutableStateOf(selectedExample.json) }
-    var actionMessage by remember { mutableStateOf<String?>(null) }
     var mobilePreviewDarkMode by remember { mutableStateOf(false) }
     var jsonFontSize by remember { mutableStateOf(14) }
+    
+    // Use a list to store all log entries instead of a single message
+    val logs = remember { mutableStateListOf<LogEntry>() }
 
     // Load JSON from resources when example changes
     LaunchedEffect(selectedExample) {
         val loadedExample = SduiDemoExamples.loadExample(selectedExample)
         selectedExample = loadedExample
         jsonInput = loadedExample.json
+        
+        // Add a log entry when example changes
+        logs.add(createLogEntry("Loaded example: ${selectedExample.name}", LogType.INFO))
     }
 
     val formState = remember { mutableStateMapOf<String, Any?>() }
@@ -40,40 +50,38 @@ fun SduiPlaygroundScreen() {
                     is SduiAction.Navigate -> {
                         val route = action.route
                         if (route == null) {
-                            actionMessage = "⚠️ Navigation action missing route"
+                            logs.add(createLogEntry("⚠️ Navigation action missing route", LogType.WARNING))
                         } else if (route == "success") {
-                            actionMessage = "✅ Form submitted! Data: ${formState.toMap()}"
+                            logs.add(createLogEntry("✅ Form submitted! Data: ${formState.toMap()}", LogType.SUCCESS))
                         } else {
-                            actionMessage = "🧭 Navigation to: $route"
+                            logs.add(createLogEntry("🧭 Navigation to: $route", LogType.ACTION))
                         }
                     }
 
                     is SduiAction.Reset -> {
                         FormState.clearAllFormValues(formState)
-                        actionMessage = "🔄 Form reset!"
+                        logs.add(createLogEntry("🔄 Form reset!", LogType.ACTION))
                     }
 
                     else -> {
-                        actionMessage = "ℹ️ Action: ${action::class.simpleName}"
+                        logs.add(createLogEntry("ℹ️ Action: ${action::class.simpleName}", LogType.INFO))
                     }
                 }
             }
         }
     }
 
-    // Auto-clear action message
-    LaunchedEffect(actionMessage) {
-        if (actionMessage != null) {
-            kotlinx.coroutines.delay(3000)
-            actionMessage = null
-        }
-    }
-
     // Use the new error handling system
     val parsedComponent = remember(jsonInput) {
         when (val result = SduiSerializer.deserializeWithValidation(jsonInput)) {
-            is SerializationResult.Success -> Result.success(result.data)
-            is SerializationResult.Error -> Result.failure(IllegalArgumentException("${result.message}: ${result.details ?: ""}"))
+            is SerializationResult.Success -> {
+                logs.add(createLogEntry("✅ JSON parsed successfully", LogType.SUCCESS))
+                Result.success(result.data)
+            }
+            is SerializationResult.Error -> {
+                logs.add(createLogEntry("❌ ${result.message}: ${result.details ?: ""}", LogType.ERROR))
+                Result.failure(IllegalArgumentException("${result.message}: ${result.details ?: ""}"))
+            }
         }
     }
 
@@ -83,8 +91,8 @@ fun SduiPlaygroundScreen() {
         onExampleChange = { selectedExample = it },
         jsonInput = jsonInput,
         onJsonChange = { jsonInput = it },
-        actionMessage = actionMessage,
-        onActionMessage = { actionMessage = it },
+        logs = logs,
+        onClearLogs = { logs.clear() },
         parsedComponent = parsedComponent,
         dispatcher = dispatcher,
         formState = formState,

@@ -335,12 +335,13 @@ fun ModernJsonEditor(
     onJsonChange: (String) -> Unit,
     selectedExample: DemoExample,
     formState: MutableMap<String, Any?>,
-    onShowFormData: (String) -> Unit,
-    parseError: Throwable? = null,
+    parsedComponent: Result<com.amnix.sdui.sdui.components.SduiComponent>,
     fontSize: Int = 14,
     onFontSizeChange: (Int) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
+    val parseError = parsedComponent.exceptionOrNull()
+    
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -690,57 +691,12 @@ fun ModernJsonEditor(
                 )
             }
 
-            OutlinedButton(
-                onClick = {
-                    onShowFormData("📋 Form data: ${formState.toMap()}")
-                },
-                colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = MaterialTheme.colorScheme.secondary,
-                ),
-                shape = RoundedCornerShape(6.dp),
-            ) {
-                Text(
-                    "Debug",
-                    style = MaterialTheme.typography.bodySmall,
-                    fontWeight = FontWeight.Medium,
-                )
-            }
+
         }
     }
 }
 
-/**
- * Modern status card for displaying action messages
- */
-@Composable
-fun ModernStatusCard(message: String, modifier: Modifier = Modifier) {
-    ElevatedCard(
-        modifier = modifier,
-        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp),
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-        ),
-        shape = RoundedCornerShape(12.dp),
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            IconContainer(
-                icon = "ℹ️",
-                backgroundColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-            )
-            Text(
-                text = message,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-            )
-        }
-    }
-}
+
 
 // JSON syntax highlighting using VisualTransformation
 private fun JsonSyntaxHighlightTransformation(): VisualTransformation {
