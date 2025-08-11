@@ -78,10 +78,10 @@ fun ModernHeaderSection(modifier: Modifier = Modifier) {
                 )
             }
 
-            // Dark mode toggle removed
+            
         }
 
-        // Divider
+        
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -116,7 +116,7 @@ fun ModernHeaderSectionWithoutToggle(modifier: Modifier = Modifier) {
             )
         }
 
-        // Divider
+        
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -143,13 +143,13 @@ fun CompactHeaderWithSampleChooser(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        // Single row with title and minimalistic sample chooser
+        
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            // Left side - App title and subtitle
+            
             Column(
                 modifier = Modifier.weight(1f),
             ) {
@@ -166,7 +166,7 @@ fun CompactHeaderWithSampleChooser(
                 )
             }
 
-            // Right side - Minimalistic sample chooser
+            
             Box {
                 OutlinedButton(
                     onClick = { onDropdownExpandedChange(true) },
@@ -223,7 +223,7 @@ fun CompactHeaderWithSampleChooser(
             }
         }
 
-        // Subtle divider
+        
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -343,7 +343,7 @@ fun ModernJsonEditor(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        // Minimal header with code editor styling and error indicator
+        
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -357,7 +357,7 @@ fun ModernJsonEditor(
                     modifier = Modifier
                         .size(8.dp)
                         .background(
-                            color = if (parseError != null) Color(0xFFFF5F57) else Color(0xFF4CAF50), // Red if error, green if OK
+                            color = if (parseError != null) Color(0xFFFF5F57) else Color(0xFF4CAF50),
                             shape = RoundedCornerShape(50.dp),
                         ),
                 )
@@ -369,7 +369,7 @@ fun ModernJsonEditor(
                     color = MaterialTheme.colorScheme.onSurface,
                 )
                 
-                // Error indicator badge
+                
                 if (parseError != null) {
                     Box(
                         modifier = Modifier
@@ -409,7 +409,7 @@ fun ModernJsonEditor(
             }
         }
 
-        // Code editor-style container
+        
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -424,7 +424,7 @@ fun ModernJsonEditor(
                 ),
         ) {
             Column {
-                // Editor header with controls
+                
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -440,7 +440,7 @@ fun ModernJsonEditor(
                         horizontalArrangement = Arrangement.spacedBy(6.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        // Traffic light dots (macOS style)
+                        
                         Box(
                             modifier = Modifier
                                 .size(12.dp)
@@ -466,7 +466,7 @@ fun ModernJsonEditor(
                     )
                 }
 
-                // JSON Code Editor with line numbers and syntax highlighting
+                
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -478,13 +478,13 @@ fun ModernJsonEditor(
                     val totalLines = jsonInput.lines().size
                     val numDigits = maxOf(2, totalLines.toString().length)
                     val gutterMinWidth = 40.dp
-                    // Generous per-digit width to prevent wrapping, plus inner padding
+                    
                     val gutterWidth = maxOf(
                         gutterMinWidth,
                         (16.dp * numDigits.toFloat()) + 16.dp,
                     )
 
-                    // Line number gutter (shares vertical scroll with editor)
+                    
                     Box(
                         modifier = Modifier
                             .width(gutterWidth)
@@ -523,7 +523,7 @@ fun ModernJsonEditor(
                         )
                     }
 
-                    // Editor area (shares same verticalScrollState with gutter)
+                    
                     Box(
                         modifier = Modifier
                             .weight(1f)
@@ -550,7 +550,7 @@ fun ModernJsonEditor(
                             decorationBox = { innerTextField ->
                                 if (jsonInput.isEmpty()) {
                                     Text(
-                                        "{\n  \"type\": \"column\",\n  \"children\": [\n    // Add your JSON here...\n  ]\n}",
+                                        "{\n  \"type\": \"column\",\n  \"children\": [\n    Add your JSON here...\n  ]\n}",
                                         fontFamily = FontFamily.Monospace,
                                         fontSize = 14.sp,
                                         lineHeight = 20.sp,
@@ -563,7 +563,7 @@ fun ModernJsonEditor(
                     }
                 }
                 
-                // Inline error display at bottom of editor
+                
                 if (parseError != null) {
                     Box(
                         modifier = Modifier
@@ -605,7 +605,7 @@ fun ModernJsonEditor(
             }
         }
 
-        // Action buttons with minimal styling
+        
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
@@ -681,7 +681,7 @@ fun ModernStatusCard(message: String, modifier: Modifier = Modifier) {
     }
 }
 
-// Lightweight JSON syntax highlighting using VisualTransformation
+// JSON syntax highlighting using VisualTransformation
 private fun JsonSyntaxHighlightTransformation(): VisualTransformation {
     val keyColor = Color(0xFF1E88E5)
     val stringColor = Color(0xFF2E7D32)
@@ -716,9 +716,9 @@ private fun JsonSyntaxHighlightTransformation(): VisualTransformation {
                 } else if (c == '\\') {
                     escape = true
                 } else if (c == '"') {
-                    // End of string
+                    
                     val end = i + 1
-                    // Determine if this string is a key (followed by optional spaces then ':')
+                    
                     var j = end
                     while (j < n && text[j].isWhitespace()) j++
                     val isKey = j < n && text[j] == ':'
@@ -745,7 +745,7 @@ private fun JsonSyntaxHighlightTransformation(): VisualTransformation {
                         continue
                     }
                     '-', in '0'..'9' -> {
-                        // number
+                        
                         val start = i
                         var k = i
                         var hasDigits = false
@@ -756,7 +756,7 @@ private fun JsonSyntaxHighlightTransformation(): VisualTransformation {
                             while (k < n && text[k].isDigit()) { k++; hasDigits = true }
                         }
                         if (hasDigits) {
-                            // exponent
+                            
                             if (k < n && (text[k] == 'e' || text[k] == 'E')) {
                                 k++
                                 if (k < n && (text[k] == '+' || text[k] == '-')) k++
@@ -768,7 +768,7 @@ private fun JsonSyntaxHighlightTransformation(): VisualTransformation {
                         }
                     }
                     't' -> {
-                        // true
+                        
                         if (i + 3 < n && text.substring(i, i + 4) == "true" && isWordBoundary(i - 1) && isWordBoundary(i + 4)) {
                             builder.addStyle(SpanStyle(color = literalColor), i, i + 4)
                             i += 4
@@ -776,7 +776,7 @@ private fun JsonSyntaxHighlightTransformation(): VisualTransformation {
                         }
                     }
                     'f' -> {
-                        // false
+                        
                         if (i + 4 < n && text.substring(i, i + 5) == "false" && isWordBoundary(i - 1) && isWordBoundary(i + 5)) {
                             builder.addStyle(SpanStyle(color = literalColor), i, i + 5)
                             i += 5
@@ -784,7 +784,7 @@ private fun JsonSyntaxHighlightTransformation(): VisualTransformation {
                         }
                     }
                     'n' -> {
-                        // null
+                        
                         if (i + 3 < n && text.substring(i, i + 4) == "null" && isWordBoundary(i - 1) && isWordBoundary(i + 4)) {
                             builder.addStyle(SpanStyle(color = literalColor), i, i + 4)
                             i += 4
