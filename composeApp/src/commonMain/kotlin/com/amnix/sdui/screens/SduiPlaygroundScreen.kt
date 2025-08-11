@@ -13,6 +13,7 @@ import com.amnix.sdui.sdui.SduiSerializer
 import com.amnix.sdui.sdui.model.SduiAction
 import com.amnix.sdui.sdui.renderer.ActionDispatcher
 import com.amnix.sdui.sdui.renderer.FormState
+import com.amnix.sdui.sdui.SerializationResult
 
 @Composable
 fun SduiPlaygroundScreen() {
@@ -65,8 +66,12 @@ fun SduiPlaygroundScreen() {
         }
     }
 
+    // Use the new error handling system
     val parsedComponent = remember(jsonInput) {
-        runCatching { SduiSerializer.deserialize(jsonInput) }
+        when (val result = SduiSerializer.deserializeWithValidation(jsonInput)) {
+            is SerializationResult.Success -> Result.success(result.data)
+            is SerializationResult.Error -> Result.failure(IllegalArgumentException("${result.message}: ${result.details ?: ""}"))
+        }
     }
 
     // Use the responsive layout component

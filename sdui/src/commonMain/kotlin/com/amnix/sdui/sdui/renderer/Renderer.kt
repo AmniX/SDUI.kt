@@ -42,7 +42,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.amnix.sdui.sdui.components.SduiComponent
-import com.amnix.sdui.sdui.validation.isValid
 
 /**
  * Main SDUI renderer function
@@ -53,8 +52,8 @@ fun RenderSduiComponent(
     dispatcher: ActionDispatcher,
     formState: MutableMap<String, Any?> = remember { mutableStateMapOf() },
 ) {
-    // Skip rendering if component is not visible or invalid
-    if (component.visible == false || !component.isValid()) {
+    // Skip rendering if component is not visible
+    if (component.visible == false) {
         return
     }
 

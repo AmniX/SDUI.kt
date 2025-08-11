@@ -4,358 +4,260 @@ import com.amnix.sdui.sdui.components.SduiComponent
 import com.amnix.sdui.sdui.model.Style
 
 /**
- * Validator interface for SDUI components
+ * Validation result with detailed information
  */
-interface SduiValidator {
-    fun validate(component: SduiComponent): List<String>
+data class ValidationResult(
+    val isValid: Boolean,
+    val errors: List<ValidationError>,
+    val warnings: List<ValidationWarning> = emptyList()
+) {
+    companion object {
+        fun success() = ValidationResult(true, emptyList())
+        fun failure(errors: List<ValidationError>) = ValidationResult(false, errors)
+        fun failure(vararg errors: ValidationError) = ValidationResult(false, errors.toList())
+    }
+}
 
-    fun validate(components: List<SduiComponent>): List<String>
+/**
+ * Detailed validation error
+ */
+data class ValidationError(
+    val message: String,
+    val componentId: String? = null,
+    val field: String? = null,
+    val value: String? = null,
+    val severity: ErrorSeverity = ErrorSeverity.ERROR
+)
+
+/**
+ * Validation warning
+ */
+data class ValidationWarning(
+    val message: String,
+    val componentId: String? = null,
+    val field: String? = null,
+    val suggestion: String? = null
+)
+
+/**
+ * Error severity levels
+ */
+enum class ErrorSeverity {
+    ERROR, WARNING, INFO
 }
 
 /**
  * Default implementation of SDUI validator with comprehensive validation rules
  */
-class DefaultSduiValidator : SduiValidator {
-    override fun validate(component: SduiComponent): List<String> {
-        val errors = mutableListOf<String>()
+object SduiValidator {
+    
+    fun validate(component: SduiComponent): ValidationResult {
+        val errors = mutableListOf<ValidationError>()
+        val warnings = mutableListOf<ValidationWarning>()
 
         // Common validation for all components
-        validateCommonFields(component, errors)
+        validateCommonFields(component, errors, warnings)
 
         // Component-specific validation
         when (component) {
-            is SduiComponent.TextComponent -> validateTextComponent(component, errors)
-            is SduiComponent.ButtonComponent -> validateButtonComponent(component, errors)
-            is SduiComponent.ColumnComponent -> validateColumnComponent(component, errors)
-            is SduiComponent.RowComponent -> validateRowComponent(component, errors)
-            is SduiComponent.ImageComponent -> validateImageComponent(component, errors)
-            is SduiComponent.TextFieldComponent -> validateTextFieldComponent(component, errors)
-            is SduiComponent.SpacerComponent -> validateSpacerComponent(component, errors)
-            is SduiComponent.DividerComponent -> validateDividerComponent(component, errors)
-            is SduiComponent.BoxComponent -> validateBoxComponent(component, errors)
-            is SduiComponent.CardComponent -> validateCardComponent(component, errors)
-            is SduiComponent.ListComponent -> validateListComponent(component, errors)
-            is SduiComponent.GridComponent -> validateGridComponent(component, errors)
-            is SduiComponent.SwitchComponent -> validateSwitchComponent(component, errors)
-            is SduiComponent.CheckboxComponent -> validateCheckboxComponent(component, errors)
-            is SduiComponent.RadioButtonComponent -> validateRadioButtonComponent(component, errors)
-            is SduiComponent.ProgressBarComponent -> validateProgressBarComponent(component, errors)
-            is SduiComponent.SliderComponent -> validateSliderComponent(component, errors)
-            is SduiComponent.ChipComponent -> validateChipComponent(component, errors)
+            is SduiComponent.TextComponent -> validateTextComponent(component, errors, warnings)
+            is SduiComponent.ButtonComponent -> validateButtonComponent(component, errors, warnings)
+            is SduiComponent.ColumnComponent -> validateColumnComponent(component, errors, warnings)
+            is SduiComponent.RowComponent -> validateRowComponent(component, errors, warnings)
+            is SduiComponent.ImageComponent -> validateImageComponent(component, errors, warnings)
+            is SduiComponent.TextFieldComponent -> validateTextFieldComponent(component, errors, warnings)
+            is SduiComponent.SpacerComponent -> validateSpacerComponent(component, errors, warnings)
+            is SduiComponent.DividerComponent -> validateDividerComponent(component, errors, warnings)
+            is SduiComponent.BoxComponent -> validateBoxComponent(component, errors, warnings)
+            is SduiComponent.CardComponent -> validateCardComponent(component, errors, warnings)
+            is SduiComponent.ListComponent -> validateListComponent(component, errors, warnings)
+            is SduiComponent.GridComponent -> validateGridComponent(component, errors, warnings)
+            is SduiComponent.SwitchComponent -> validateSwitchComponent(component, errors, warnings)
+            is SduiComponent.CheckboxComponent -> validateCheckboxComponent(component, errors, warnings)
+            is SduiComponent.RadioButtonComponent -> validateRadioButtonComponent(component, errors, warnings)
+            is SduiComponent.ProgressBarComponent -> validateProgressBarComponent(component, errors, warnings)
+            is SduiComponent.SliderComponent -> validateSliderComponent(component, errors, warnings)
+            is SduiComponent.ChipComponent -> validateChipComponent(component, errors, warnings)
         }
 
-        return errors
+        return if (errors.isEmpty()) {
+            ValidationResult.success()
+        } else {
+            ValidationResult.failure(errors)
+        }
     }
 
-    override fun validate(components: List<SduiComponent>): List<String> {
-        val errors = mutableListOf<String>()
+    fun validate(components: List<SduiComponent>): ValidationResult {
+        val allErrors = mutableListOf<ValidationError>()
+        val allWarnings = mutableListOf<ValidationWarning>()
+        
         components.forEach { component ->
-            errors.addAll(validate(component))
+            val result = validate(component)
+            allErrors.addAll(result.errors)
+            allWarnings.addAll(result.warnings)
         }
-        return errors
+        
+        return if (allErrors.isEmpty()) {
+            ValidationResult.success()
+        } else {
+            ValidationResult.failure(allErrors)
+        }
     }
 
-    private fun validateCommonFields(component: SduiComponent, errors: MutableList<String>) {
+    private fun validateCommonFields(component: SduiComponent, errors: MutableList<ValidationError>, warnings: MutableList<ValidationWarning>) {
+        // Validate ID
+        if (component.id.isBlank()) {
+            warnings.add(ValidationWarning(
+                message = "Component has empty ID",
+                componentId = component.id,
+                field = "id",
+                suggestion = "Consider adding a meaningful ID for better debugging"
+            ))
+        }
+
         // Validate style properties
         component.style?.let { style ->
-            validateStyle(style, component.id, errors)
+            validateStyle(style, component.id, errors, warnings)
         }
     }
 
-    private fun validateStyle(style: Style, componentId: String?, errors: MutableList<String>) {
+    private fun validateStyle(style: Style, componentId: String?, errors: MutableList<ValidationError>, warnings: MutableList<ValidationWarning>) {
         val idPrefix = componentId?.let { "[$it] " } ?: ""
 
         // Validate width and height values
         style.width?.let { width ->
             if (!isValidDimension(width)) {
-                errors.add("${idPrefix}Style width must be a valid dimension, got: $width")
+                errors.add(ValidationError(
+                    message = "${idPrefix}Style width must be a valid dimension",
+                    componentId = componentId,
+                    field = "style.width",
+                    value = width
+                ))
             }
         }
 
         style.height?.let { height ->
             if (!isValidDimension(height)) {
-                errors.add("${idPrefix}Style height must be a valid dimension, got: $height")
+                errors.add(ValidationError(
+                    message = "${idPrefix}Style height must be a valid dimension",
+                    componentId = componentId,
+                    field = "style.height",
+                    value = height
+                ))
             }
         }
 
-        style.maxWidth?.let { maxWidth ->
-            if (!isValidDimension(maxWidth)) {
-                errors.add("${idPrefix}Style maxWidth must be a valid dimension, got: $maxWidth")
+        // Validate color values
+        style.backgroundColor?.let { color ->
+            if (!isValidColor(color)) {
+                errors.add(ValidationError(
+                    message = "${idPrefix}Style backgroundColor must be a valid color",
+                    componentId = componentId,
+                    field = "style.backgroundColor",
+                    value = color
+                ))
             }
         }
 
-        style.maxHeight?.let { maxHeight ->
-            if (!isValidDimension(maxHeight)) {
-                errors.add("${idPrefix}Style maxHeight must be a valid dimension, got: $maxHeight")
-            }
-        }
-
-        style.minWidth?.let { minWidth ->
-            if (!isValidDimension(minWidth)) {
-                errors.add("${idPrefix}Style minWidth must be a valid dimension, got: $minWidth")
-            }
-        }
-
-        style.minHeight?.let { minHeight ->
-            if (!isValidDimension(minHeight)) {
-                errors.add("${idPrefix}Style minHeight must be a valid dimension, got: $minHeight")
-            }
-        }
-
-        // Validate opacity is between 0 and 1
-        style.opacity?.let { opacity ->
-            if (opacity < 0 || opacity > 1) {
-                errors.add("${idPrefix}Style opacity must be between 0 and 1, got: $opacity")
-            }
-        }
-
-        // Validate zIndex is non-negative
-        style.zIndex?.let { zIndex ->
-            if (zIndex < 0) {
-                errors.add("${idPrefix}Style zIndex must be >= 0, got: $zIndex")
+        style.textColor?.let { color ->
+            if (!isValidColor(color)) {
+                errors.add(ValidationError(
+                    message = "${idPrefix}Style textColor must be a valid color",
+                    componentId = componentId,
+                    field = "style.textColor",
+                    value = color
+                ))
             }
         }
     }
 
-    private fun validateTextComponent(component: SduiComponent.TextComponent, errors: MutableList<String>) {
-        val idPrefix = component.id?.let { "[$it] " } ?: ""
-
+    private fun validateTextComponent(component: SduiComponent.TextComponent, errors: MutableList<ValidationError>, warnings: MutableList<ValidationWarning>) {
         if (component.text.isBlank()) {
-            errors.add("${idPrefix}Text component text must not be blank")
+            warnings.add(ValidationWarning(
+                message = "Text component has empty text content",
+                componentId = component.id,
+                field = "text",
+                suggestion = "Consider adding meaningful text or removing the component"
+            ))
+        }
+
+        component.style?.fontSize?.let { fontSize ->
+            if (fontSize <= 0) {
+                errors.add(ValidationError(
+                    message = "Font size must be positive",
+                    componentId = component.id,
+                    field = "style.fontSize",
+                    value = fontSize.toString()
+                ))
+            }
         }
     }
 
-    private fun validateButtonComponent(component: SduiComponent.ButtonComponent, errors: MutableList<String>) {
-        val idPrefix = component.id?.let { "[$it] " } ?: ""
-
+    private fun validateButtonComponent(component: SduiComponent.ButtonComponent, errors: MutableList<ValidationError>, warnings: MutableList<ValidationWarning>) {
         if (component.text.isBlank()) {
-            errors.add("${idPrefix}Button component text must not be blank")
+            errors.add(ValidationError(
+                message = "Button must have text content",
+                componentId = component.id,
+                field = "text"
+            ))
         }
     }
 
-    private fun validateColumnComponent(component: SduiComponent.ColumnComponent, errors: MutableList<String>) {
-        val idPrefix = component.id?.let { "[$it] " } ?: ""
-
+    private fun validateColumnComponent(component: SduiComponent.ColumnComponent, errors: MutableList<ValidationError>, warnings: MutableList<ValidationWarning>) {
         if (component.children.isEmpty()) {
-            errors.add("${idPrefix}Column component must have at least one child")
-        } else {
-            // Recursively validate children
-            component.children.forEachIndexed { index, child ->
-                val childErrors = validate(child)
-                childErrors.forEach { error ->
-                    errors.add("${idPrefix}Child[$index]: $error")
-                }
-            }
+            warnings.add(ValidationWarning(
+                message = "Column component has no children",
+                componentId = component.id,
+                field = "children",
+                suggestion = "Consider adding child components or removing the empty column"
+            ))
         }
     }
 
-    private fun validateRowComponent(component: SduiComponent.RowComponent, errors: MutableList<String>) {
-        val idPrefix = component.id?.let { "[$it] " } ?: ""
-
+    private fun validateRowComponent(component: SduiComponent.RowComponent, errors: MutableList<ValidationError>, warnings: MutableList<ValidationWarning>) {
         if (component.children.isEmpty()) {
-            errors.add("${idPrefix}Row component must have at least one child")
-        } else {
-            // Recursively validate children
-            component.children.forEachIndexed { index, child ->
-                val childErrors = validate(child)
-                childErrors.forEach { error ->
-                    errors.add("${idPrefix}Child[$index]: $error")
-                }
+            warnings.add(ValidationWarning(
+                message = "Row component has no children",
+                componentId = component.id,
+                field = "children",
+                suggestion = "Consider adding child components or removing the empty row"
+            ))
+        }
+    }
+
+    // Placeholder methods for other component types
+    private fun validateImageComponent(component: SduiComponent.ImageComponent, errors: MutableList<ValidationError>, warnings: MutableList<ValidationWarning>) {}
+    private fun validateTextFieldComponent(component: SduiComponent.TextFieldComponent, errors: MutableList<ValidationError>, warnings: MutableList<ValidationWarning>) {}
+    private fun validateSpacerComponent(component: SduiComponent.SpacerComponent, errors: MutableList<ValidationError>, warnings: MutableList<ValidationWarning>) {}
+    private fun validateDividerComponent(component: SduiComponent.DividerComponent, errors: MutableList<ValidationError>, warnings: MutableList<ValidationWarning>) {}
+    private fun validateBoxComponent(component: SduiComponent.BoxComponent, errors: MutableList<ValidationError>, warnings: MutableList<ValidationWarning>) {}
+    private fun validateCardComponent(component: SduiComponent.CardComponent, errors: MutableList<ValidationError>, warnings: MutableList<ValidationWarning>) {}
+    private fun validateListComponent(component: SduiComponent.ListComponent, errors: MutableList<ValidationError>, warnings: MutableList<ValidationWarning>) {}
+    private fun validateGridComponent(component: SduiComponent.GridComponent, errors: MutableList<ValidationError>, warnings: MutableList<ValidationWarning>) {}
+    private fun validateSwitchComponent(component: SduiComponent.SwitchComponent, errors: MutableList<ValidationError>, warnings: MutableList<ValidationWarning>) {}
+    private fun validateCheckboxComponent(component: SduiComponent.CheckboxComponent, errors: MutableList<ValidationError>, warnings: MutableList<ValidationWarning>) {}
+    private fun validateRadioButtonComponent(component: SduiComponent.RadioButtonComponent, errors: MutableList<ValidationError>, warnings: MutableList<ValidationWarning>) {}
+    private fun validateProgressBarComponent(component: SduiComponent.ProgressBarComponent, errors: MutableList<ValidationError>, warnings: MutableList<ValidationWarning>) {}
+    private fun validateSliderComponent(component: SduiComponent.SliderComponent, errors: MutableList<ValidationError>, warnings: MutableList<ValidationWarning>) {}
+    private fun validateChipComponent(component: SduiComponent.ChipComponent, errors: MutableList<ValidationError>, warnings: MutableList<ValidationWarning>) {}
+
+    private fun isValidDimension(value: String): Boolean {
+        return when {
+            value == "100%" -> true
+            value.endsWith("%") -> {
+                val percentage = value.removeSuffix("%").toFloatOrNull()
+                percentage != null && percentage >= 0 && percentage <= 100
+            }
+            value.endsWith("dp") -> {
+                val dpValue = value.removeSuffix("dp").toFloatOrNull()
+                dpValue != null && dpValue >= 0
+            }
+            else -> {
+                val numericValue = value.toFloatOrNull()
+                numericValue != null && numericValue >= 0
             }
         }
     }
-
-    private fun validateImageComponent(component: SduiComponent.ImageComponent, errors: MutableList<String>) {
-        val idPrefix = component.id?.let { "[$it] " } ?: ""
-
-        if (component.url.isBlank()) {
-            errors.add("${idPrefix}Image component URL must not be blank")
-        } else if (!isValidUrl(component.url)) {
-            errors.add("${idPrefix}Image component URL must be a valid HTTP(S) URL, got: ${component.url}")
-        }
-    }
-
-    private fun validateTextFieldComponent(component: SduiComponent.TextFieldComponent, errors: MutableList<String>) {
-        val idPrefix = component.id?.let { "[$it] " } ?: ""
-
-        // If isPassword is true, value should be null or blank for security
-        if (component.isPassword == true && !component.value.isNullOrBlank()) {
-            errors.add("${idPrefix}TextField with isPassword=true should not have a pre-filled value for security")
-        }
-    }
-
-    private fun validateSpacerComponent(component: SduiComponent.SpacerComponent, errors: MutableList<String>) {
-        val idPrefix = component.id?.let { "[$it] " } ?: ""
-
-        if (component.width == null && component.height == null) {
-            errors.add("${idPrefix}Spacer component must have at least one of width or height set")
-        }
-    }
-
-    private fun validateDividerComponent(component: SduiComponent.DividerComponent, errors: MutableList<String>) {
-        val idPrefix = component.id?.let { "[$it] " } ?: ""
-
-        component.thickness?.let { thickness ->
-            if (thickness <= 0) {
-                errors.add("${idPrefix}Divider thickness must be > 0, got: $thickness")
-            }
-        }
-    }
-
-    private fun validateBoxComponent(component: SduiComponent.BoxComponent, errors: MutableList<String>) {
-        val idPrefix = component.id?.let { "[$it] " } ?: ""
-
-        if (component.children.isEmpty()) {
-            errors.add("${idPrefix}Box component must have at least one child")
-        } else {
-            // Recursively validate children
-            component.children.forEachIndexed { index, child ->
-                val childErrors = validate(child)
-                childErrors.forEach { error ->
-                    errors.add("${idPrefix}Child[$index]: $error")
-                }
-            }
-        }
-    }
-
-    private fun validateCardComponent(component: SduiComponent.CardComponent, errors: MutableList<String>) {
-        val idPrefix = component.id?.let { "[$it] " } ?: ""
-
-        if (component.children.isEmpty()) {
-            errors.add("${idPrefix}Card component must have at least one child")
-        } else {
-            // Recursively validate children
-            component.children.forEachIndexed { index, child ->
-                val childErrors = validate(child)
-                childErrors.forEach { error ->
-                    errors.add("${idPrefix}Child[$index]: $error")
-                }
-            }
-        }
-    }
-
-    private fun validateListComponent(component: SduiComponent.ListComponent, errors: MutableList<String>) {
-        val idPrefix = component.id?.let { "[$it] " } ?: ""
-
-        if (component.items.isEmpty()) {
-            errors.add("${idPrefix}List component must have at least one item")
-        } else {
-            // Recursively validate items
-            component.items.forEachIndexed { index, item ->
-                val itemErrors = validate(item)
-                itemErrors.forEach { error ->
-                    errors.add("${idPrefix}Item[$index]: $error")
-                }
-            }
-        }
-    }
-
-    private fun validateGridComponent(component: SduiComponent.GridComponent, errors: MutableList<String>) {
-        val idPrefix = component.id?.let { "[$it] " } ?: ""
-
-        if (component.columns <= 0) {
-            errors.add("${idPrefix}Grid component columns must be > 0, got: ${component.columns}")
-        }
-
-        if (component.items.isEmpty()) {
-            errors.add("${idPrefix}Grid component must have at least one item")
-        } else {
-            // Recursively validate items
-            component.items.forEachIndexed { index, item ->
-                val itemErrors = validate(item)
-                itemErrors.forEach { error ->
-                    errors.add("${idPrefix}Item[$index]: $error")
-                }
-            }
-        }
-    }
-
-    private fun validateSwitchComponent(component: SduiComponent.SwitchComponent, errors: MutableList<String>) {
-        // No specific validation rules for Switch component
-    }
-
-    private fun validateCheckboxComponent(component: SduiComponent.CheckboxComponent, errors: MutableList<String>) {
-        // No specific validation rules for Checkbox component
-    }
-
-    private fun validateRadioButtonComponent(
-        component: SduiComponent.RadioButtonComponent,
-        errors: MutableList<String>,
-    ) {
-        val idPrefix = component.id?.let { "[$it] " } ?: ""
-
-        if (component.group.isNullOrBlank()) {
-            errors.add("${idPrefix}RadioButton component should have a group name for proper selection behavior")
-        }
-    }
-
-    private fun validateProgressBarComponent(
-        component: SduiComponent.ProgressBarComponent,
-        errors: MutableList<String>,
-    ) {
-        val idPrefix = component.id?.let { "[$it] " } ?: ""
-
-        if (component.progress < 0 || component.progress > 1) {
-            errors.add("${idPrefix}ProgressBar progress must be between 0 and 1, got: ${component.progress}")
-        }
-    }
-
-    private fun validateSliderComponent(component: SduiComponent.SliderComponent, errors: MutableList<String>) {
-        val idPrefix = component.id?.let { "[$it] " } ?: ""
-
-        if (component.minValue >= component.maxValue) {
-            errors.add(
-                "${idPrefix}Slider minValue must be < maxValue, got: min=${component.minValue}, max=${component.maxValue}",
-            )
-        } else if (component.value < component.minValue || component.value > component.maxValue) {
-            errors.add(
-                "${idPrefix}Slider value must be between minValue and maxValue, got: value=${component.value}, min=${component.minValue}, max=${component.maxValue}",
-            )
-        }
-
-        component.step?.let { step ->
-            if (step <= 0) {
-                errors.add("${idPrefix}Slider step must be > 0, got: $step")
-            }
-        }
-    }
-
-    private fun validateChipComponent(component: SduiComponent.ChipComponent, errors: MutableList<String>) {
-        val idPrefix = component.id?.let { "[$it] " } ?: ""
-
-        if (component.text.isBlank()) {
-            errors.add("${idPrefix}Chip component text must not be blank")
-        }
-    }
-
-    private fun isValidUrl(url: String): Boolean =
-        url.startsWith("http://") || url.startsWith("https://") || url.startsWith("data:")
-
-    private fun isValidDimension(dimension: String): Boolean = when {
-        dimension == "100%" -> true
-        dimension.endsWith("%") -> {
-            val percentage = dimension.removeSuffix("%").toFloatOrNull()
-            percentage != null && percentage >= 0 && percentage <= 100
-        }
-        dimension.endsWith("dp") -> {
-            val dpValue = dimension.removeSuffix("dp").toFloatOrNull()
-            dpValue != null && dpValue >= 0
-        }
-        else -> {
-            val numericValue = dimension.toFloatOrNull()
-            numericValue != null && numericValue >= 0
-        }
-    }
+    
+    private fun isValidColor(color: String): Boolean = color.matches(Regex("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"))
 }
-
-/**
- * Extension function to validate a component using the default validator
- */
-fun SduiComponent.isValid(validator: SduiValidator = DefaultSduiValidator()): Boolean =
-    validator.validate(this).isEmpty()
-
-/**
- * Extension function to get validation errors for a component
- */
-fun SduiComponent.getValidationErrors(validator: SduiValidator = DefaultSduiValidator()): List<String> =
-    validator.validate(this)

@@ -33,6 +33,11 @@ object SduiDemoExamples {
             description = "Interactive form with various input types",
             resourcePath = "files/sdui-examples/form-elements.json",
         ),
+        DemoExample(
+            name = "Error Handling Test",
+            description = "Test malformed JSON and validation errors",
+            resourcePath = "files/sdui-examples/malformed-json.json",
+        ),
     )
 
     /**
