@@ -157,6 +157,9 @@ fun WideLayout(
                         isDropdownExpanded = isDropdownExpanded,
                         onDropdownExpandedChange = { isDropdownExpanded = it },
                         onExampleChange = onExampleChange,
+                        onReset = {
+                            onJsonChange(selectedExample.json.ifEmpty { "Loading..." })
+                        },
                     )
 
                     // JSON Editor
@@ -230,6 +233,9 @@ fun CompactLayout(
             isDropdownExpanded = isDropdownExpanded,
             onDropdownExpandedChange = { isDropdownExpanded = it },
             onExampleChange = onExampleChange,
+            onReset = {
+                onJsonChange(selectedExample.json.ifEmpty { "Loading..." })
+            },
         )
 
         // JSON Editor

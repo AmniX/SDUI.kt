@@ -44,6 +44,7 @@ fun ExampleSelectorCard(
     isDropdownExpanded: Boolean,
     onDropdownExpandedChange: (Boolean) -> Unit,
     onExampleChange: (DemoExample) -> Unit,
+    onReset: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -51,11 +52,35 @@ fun ExampleSelectorCard(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = "Demo Examples",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Medium,
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = "Demo Examples",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Medium,
+                )
+                
+                // Reset button
+                OutlinedButton(
+                    onClick = onReset,
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.1f),
+                        contentColor = MaterialTheme.colorScheme.secondary,
+                    ),
+                    shape = RoundedCornerShape(16.dp),
+                    modifier = Modifier.height(36.dp),
+                ) {
+                    Text(
+                        text = "Reset",
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Medium,
+                    )
+                }
+            }
+            
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedButton(

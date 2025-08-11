@@ -137,6 +137,7 @@ fun CompactHeaderWithSampleChooser(
     isDropdownExpanded: Boolean,
     onDropdownExpandedChange: (Boolean) -> Unit,
     onExampleChange: (DemoExample) -> Unit,
+    onReset: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -166,58 +167,81 @@ fun CompactHeaderWithSampleChooser(
                 )
             }
 
-            
-            Box {
+            // Sample chooser and reset button in a row
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Reset button
                 OutlinedButton(
-                    onClick = { onDropdownExpandedChange(true) },
+                    onClick = onReset,
                     colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f),
-                        contentColor = MaterialTheme.colorScheme.primary,
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.1f),
+                        contentColor = MaterialTheme.colorScheme.secondary,
                     ),
-                    shape = RoundedCornerShape(20.dp),
+                    shape = RoundedCornerShape(16.dp),
                     modifier = Modifier.height(36.dp),
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    ) {
-                        Text(
-                            text = selectedExample.name,
-                            style = MaterialTheme.typography.bodySmall,
-                            fontWeight = FontWeight.Medium,
-                        )
-                        Text(
-                            text = "▼",
-                            style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp),
-                        )
-                    }
+                    Text(
+                        text = "Reset",
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Medium,
+                    )
                 }
+                
+                // Sample chooser dropdown
+                Box {
+                    OutlinedButton(
+                        onClick = { onDropdownExpandedChange(true) },
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f),
+                            contentColor = MaterialTheme.colorScheme.primary,
+                        ),
+                        shape = RoundedCornerShape(20.dp),
+                        modifier = Modifier.height(36.dp),
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        ) {
+                            Text(
+                                text = selectedExample.name,
+                                style = MaterialTheme.typography.bodySmall,
+                                fontWeight = FontWeight.Medium,
+                            )
+                            Text(
+                                text = "▼",
+                                style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp),
+                            )
+                        }
+                    }
 
-                DropdownMenu(
-                    expanded = isDropdownExpanded,
-                    onDismissRequest = { onDropdownExpandedChange(false) },
-                ) {
-                    SduiDemoExamples.examples.forEach { example ->
-                        DropdownMenuItem(
-                            text = {
-                                Column {
-                                    Text(
-                                        text = example.name,
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        fontWeight = FontWeight.Medium,
-                                    )
-                                    Text(
-                                        text = example.description,
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
-                                    )
-                                }
-                            },
-                            onClick = {
-                                onExampleChange(example.copy(json = ""))
-                                onDropdownExpandedChange(false)
-                            },
-                        )
+                    DropdownMenu(
+                        expanded = isDropdownExpanded,
+                        onDismissRequest = { onDropdownExpandedChange(false) },
+                    ) {
+                        SduiDemoExamples.examples.forEach { example ->
+                            DropdownMenuItem(
+                                text = {
+                                    Column {
+                                        Text(
+                                            text = example.name,
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            fontWeight = FontWeight.Medium,
+                                        )
+                                        Text(
+                                            text = example.description,
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
+                                        )
+                                    }
+                                },
+                                onClick = {
+                                    onExampleChange(example.copy(json = ""))
+                                    onDropdownExpandedChange(false)
+                                },
+                            )
+                        }
                     }
                 }
             }
@@ -667,32 +691,7 @@ fun ModernJsonEditor(
             }
         }
 
-        
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            OutlinedButton(
-                onClick = {
-                    onJsonChange(
-                        selectedExample.json.ifEmpty {
-                            "Loading..."
-                        },
-                    )
-                },
-                colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = MaterialTheme.colorScheme.primary,
-                ),
-                shape = RoundedCornerShape(6.dp),
-            ) {
-                Text(
-                    "Reset",
-                    style = MaterialTheme.typography.bodySmall,
-                    fontWeight = FontWeight.Medium,
-                )
-            }
 
-
-        }
     }
 }
 
