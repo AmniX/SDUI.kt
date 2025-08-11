@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -22,13 +21,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 /**
- * Terminal-style log window for displaying action messages and logs
+ * Minimal logs viewer that matches the playground UI design
  */
 @Composable
 fun TerminalLogWindow(
@@ -40,7 +38,7 @@ fun TerminalLogWindow(
         modifier = modifier
             .fillMaxWidth()
             .height(300.dp),
-        color = Color(0xFF1E1E1E),
+        color = MaterialTheme.colorScheme.surface,
         shape = MaterialTheme.shapes.medium
     ) {
         Column(
@@ -48,83 +46,60 @@ fun TerminalLogWindow(
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            // Terminal Header
+            // Header with title and clear button
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    // Terminal dots
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .width(12.dp)
-                                .height(12.dp)
-                                .background(Color(0xFFFF5F57), shape = MaterialTheme.shapes.small)
-                        )
-                        Box(
-                            modifier = Modifier
-                                .width(12.dp)
-                                .height(12.dp)
-                                .background(Color(0xFFFFBD2E), shape = MaterialTheme.shapes.small)
-                        )
-                        Box(
-                            modifier = Modifier
-                                .width(12.dp)
-                                .height(12.dp)
-                                .background(Color(0xFF28CA42), shape = MaterialTheme.shapes.small)
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Text(
-                        text = "SDUI Terminal",
-                        color = Color.White,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium,
-                        fontFamily = FontFamily.Monospace
-                    )
-                }
+                Text(
+                    text = "Action Logs",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
                 
                 Button(
                     onClick = onClearLogs,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.height(32.dp)
                 ) {
                     Text(
                         text = "Clear",
-                        color = Color(0xFFCCCCCC),
-                        fontSize = 12.sp,
-                        fontFamily = FontFamily.Monospace
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Medium
                     )
                 }
             }
             
             Spacer(modifier = Modifier.height(12.dp))
             
-            // Terminal Content
+            // Logs content area
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                    .background(Color(0xFF000000))
-                    .border(1.dp, Color(0xFF333333))
+                    .background(
+                        MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.3f),
+                        shape = MaterialTheme.shapes.small
+                    )
+                    .border(
+                        1.dp,
+                        MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
+                        shape = MaterialTheme.shapes.small
+                    )
                     .padding(12.dp)
             ) {
                 if (logs.isEmpty()) {
                     Text(
                         text = "No logs yet. Actions will appear here...",
-                        color = Color(0xFF888888),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
                         fontSize = 12.sp,
-                        fontFamily = FontFamily.Monospace
+                        style = MaterialTheme.typography.bodySmall
                     )
                 } else {
                     LazyColumn(
                         reverseLayout = true,
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                        verticalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
                         items(logs.reversed()) { logEntry ->
                             LogEntryRow(logEntry = logEntry)
@@ -142,19 +117,29 @@ private fun LogEntryRow(logEntry: LogEntry) {
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Top
     ) {
+        // Timestamp
         Text(
             text = logEntry.timestamp,
-            color = Color(0xFF888888),
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
             fontSize = 10.sp,
-            fontFamily = FontFamily.Monospace,
-            modifier = Modifier.width(80.dp)
+            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.width(70.dp)
         )
+        
         Spacer(modifier = Modifier.width(8.dp))
+        
+        // Message with appropriate color
         Text(
             text = logEntry.message,
-            color = logEntry.color,
+            color = when (logEntry.type) {
+                LogType.SUCCESS -> MaterialTheme.colorScheme.primary
+                LogType.WARNING -> Color(0xFFFF9800)
+                LogType.ERROR -> MaterialTheme.colorScheme.error
+                LogType.ACTION -> MaterialTheme.colorScheme.secondary
+                LogType.INFO -> MaterialTheme.colorScheme.onSurface
+            },
             fontSize = 12.sp,
-            fontFamily = FontFamily.Monospace,
+            style = MaterialTheme.typography.bodySmall,
             modifier = Modifier.weight(1f)
         )
     }
