@@ -27,6 +27,9 @@ fun SduiPlaygroundScreen() {
     
     // Use a list to store all log entries instead of a single message
     val logs = remember { mutableStateListOf<LogEntry>() }
+    
+    // Keep track of the last successfully parsed component for fallback rendering
+    var lastWorkingComponent by remember { mutableStateOf<com.amnix.sdui.sdui.components.SduiComponent?>(null) }
 
     // Load JSON from resources when example changes
     LaunchedEffect(selectedExample) {
@@ -36,6 +39,17 @@ fun SduiPlaygroundScreen() {
         
         // Add a log entry when example changes
         logs.add(createLogEntry("Loaded example: ${selectedExample.name}", LogType.INFO))
+        
+        // Try to parse the initial JSON and set it as the last working component
+        try {
+            val initialResult = SduiSerializer.deserializeWithValidation(loadedExample.json)
+            if (initialResult is SerializationResult.Success) {
+                lastWorkingComponent = initialResult.data
+                logs.add(createLogEntry("✅ Initial component loaded successfully", LogType.SUCCESS))
+            }
+        } catch (e: Exception) {
+            logs.add(createLogEntry("⚠️ Initial component failed to load: ${e.message}", LogType.WARNING))
+        }
     }
 
     val formState = remember { mutableStateMapOf<String, Any?>() }
@@ -69,19 +83,32 @@ fun SduiPlaygroundScreen() {
         }
     }
 
-    // Use the new error handling system
+    // Use the new error handling system with fallback to last working component
     val parsedComponent = remember(jsonInput) {
         when (val result = SduiSerializer.deserializeWithValidation(jsonInput)) {
             is SerializationResult.Success -> {
                 logs.add(createLogEntry("✅ JSON parsed successfully", LogType.SUCCESS))
+                // Update the last working component
+                lastWorkingComponent = result.data
                 Result.success(result.data)
             }
             is SerializationResult.Error -> {
                 val errorMessage = "❌ ${result.message}: ${result.details ?: ""}"
                 logs.add(createLogEntry(errorMessage, LogType.ERROR))
-                // Debug: Also log the raw result for debugging
-                logs.add(createLogEntry("🔍 Debug - Raw error: $result", LogType.INFO))
-                Result.failure(IllegalArgumentException("${result.message}: ${result.details ?: ""}"))
+                
+                // If we have a last working component, show a fallback message
+                if (lastWorkingComponent != null) {
+                    logs.add(createLogEntry("⚠️ Rendering last working component while you fix the JSON", LogType.WARNING))
+                } else {
+                    logs.add(createLogEntry("🔍 No previous component to fall back to", LogType.INFO))
+                }
+                
+                // Return the last working component as a fallback, or failure if none exists
+                if (lastWorkingComponent != null) {
+                    Result.success(lastWorkingComponent!!)
+                } else {
+                    Result.failure(IllegalArgumentException("${result.message}: ${result.details ?: ""}"))
+                }
             }
         }
     }

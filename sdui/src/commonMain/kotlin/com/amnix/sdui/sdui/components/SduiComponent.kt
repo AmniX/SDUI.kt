@@ -4,6 +4,7 @@ import com.amnix.sdui.sdui.model.SduiAction
 import com.amnix.sdui.sdui.model.Style
 import kotlin.random.Random
 import kotlinx.serialization.Serializable
+import kotlin.random.nextUInt
 
 @Serializable
 sealed class SduiComponent {
@@ -16,7 +17,7 @@ sealed class SduiComponent {
     @Serializable
     @kotlinx.serialization.SerialName("text")
     data class TextComponent(
-        override val id: String = "text_${Random.nextInt()}",
+        override val id: String = "text_${Random.nextUInt()}",
         override val style: Style? = null,
         override val action: SduiAction? = null,
         override val visible: Boolean? = true,
@@ -29,7 +30,7 @@ sealed class SduiComponent {
     @Serializable
     @kotlinx.serialization.SerialName("button")
     data class ButtonComponent(
-        override val id: String = "button_${Random.nextInt()}",
+        override val id: String = "button_${Random.nextUInt()}",
         override val style: Style? = null,
         override val action: SduiAction? = null,
         override val visible: Boolean? = true,
@@ -42,7 +43,7 @@ sealed class SduiComponent {
     @Serializable
     @kotlinx.serialization.SerialName("column")
     data class ColumnComponent(
-        override val id: String = "column_${Random.nextInt()}",
+        override val id: String = "column_${Random.nextUInt()}",
         override val style: Style? = null,
         override val action: SduiAction? = null,
         override val visible: Boolean? = true,
@@ -54,7 +55,7 @@ sealed class SduiComponent {
     @Serializable
     @kotlinx.serialization.SerialName("row")
     data class RowComponent(
-        override val id: String = "row_${Random.nextInt()}",
+        override val id: String = "row_${Random.nextUInt()}",
         override val style: Style? = null,
         override val action: SduiAction? = null,
         override val visible: Boolean? = true,
@@ -66,7 +67,7 @@ sealed class SduiComponent {
     @Serializable
     @kotlinx.serialization.SerialName("image")
     data class ImageComponent(
-        override val id: String = "image_${Random.nextInt()}",
+        override val id: String = "image_${Random.nextUInt()}",
         override val style: Style? = null,
         override val action: SduiAction? = null,
         override val visible: Boolean? = true,
@@ -81,7 +82,7 @@ sealed class SduiComponent {
     @Serializable
     @kotlinx.serialization.SerialName("textField")
     data class TextFieldComponent(
-        override val id: String = "textfield_${Random.nextInt()}",
+        override val id: String = "textfield_${Random.nextUInt()}",
         override val style: Style? = null,
         override val action: SduiAction? = null,
         override val visible: Boolean? = true,
@@ -97,7 +98,7 @@ sealed class SduiComponent {
     @Serializable
     @kotlinx.serialization.SerialName("spacer")
     data class SpacerComponent(
-        override val id: String = "spacer_${Random.nextInt()}",
+        override val id: String = "spacer_${Random.nextUInt()}",
         override val style: Style? = null,
         override val action: SduiAction? = null,
         override val visible: Boolean? = true,
@@ -109,7 +110,7 @@ sealed class SduiComponent {
     @Serializable
     @kotlinx.serialization.SerialName("divider")
     data class DividerComponent(
-        override val id: String = "divider_${Random.nextInt()}",
+        override val id: String = "divider_${Random.nextUInt()}",
         override val style: Style? = null,
         override val action: SduiAction? = null,
         override val visible: Boolean? = true,
@@ -121,7 +122,7 @@ sealed class SduiComponent {
     @Serializable
     @kotlinx.serialization.SerialName("box")
     data class BoxComponent(
-        override val id: String = "box_${Random.nextInt()}",
+        override val id: String = "box_${Random.nextUInt()}",
         override val style: Style? = null,
         override val action: SduiAction? = null,
         override val visible: Boolean? = true,
@@ -132,7 +133,7 @@ sealed class SduiComponent {
     @Serializable
     @kotlinx.serialization.SerialName("card")
     data class CardComponent(
-        override val id: String = "card_${Random.nextInt()}",
+        override val id: String = "card_${Random.nextUInt()}",
         override val style: Style? = null,
         override val action: SduiAction? = null,
         override val visible: Boolean? = true,
@@ -144,7 +145,7 @@ sealed class SduiComponent {
     @Serializable
     @kotlinx.serialization.SerialName("list")
     data class ListComponent(
-        override val id: String = "list_${Random.nextInt()}",
+        override val id: String = "list_${Random.nextUInt()}",
         override val style: Style? = null,
         override val action: SduiAction? = null,
         override val visible: Boolean? = true,
@@ -158,7 +159,7 @@ sealed class SduiComponent {
     @Serializable
     @kotlinx.serialization.SerialName("grid")
     data class GridComponent(
-        override val id: String = "grid_${Random.nextInt()}",
+        override val id: String = "grid_${Random.nextUInt()}",
         override val style: Style? = null,
         override val action: SduiAction? = null,
         override val visible: Boolean? = true,
@@ -172,7 +173,7 @@ sealed class SduiComponent {
     @Serializable
     @kotlinx.serialization.SerialName("switch")
     data class SwitchComponent(
-        override val id: String = "switch_${Random.nextInt()}",
+        override val id: String = "switch_${Random.nextUInt()}",
         override val style: Style? = null,
         override val action: SduiAction? = null,
         override val visible: Boolean? = true,
@@ -185,7 +186,7 @@ sealed class SduiComponent {
     @Serializable
     @kotlinx.serialization.SerialName("checkbox")
     data class CheckboxComponent(
-        override val id: String = "checkbox_${Random.nextInt()}",
+        override val id: String = "checkbox_${Random.nextUInt()}",
         override val style: Style? = null,
         override val action: SduiAction? = null,
         override val visible: Boolean? = true,
@@ -198,7 +199,7 @@ sealed class SduiComponent {
     @Serializable
     @kotlinx.serialization.SerialName("radioButton")
     data class RadioButtonComponent(
-        override val id: String = "radiobutton_${Random.nextInt()}",
+        override val id: String = "radiobutton_${Random.nextUInt()}",
         override val style: Style? = null,
         override val action: SduiAction? = null,
         override val visible: Boolean? = true,
@@ -212,7 +213,7 @@ sealed class SduiComponent {
     @Serializable
     @kotlinx.serialization.SerialName("progressBar")
     data class ProgressBarComponent(
-        override val id: String = "progressbar_${Random.nextInt()}",
+        override val id: String = "progressbar_${Random.nextUInt()}",
         override val style: Style? = null,
         override val action: SduiAction? = null,
         override val visible: Boolean? = true,
@@ -225,7 +226,7 @@ sealed class SduiComponent {
     @Serializable
     @kotlinx.serialization.SerialName("slider")
     data class SliderComponent(
-        override val id: String = "slider_${Random.nextInt()}",
+        override val id: String = "slider_${Random.nextUInt()}",
         override val style: Style? = null,
         override val action: SduiAction? = null,
         override val visible: Boolean? = true,
@@ -241,7 +242,7 @@ sealed class SduiComponent {
     @Serializable
     @kotlinx.serialization.SerialName("chip")
     data class ChipComponent(
-        override val id: String = "chip_${Random.nextInt()}",
+        override val id: String = "chip_${Random.nextUInt()}",
         override val style: Style? = null,
         override val action: SduiAction? = null,
         override val visible: Boolean? = true,

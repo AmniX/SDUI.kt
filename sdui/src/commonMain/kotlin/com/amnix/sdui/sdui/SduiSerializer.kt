@@ -39,7 +39,7 @@ object SduiSerializer {
             } else {
                 SerializationResult.Error(
                     message = "Validation failed",
-                    details = validationResult.errors.joinToString("\n") { it.message }
+                    details = validationResult.issues.joinToString("\n") { it.message }
                 )
             }
         } catch (e: SerializationException) {
@@ -55,61 +55,6 @@ object SduiSerializer {
             // Handle other unexpected errors
             SerializationResult.Error(
                 message = "Unexpected error: ${e.message}",
-                details = e.stackTraceToString()
-            )
-        }
-    }
-
-    /**
-     * Legacy deserialize method for backward compatibility
-     */
-    fun deserialize(jsonString: String): SduiComponent = 
-        deserializeWithValidation(jsonString).let { result ->
-            when (result) {
-                is SerializationResult.Success -> result.data
-                is SerializationResult.Error -> throw IllegalArgumentException("Deserialization failed: ${result.message}")
-            }
-        }
-
-    /**
-     * Serialize component to JSON
-     */
-    fun serialize(component: SduiComponent): String = 
-        json.encodeToString(SduiComponent.serializer(), component)
-
-    /**
-     * Serialize list of components
-     */
-    fun serializeList(components: List<SduiComponent>): String =
-        json.encodeToString(kotlinx.serialization.builtins.ListSerializer(SduiComponent.serializer()), components)
-
-    /**
-     * Deserialize list with validation
-     */
-    fun deserializeListWithValidation(jsonString: String): SerializationResult<List<SduiComponent>> {
-        return try {
-            val components = json.decodeFromString(kotlinx.serialization.builtins.ListSerializer(SduiComponent.serializer()), jsonString)
-            
-            // Validate each component
-            val validationErrors = mutableListOf<String>()
-            components.forEachIndexed { index, component ->
-                val result = SduiValidator.validate(component)
-                if (!result.isValid) {
-                    validationErrors.add("Component $index: ${result.errors.joinToString(", ") { it.message }}")
-                }
-            }
-            
-            if (validationErrors.isEmpty()) {
-                SerializationResult.Success(components)
-            } else {
-                SerializationResult.Error(
-                    message = "Validation failed for list components",
-                    details = validationErrors.joinToString("\n")
-                )
-            }
-        } catch (e: Exception) {
-            SerializationResult.Error(
-                message = "List deserialization failed: ${e.message}",
                 details = e.stackTraceToString()
             )
         }
