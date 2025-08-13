@@ -1,6 +1,7 @@
 package com.amnix.sdui.sdui.renderer
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -41,6 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 import com.amnix.sdui.sdui.components.SduiComponent
 
 /**
@@ -147,8 +151,14 @@ private fun SduiColumnComponent(
     dispatcher: ActionDispatcher,
     formState: MutableMap<String, Any?>,
 ) {
+    val columnModifier =
+        if (component.style?.scroll == true) {
+            Modifier.applyStyle(component.style).verticalScroll(rememberScrollState())
+        } else {
+            Modifier.applyStyle(component.style)
+        }
     Column(
-        modifier = Modifier.applyStyle(component.style),
+        modifier = columnModifier,
         verticalArrangement = Arrangement.spacedBy(component.spacing?.dp ?: 0.dp),
         horizontalAlignment = parseHorizontalAlignment(component.style?.alignItems),
     ) {
@@ -171,12 +181,21 @@ private fun SduiRowComponent(
             "spaceevenly", "space_evenly", "space-evenly" -> Arrangement.SpaceEvenly
             "end", "right" ->
                 component.spacing?.dp?.let { Arrangement.spacedBy(it, Alignment.End) } ?: Arrangement.End
-            "center" -> component.spacing?.dp?.let { Arrangement.spacedBy(it, Alignment.CenterHorizontally) } ?: Arrangement.Center
+            "center" -> component.spacing?.dp?.let { Arrangement.spacedBy(it, Alignment.CenterHorizontally) }
+                ?: Arrangement.Center
             else -> component.spacing?.dp?.let { Arrangement.spacedBy(it, Alignment.Start) } ?: Arrangement.Start
         }
 
+    val rowModifier =
+        if (component.style?.scroll ==
+            true
+        ) {
+            Modifier.applyStyle(component.style).horizontalScroll(rememberScrollState())
+        } else {
+            Modifier.applyStyle(component.style)
+        }
     Row(
-        modifier = Modifier.applyStyle(component.style),
+        modifier = rowModifier,
         horizontalArrangement = horizontalArrangement,
         verticalAlignment = parseVerticalAlignment(component.style?.alignItems),
     ) {
@@ -188,19 +207,26 @@ private fun SduiRowComponent(
 
 @Composable
 private fun SduiImageComponent(component: SduiComponent.ImageComponent) {
-    // Simple placeholder for image - in a real implementation, you'd use a proper image loader
-    Box(
-        modifier =
-        Modifier
-            .applyStyle(component.style)
-            .background(Color.LightGray),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(
-            text = component.altText ?: "Image",
-            color = Color.Gray,
-        )
+    val modifier = Modifier.applyStyle(component.style)
+    val url = component.url
+    if (url.isBlank()) {
+        Box(
+            modifier = modifier.background(Color.LightGray),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(text = component.altText ?: "Image", color = Color.Gray)
+        }
+        return
     }
+
+    AsyncImage(
+        model = url,
+        contentDescription = component.contentDescription ?: component.altText,
+        modifier = modifier,
+        onState = { s ->
+            println(s)
+        },
+    )
 }
 
 @Composable

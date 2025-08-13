@@ -50,6 +50,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.coil3.compose)
         }
 
         commonTest.dependencies {
@@ -60,6 +61,7 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.coil3.network.okhttp)
         }
 
         iosMain.dependencies {
@@ -68,6 +70,7 @@ kotlin {
 
         jvmMain.dependencies {
             implementation(libs.kotlinx.coroutinesSwing)
+            implementation(libs.coil3.network.okhttp)
         }
 
         wasmJsMain.dependencies {

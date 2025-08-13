@@ -1,6 +1,8 @@
 package com.amnix.sdui.sdui.model
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Serializer
 
 @Serializable
 data class Style(
@@ -14,6 +16,9 @@ data class Style(
     val alignment: String? = null,
     val width: String? = null,
     val height: String? = null,
+    @Serializable(with = AspectRatioAsStringSerializer::class)
+    val aspectRatio: String? = null,
+    val scroll: Boolean? = null,
     val maxWidth: String? = null,
     val maxHeight: String? = null,
     val minWidth: String? = null,
@@ -33,6 +38,24 @@ data class Style(
     val scale: Float? = null,
     val zIndex: Int? = null,
 )
+
+@Suppress("unused")
+object AspectRatioAsStringSerializer : kotlinx.serialization.KSerializer<String?> {
+    override val descriptor = kotlinx.serialization.descriptors.PrimitiveSerialDescriptor(
+        "AspectRatio",
+        kotlinx.serialization.descriptors.PrimitiveKind.STRING,
+    )
+
+    override fun serialize(encoder: kotlinx.serialization.encoding.Encoder, value: String?) {
+        if (value == null) encoder.encodeNull() else encoder.encodeString(value)
+    }
+
+    override fun deserialize(decoder: kotlinx.serialization.encoding.Decoder): String? = try {
+        decoder.decodeString()
+    } catch (_: Exception) {
+        null
+    }
+}
 
 @Serializable
 data class Padding(

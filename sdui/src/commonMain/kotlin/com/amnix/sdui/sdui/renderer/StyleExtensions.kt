@@ -2,6 +2,7 @@ package com.amnix.sdui.sdui.renderer
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
@@ -92,6 +94,20 @@ fun Modifier.applyStyle(style: Style?): Modifier {
         }
     }
 
+    // Apply aspect ratio (accepts decimal or "w:h")
+    style.aspectRatio?.let { ratio ->
+        val numeric = ratio.toFloatOrNull() ?: ratio.split(":").let { parts ->
+            if (parts.size == 2) {
+                val w = parts[0].trim().toFloatOrNull()
+                val h = parts[1].trim().toFloatOrNull()
+                if (w != null && h != null && h != 0f) w / h else null
+            } else {
+                null
+            }
+        }
+        numeric?.let { if (it > 0f) modifier = modifier.aspectRatio(it) }
+    }
+
     // Apply min/max constraints
     style.minWidth?.let { minWidth ->
         val dpValue =
@@ -133,13 +149,10 @@ fun Modifier.applyStyle(style: Style?): Modifier {
         }
     }
 
-    // Apply corner radius
+    // Apply corner radius by clipping content to shape
     style.cornerRadius?.let { radius ->
-        modifier =
-            modifier.background(
-                color = Color.Transparent,
-                shape = RoundedCornerShape(radius.dp),
-            )
+        val shape = RoundedCornerShape(radius.dp)
+        modifier = modifier.clip(shape)
     }
 
     // Apply border
