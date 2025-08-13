@@ -10,13 +10,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
@@ -40,12 +40,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.LineHeightStyle
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.amnix.sdui.data.DemoExample
@@ -78,11 +78,8 @@ fun ModernHeaderSection(modifier: Modifier = Modifier) {
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                 )
             }
-
-            
         }
 
-        
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -117,7 +114,6 @@ fun ModernHeaderSectionWithoutToggle(modifier: Modifier = Modifier) {
             )
         }
 
-        
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -145,13 +141,11 @@ fun CompactHeaderWithSampleChooser(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            
             Column(
                 modifier = Modifier.weight(1f),
             ) {
@@ -171,7 +165,7 @@ fun CompactHeaderWithSampleChooser(
             // Sample chooser and reset button in a row
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 // Reset button
                 OutlinedButton(
@@ -189,7 +183,7 @@ fun CompactHeaderWithSampleChooser(
                         fontWeight = FontWeight.Medium,
                     )
                 }
-                
+
                 // Sample chooser dropdown
                 Box {
                     OutlinedButton(
@@ -248,7 +242,6 @@ fun CompactHeaderWithSampleChooser(
             }
         }
 
-        
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -366,12 +359,11 @@ fun ModernJsonEditor(
     modifier: Modifier = Modifier,
 ) {
     val parseError = parsedComponent.exceptionOrNull()
-    
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -396,8 +388,7 @@ fun ModernJsonEditor(
                     fontFamily = FontFamily.Monospace,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
-                
-                
+
                 if (parseError != null) {
                     Box(
                         modifier = Modifier
@@ -417,7 +408,7 @@ fun ModernJsonEditor(
                     }
                 }
             }
-            
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -428,7 +419,7 @@ fun ModernJsonEditor(
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
                     OutlinedButton(
-                        onClick = { 
+                        onClick = {
                             if (fontSize > 8) onFontSizeChange(fontSize - 1)
                         },
                         modifier = Modifier.size(24.dp),
@@ -437,8 +428,8 @@ fun ModernJsonEditor(
                             contentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                         ),
                         border = androidx.compose.foundation.BorderStroke(
-                            1.dp, 
-                            MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                            1.dp,
+                            MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
                         ),
                         shape = RoundedCornerShape(4.dp),
                     ) {
@@ -448,7 +439,7 @@ fun ModernJsonEditor(
                             fontWeight = FontWeight.Bold,
                         )
                     }
-                    
+
                     Text(
                         text = "${fontSize}sp",
                         style = MaterialTheme.typography.bodySmall,
@@ -457,9 +448,9 @@ fun ModernJsonEditor(
                         modifier = Modifier.width(36.dp),
                         textAlign = TextAlign.Center,
                     )
-                    
+
                     OutlinedButton(
-                        onClick = { 
+                        onClick = {
                             if (fontSize < 24) onFontSizeChange(fontSize + 1)
                         },
                         modifier = Modifier.size(24.dp),
@@ -468,8 +459,8 @@ fun ModernJsonEditor(
                             contentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                         ),
                         border = androidx.compose.foundation.BorderStroke(
-                            1.dp, 
-                            MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                            1.dp,
+                            MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
                         ),
                         shape = RoundedCornerShape(4.dp),
                     ) {
@@ -480,7 +471,7 @@ fun ModernJsonEditor(
                         )
                     }
                 }
-                
+
                 if (parseError != null) {
                     Text(
                         text = "⚠️",
@@ -496,7 +487,6 @@ fun ModernJsonEditor(
             }
         }
 
-        
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -511,7 +501,6 @@ fun ModernJsonEditor(
                 ),
         ) {
             Column {
-                
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -527,7 +516,6 @@ fun ModernJsonEditor(
                         horizontalArrangement = Arrangement.spacedBy(6.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        
                         Box(
                             modifier = Modifier
                                 .size(12.dp)
@@ -544,7 +532,7 @@ fun ModernJsonEditor(
                                 .background(Color(0xFF28CA42), RoundedCornerShape(50.dp)),
                         )
                     }
-                    
+
                     Text(
                         text = "JSON",
                         style = MaterialTheme.typography.bodySmall,
@@ -553,7 +541,6 @@ fun ModernJsonEditor(
                     )
                 }
 
-                
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -565,13 +552,12 @@ fun ModernJsonEditor(
                     val totalLines = jsonInput.lines().size
                     val numDigits = maxOf(2, totalLines.toString().length)
                     val gutterMinWidth = 40.dp
-                    
+
                     val gutterWidth = maxOf(
                         gutterMinWidth,
                         (16.dp * numDigits.toFloat()) + 16.dp,
                     )
 
-                    
                     Box(
                         modifier = Modifier
                             .width(gutterWidth)
@@ -580,7 +566,7 @@ fun ModernJsonEditor(
                                 shape = RoundedCornerShape(bottomStart = 12.dp),
                             )
                             .padding(start = 8.dp, end = 8.dp)
-                            .verticalScroll(verticalScrollState)
+                            .verticalScroll(verticalScrollState),
                     ) {
                         val lineNumbersText = buildString {
                             val numDigits = totalLines.toString().length
@@ -610,7 +596,6 @@ fun ModernJsonEditor(
                         )
                     }
 
-                    
                     Box(
                         modifier = Modifier
                             .weight(1f)
@@ -649,8 +634,7 @@ fun ModernJsonEditor(
                         )
                     }
                 }
-                
-                
+
                 if (parseError != null) {
                     Box(
                         modifier = Modifier
@@ -691,12 +675,8 @@ fun ModernJsonEditor(
                 }
             }
         }
-
-
     }
 }
-
-
 
 // JSON syntax highlighting using VisualTransformation
 private fun JsonSyntaxHighlightTransformation(): VisualTransformation {
@@ -721,9 +701,7 @@ private fun JsonSyntaxHighlightTransformation(): VisualTransformation {
         var stringStart = -1
         var escape = false
 
-        fun isWordBoundary(idx: Int): Boolean {
-            return idx < 0 || idx >= n || !text[idx].isLetter()
-        }
+        fun isWordBoundary(idx: Int): Boolean = idx < 0 || idx >= n || !text[idx].isLetter()
 
         while (i < n) {
             val c = text[i]
@@ -733,9 +711,8 @@ private fun JsonSyntaxHighlightTransformation(): VisualTransformation {
                 } else if (c == '\\') {
                     escape = true
                 } else if (c == '"') {
-                    
                     val end = i + 1
-                    
+
                     var j = end
                     while (j < n && text[j].isWhitespace()) j++
                     val isKey = j < n && text[j] == ':'
@@ -762,18 +739,22 @@ private fun JsonSyntaxHighlightTransformation(): VisualTransformation {
                         continue
                     }
                     '-', in '0'..'9' -> {
-                        
                         val start = i
                         var k = i
                         var hasDigits = false
                         if (text[k] == '-') k++
-                        while (k < n && text[k].isDigit()) { k++; hasDigits = true }
+                        while (k < n && text[k].isDigit()) {
+                            k++
+                            hasDigits = true
+                        }
                         if (k < n && text[k] == '.') {
                             k++
-                            while (k < n && text[k].isDigit()) { k++; hasDigits = true }
+                            while (k < n && text[k].isDigit()) {
+                                k++
+                                hasDigits = true
+                            }
                         }
                         if (hasDigits) {
-                            
                             if (k < n && (text[k] == 'e' || text[k] == 'E')) {
                                 k++
                                 if (k < n && (text[k] == '+' || text[k] == '-')) k++
@@ -785,24 +766,42 @@ private fun JsonSyntaxHighlightTransformation(): VisualTransformation {
                         }
                     }
                     't' -> {
-                        
-                        if (i + 3 < n && text.substring(i, i + 4) == "true" && isWordBoundary(i - 1) && isWordBoundary(i + 4)) {
+                        if (i + 3 < n &&
+                            text.substring(
+                                i,
+                                i + 4,
+                            ) == "true" &&
+                            isWordBoundary(i - 1) &&
+                            isWordBoundary(i + 4)
+                        ) {
                             builder.addStyle(SpanStyle(color = literalColor), i, i + 4)
                             i += 4
                             continue
                         }
                     }
                     'f' -> {
-                        
-                        if (i + 4 < n && text.substring(i, i + 5) == "false" && isWordBoundary(i - 1) && isWordBoundary(i + 5)) {
+                        if (i + 4 < n &&
+                            text.substring(
+                                i,
+                                i + 5,
+                            ) == "false" &&
+                            isWordBoundary(i - 1) &&
+                            isWordBoundary(i + 5)
+                        ) {
                             builder.addStyle(SpanStyle(color = literalColor), i, i + 5)
                             i += 5
                             continue
                         }
                     }
                     'n' -> {
-                        
-                        if (i + 3 < n && text.substring(i, i + 4) == "null" && isWordBoundary(i - 1) && isWordBoundary(i + 4)) {
+                        if (i + 3 < n &&
+                            text.substring(
+                                i,
+                                i + 4,
+                            ) == "null" &&
+                            isWordBoundary(i - 1) &&
+                            isWordBoundary(i + 4)
+                        ) {
                             builder.addStyle(SpanStyle(color = literalColor), i, i + 4)
                             i += 4
                             continue
@@ -816,8 +815,6 @@ private fun JsonSyntaxHighlightTransformation(): VisualTransformation {
         TransformedText(builder.toAnnotatedString(), OffsetMapping.Identity)
     }
 }
-
-
 
 /**
  * Section header with colored indicator dot
@@ -845,5 +842,3 @@ private fun SectionHeader(title: String, color: androidx.compose.ui.graphics.Col
         )
     }
 }
-
-

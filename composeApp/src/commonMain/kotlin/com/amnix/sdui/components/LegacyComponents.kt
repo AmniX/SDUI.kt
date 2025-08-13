@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.Alignment
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -24,6 +23,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
@@ -62,7 +62,7 @@ fun ExampleSelectorCard(
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Medium,
                 )
-                
+
                 // Reset button
                 OutlinedButton(
                     onClick = onReset,
@@ -80,7 +80,7 @@ fun ExampleSelectorCard(
                     )
                 }
             }
-            
+
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedButton(
@@ -132,7 +132,7 @@ fun JsonEditorCard(
     modifier: Modifier = Modifier,
 ) {
     val parseError = parsedComponent.exceptionOrNull()
-    
+
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -148,14 +148,14 @@ fun JsonEditorCard(
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Medium,
                 )
-                
+
                 // Font size controls
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
                     OutlinedButton(
-                        onClick = { 
+                        onClick = {
                             if (fontSize > 8) onFontSizeChange(fontSize - 1)
                         },
                         modifier = Modifier.size(28.dp),
@@ -164,8 +164,8 @@ fun JsonEditorCard(
                             contentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                         ),
                         border = BorderStroke(
-                            1.dp, 
-                            MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                            1.dp,
+                            MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
                         ),
                         shape = RoundedCornerShape(4.dp),
                     ) {
@@ -175,7 +175,7 @@ fun JsonEditorCard(
                             fontWeight = FontWeight.Bold,
                         )
                     }
-                    
+
                     Text(
                         text = "${fontSize}sp",
                         style = MaterialTheme.typography.bodySmall,
@@ -184,9 +184,9 @@ fun JsonEditorCard(
                         modifier = Modifier.width(40.dp),
                         textAlign = TextAlign.Center,
                     )
-                    
+
                     OutlinedButton(
-                        onClick = { 
+                        onClick = {
                             if (fontSize < 24) onFontSizeChange(fontSize + 1)
                         },
                         modifier = Modifier.size(28.dp),
@@ -195,8 +195,8 @@ fun JsonEditorCard(
                             contentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                         ),
                         border = BorderStroke(
-                            1.dp, 
-                            MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                            1.dp,
+                            MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
                         ),
                         shape = RoundedCornerShape(4.dp),
                     ) {
@@ -216,12 +216,12 @@ fun JsonEditorCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(if (parseError != null) 120.dp else 150.dp),
-                placeholder = { 
+                placeholder = {
                     Text(
                         "Enter SDUI JSON...",
                         fontSize = fontSize.sp,
                         fontFamily = FontFamily.Monospace,
-                    ) 
+                    )
                 },
                 textStyle = MaterialTheme.typography.bodyMedium.copy(
                     fontFamily = FontFamily.Monospace,
@@ -229,7 +229,7 @@ fun JsonEditorCard(
                 ),
                 isError = parseError != null,
             )
-            
+
             // Simple error display for legacy component
             if (parseError != null) {
                 Spacer(modifier = Modifier.height(8.dp))
@@ -280,8 +280,6 @@ fun JsonEditorCard(
         }
     }
 }
-
-
 
 @Composable
 fun ErrorCard(error: Throwable, modifier: Modifier = Modifier) {

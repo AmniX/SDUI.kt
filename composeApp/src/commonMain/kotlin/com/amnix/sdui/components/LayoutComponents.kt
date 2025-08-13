@@ -31,26 +31,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.amnix.sdui.components.CompactHeaderWithSampleChooser
-import com.amnix.sdui.components.CompactPreviewCard
-import com.amnix.sdui.components.ExampleSelectorCard
-import com.amnix.sdui.components.JsonEditorCard
-import com.amnix.sdui.components.LogEntry
-import com.amnix.sdui.components.MobilePhonePreview
-import com.amnix.sdui.components.ModernJsonEditor
-import com.amnix.sdui.components.ResizableJsonAndLogs
-import com.amnix.sdui.components.TerminalLogWindow
 import com.amnix.sdui.data.DemoExample
 import com.amnix.sdui.sdui.renderer.ActionDispatcher
-import com.amnix.sdui.sdui.renderer.FormState
 import com.amnix.sdui.sdui.renderer.RenderSduiComponent
+import com.russhwolf.settings.Settings
 
 /**
  * Resizable component that allows users to drag to adjust the height of JSON Editor and Log Viewer
@@ -68,16 +55,20 @@ fun ResizableJsonAndLogs(
     onClearLogs: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var jsonEditorHeight by remember { mutableStateOf(320.dp) } // Reduced from 400dp to 250dp
+    val settings = remember { Settings() }
+    val savedJsonHeightValue = remember(settings) { settings.getInt("json_editor_height", 320) }
+    var jsonEditorHeight by remember {
+        mutableStateOf(savedJsonHeightValue.dp)
+    } // Reduced from 400dp to 250dp    val minJsonHeight = 150.dp // Reduced from 200dp to 150dp
     val minJsonHeight = 150.dp // Reduced from 200dp to 150dp
     val maxJsonHeight = 600.dp // Reduced from 800dp to 600dp
-    
+
     Column(modifier = modifier) {
         // JSON Editor with adjustable height
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(jsonEditorHeight)
+                .height(jsonEditorHeight),
         ) {
             ModernJsonEditor(
                 jsonInput = jsonInput,
@@ -89,7 +80,7 @@ fun ResizableJsonAndLogs(
                 onFontSizeChange = onFontSizeChange,
             )
         }
-        
+
         // Drag Handle
         Box(
             modifier = Modifier
@@ -100,13 +91,14 @@ fun ResizableJsonAndLogs(
                     detectDragGestures { _, dragAmount ->
                         val newHeight = jsonEditorHeight + dragAmount.y.div(2).dp
                         jsonEditorHeight = newHeight.coerceIn(minJsonHeight, maxJsonHeight)
+                        settings.putInt("json_editor_height", jsonEditorHeight.value.toInt())
                     }
-                }
+                },
         ) {
             // Drag handle indicator with multiple dots
             Row(
                 modifier = Modifier.align(Alignment.Center),
-                horizontalArrangement = Arrangement.spacedBy(2.dp)
+                horizontalArrangement = Arrangement.spacedBy(2.dp),
             ) {
                 repeat(3) {
                     Box(
@@ -114,22 +106,22 @@ fun ResizableJsonAndLogs(
                             .size(3.dp)
                             .background(
                                 MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
-                                RoundedCornerShape(1.5.dp)
-                            )
+                                RoundedCornerShape(1.5.dp),
+                            ),
                     )
                 }
             }
         }
-        
+
         // Log Viewer (takes remaining space but with minimum height)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(250.dp) // Fixed height to ensure visibility
+                .height(250.dp), // Fixed height to ensure visibility
         ) {
             TerminalLogWindow(
                 logs = logs,
-                onClearLogs = onClearLogs
+                onClearLogs = onClearLogs,
             )
         }
     }
@@ -265,7 +257,7 @@ fun WideLayout(
                         fontSize = jsonFontSize,
                         onFontSizeChange = onJsonFontSizeChange,
                         logs = logs,
-                        onClearLogs = onClearLogs
+                        onClearLogs = onClearLogs,
                     )
                 }
             }
@@ -275,7 +267,7 @@ fun WideLayout(
                 parsedComponent = parsedComponent,
                 dispatcher = dispatcher,
                 formState = formState,
-                modifier = Modifier.width(400.dp)
+                modifier = Modifier.width(400.dp),
             )
         }
     }
@@ -337,7 +329,7 @@ fun CompactLayout(
             fontSize = jsonFontSize,
             onFontSizeChange = onJsonFontSizeChange,
             logs = logs,
-            onClearLogs = onClearLogs
+            onClearLogs = onClearLogs,
         )
 
         // Rendered UI with mobile preview theming
@@ -439,7 +431,7 @@ private fun CompactPreviewCard(
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Medium,
                 )
-                
+
                 // Show fallback indicator if this is a fallback component
                 if (isFallback) {
                     Row(
