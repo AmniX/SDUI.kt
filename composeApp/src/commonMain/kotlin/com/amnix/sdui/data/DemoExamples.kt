@@ -33,7 +33,11 @@ object SduiDemoExamples {
             description = "Interactive form with various input types",
             resourcePath = "files/sdui-examples/form-elements.json",
         ),
-
+        DemoExample(
+            name = "Simple Layout",
+            description = "Basic SDUI components demonstration",
+            resourcePath = "files/sdui-examples/card-layout.json",
+        ),
     )
 
     /**
