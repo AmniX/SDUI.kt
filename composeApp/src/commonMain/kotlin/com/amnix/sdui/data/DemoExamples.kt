@@ -39,7 +39,7 @@ object SduiDemoExamples {
             resourcePath = "files/sdui-examples/card-layout.json",
         ),
         DemoExample(
-            name = "DroidKaifi 2025",
+            name = "DroidKaigi 2025",
             description = "Homepage of DroidKaigi 2025",
             resourcePath = "files/sdui-examples/media-home.json",
         ),
