@@ -164,9 +164,20 @@ private fun SduiRowComponent(
     dispatcher: ActionDispatcher,
     formState: MutableMap<String, Any?>,
 ) {
+    val horizontalArrangement =
+        when (component.style?.justifyContent?.lowercase()) {
+            "spacebetween", "space_between", "space-between" -> Arrangement.SpaceBetween
+            "spacearound", "space_around", "space-around" -> Arrangement.SpaceAround
+            "spaceevenly", "space_evenly", "space-evenly" -> Arrangement.SpaceEvenly
+            "end", "right" ->
+                component.spacing?.dp?.let { Arrangement.spacedBy(it, Alignment.End) } ?: Arrangement.End
+            "center" -> component.spacing?.dp?.let { Arrangement.spacedBy(it, Alignment.CenterHorizontally) } ?: Arrangement.Center
+            else -> component.spacing?.dp?.let { Arrangement.spacedBy(it, Alignment.Start) } ?: Arrangement.Start
+        }
+
     Row(
         modifier = Modifier.applyStyle(component.style),
-        horizontalArrangement = Arrangement.spacedBy(component.spacing?.dp ?: 0.dp),
+        horizontalArrangement = horizontalArrangement,
         verticalAlignment = parseVerticalAlignment(component.style?.alignItems),
     ) {
         component.children.forEach { child ->
