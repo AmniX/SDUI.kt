@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -556,7 +557,7 @@ fun ModernJsonEditor(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(if (parseError != null) 300.dp else 350.dp),
+                        .fillMaxSize(), // Changed from fixed height to fill available space
                 ) {
                     val verticalScrollState = rememberScrollState()
                     val horizontalScrollState = rememberScrollState()

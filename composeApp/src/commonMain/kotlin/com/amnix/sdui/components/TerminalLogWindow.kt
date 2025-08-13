@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -37,16 +38,16 @@ fun TerminalLogWindow(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .height(300.dp),
+            .fillMaxSize(), // Changed from fixed height to fill available space
         color = MaterialTheme.colorScheme.surface,
         shape = MaterialTheme.shapes.medium
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(12.dp) // Reduced from 16dp to save space
         ) {
-            // Minimal header - just title and clear button in one row
+            // Ultra-compact header - minimal title and small clear button
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -54,25 +55,28 @@ fun TerminalLogWindow(
             ) {
                 Text(
                     text = "Logs",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.labelMedium, // Smaller text style
                     fontWeight = FontWeight.Medium,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f), // Less prominent
+                    fontSize = 12.sp // Explicit smaller font size
                 )
                 
-                // Small clear button
+                // Ultra-compact clear button
                 Button(
                     onClick = onClearLogs,
-                    modifier = Modifier.height(28.dp)
+                    modifier = Modifier.height(24.dp), // Reduced from 28dp
+                    contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 8.dp, vertical = 2.dp) // Minimal padding
                 ) {
                     Text(
                         text = "Clear",
                         style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 10.sp // Smaller font for button text
                     )
                 }
             }
             
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(6.dp)) // Reduced from 8dp
             
             // Logs content area
             Box(
@@ -88,19 +92,19 @@ fun TerminalLogWindow(
                         MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
                         shape = MaterialTheme.shapes.small
                     )
-                    .padding(12.dp)
+                    .padding(10.dp) // Reduced from 12dp
             ) {
                 if (logs.isEmpty()) {
                     Text(
                         text = "No logs yet. Actions will appear here...",
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
-                        fontSize = 12.sp,
+                        fontSize = 11.sp, // Reduced from 12sp
                         style = MaterialTheme.typography.bodySmall
                     )
                 } else {
                     LazyColumn(
                         reverseLayout = true,
-                        verticalArrangement = Arrangement.spacedBy(6.dp)
+                        verticalArrangement = Arrangement.spacedBy(4.dp) // Reduced from 6dp
                     ) {
                         items(logs.reversed()) { logEntry ->
                             LogEntryRow(logEntry = logEntry)

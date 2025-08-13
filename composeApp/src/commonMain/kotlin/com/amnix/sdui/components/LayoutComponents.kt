@@ -2,6 +2,7 @@ package com.amnix.sdui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -30,17 +31,109 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.amnix.sdui.components.TerminalLogWindow
+import androidx.compose.ui.unit.sp
+import com.amnix.sdui.components.CompactHeaderWithSampleChooser
+import com.amnix.sdui.components.CompactPreviewCard
+import com.amnix.sdui.components.ExampleSelectorCard
+import com.amnix.sdui.components.JsonEditorCard
 import com.amnix.sdui.components.LogEntry
 import com.amnix.sdui.components.MobilePhonePreview
+import com.amnix.sdui.components.ModernJsonEditor
+import com.amnix.sdui.components.ResizableJsonAndLogs
+import com.amnix.sdui.components.TerminalLogWindow
 import com.amnix.sdui.data.DemoExample
-import com.amnix.sdui.sdui.components.SduiComponent
 import com.amnix.sdui.sdui.renderer.ActionDispatcher
 import com.amnix.sdui.sdui.renderer.FormState
 import com.amnix.sdui.sdui.renderer.RenderSduiComponent
+
+/**
+ * Resizable component that allows users to drag to adjust the height of JSON Editor and Log Viewer
+ */
+@Composable
+fun ResizableJsonAndLogs(
+    jsonInput: String,
+    onJsonChange: (String) -> Unit,
+    selectedExample: DemoExample,
+    formState: MutableMap<String, Any?>,
+    parsedComponent: Result<com.amnix.sdui.sdui.components.SduiComponent>,
+    fontSize: Int,
+    onFontSizeChange: (Int) -> Unit,
+    logs: List<LogEntry>,
+    onClearLogs: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var jsonEditorHeight by remember { mutableStateOf(320.dp) } // Reduced from 400dp to 250dp
+    val minJsonHeight = 150.dp // Reduced from 200dp to 150dp
+    val maxJsonHeight = 600.dp // Reduced from 800dp to 600dp
+    
+    Column(modifier = modifier) {
+        // JSON Editor with adjustable height
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(jsonEditorHeight)
+        ) {
+            ModernJsonEditor(
+                jsonInput = jsonInput,
+                onJsonChange = onJsonChange,
+                selectedExample = selectedExample,
+                formState = formState,
+                parsedComponent = parsedComponent,
+                fontSize = fontSize,
+                onFontSizeChange = onFontSizeChange,
+            )
+        }
+        
+        // Drag Handle
+        Box(
+            modifier = Modifier
+                .padding(vertical = 2.dp)
+                .fillMaxWidth()
+                .height(12.dp) // Increased height for better usability
+                .pointerInput(Unit) {
+                    detectDragGestures { _, dragAmount ->
+                        val newHeight = jsonEditorHeight + dragAmount.y.div(2).dp
+                        jsonEditorHeight = newHeight.coerceIn(minJsonHeight, maxJsonHeight)
+                    }
+                }
+        ) {
+            // Drag handle indicator with multiple dots
+            Row(
+                modifier = Modifier.align(Alignment.Center),
+                horizontalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
+                repeat(3) {
+                    Box(
+                        modifier = Modifier
+                            .size(3.dp)
+                            .background(
+                                MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
+                                RoundedCornerShape(1.5.dp)
+                            )
+                    )
+                }
+            }
+        }
+        
+        // Log Viewer (takes remaining space but with minimum height)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(250.dp) // Fixed height to ensure visibility
+        ) {
+            TerminalLogWindow(
+                logs = logs,
+                onClearLogs = onClearLogs
+            )
+        }
+    }
+}
 
 /**
  * Responsive layout that switches between wide and compact based on available width
@@ -162,8 +255,8 @@ fun WideLayout(
                         },
                     )
 
-                    // JSON Editor
-                    ModernJsonEditor(
+                    // Resizable JSON Editor and Log Viewer
+                    ResizableJsonAndLogs(
                         jsonInput = jsonInput,
                         onJsonChange = onJsonChange,
                         selectedExample = selectedExample,
@@ -171,10 +264,6 @@ fun WideLayout(
                         parsedComponent = parsedComponent,
                         fontSize = jsonFontSize,
                         onFontSizeChange = onJsonFontSizeChange,
-                    )
-
-                    // Terminal Log Window
-                    TerminalLogWindow(
                         logs = logs,
                         onClearLogs = onClearLogs
                     )
@@ -238,8 +327,8 @@ fun CompactLayout(
             },
         )
 
-        // JSON Editor
-        JsonEditorCard(
+        // Resizable JSON Editor and Log Viewer
+        ResizableJsonAndLogs(
             jsonInput = jsonInput,
             onJsonChange = onJsonChange,
             selectedExample = selectedExample,
@@ -247,10 +336,6 @@ fun CompactLayout(
             parsedComponent = parsedComponent,
             fontSize = jsonFontSize,
             onFontSizeChange = onJsonFontSizeChange,
-        )
-
-        // Terminal Log Window
-        TerminalLogWindow(
             logs = logs,
             onClearLogs = onClearLogs
         )
