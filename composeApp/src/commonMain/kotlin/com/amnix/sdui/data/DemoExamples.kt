@@ -39,8 +39,8 @@ object SduiDemoExamples {
             resourcePath = "files/sdui-examples/card-layout.json",
         ),
         DemoExample(
-            name = "Media Home",
-            description = "Media hub with grid of posters and featured playlist",
+            name = "DroidKaifi 2025",
+            description = "Homepage of DroidKaigi 2025",
             resourcePath = "files/sdui-examples/media-home.json",
         ),
     )
