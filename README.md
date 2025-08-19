@@ -104,55 +104,6 @@ Actions and state
 
 ### Diagrams
 
-Playground flow
-
-```mermaid
-sequenceDiagram
-    autonumber
-    participant U as User
-    participant P as SduiPlaygroundScreen
-    participant Ser as SduiSerializer
-    participant Val as SduiValidator
-    participant RL as ResponsiveLayout
-    participant Prev as Preview
-    participant R as RenderSduiComponent
-    participant AD as Dispatcher
-    participant FS as FormState
-    participant L as Logs
-
-    U->>P: Select example / Edit JSON
-    P->>Ser: deserializeWithValidation(json)
-    Ser->>Val: validate(component)
-    Val-->>Ser: ValidationResult
-    Ser-->>P: SerializationResult (Success or Error)
-    alt Success
-      P->>P: Save lastWorkingComponent
-      P->>RL: Pass parsedComponent Success
-      RL->>Prev: Pass component, dispatcher, formState
-      Prev->>R: RenderSduiComponent(component, dispatcher, formState)
-    else Error
-      P->>L: Log error
-      alt lastWorkingComponent exists
-        P->>RL: Use lastWorkingComponent
-        RL->>Prev: Pass fallback component
-        Prev->>R: RenderSduiComponent(...)
-      else No working component
-        P-->>U: Show error; no render
-      end
-    end
-
-    U->>Prev: Interact with UI
-    Prev->>AD: dispatch(action)
-    alt Navigate
-      AD->>L: Log route or success
-    else Reset
-      AD->>FS: clearAllFormValues
-      AD->>L: Log reset
-    else Other
-      AD->>L: Log action type
-    end
-```
-
 RenderSduiComponent flow
 
 ```mermaid
