@@ -123,7 +123,3 @@ sequenceDiagram
 
 - Inspired by the Compose Multiplatform and SDUI communities.
 - Questions? Find me after the talk or open an issue!
-
----
-
-[MIT License](LICENSE)
