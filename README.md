@@ -1,7 +1,6 @@
 # SDUI.kt – DroidKaigi 2025: Server Driven UI in Kotlin Multiplatform
 
-Welcome!  
-This repository is the companion codebase for the **DroidKaigi 2025 presentation** on Server Driven UI (SDUI) using Kotlin Multiplatform and Compose Multiplatform. Here, you'll find runnable playgrounds, illustrative models, and practical code samples designed to make SDUI concepts tangible and memorable for conference attendees.
+> **⚠️ This repository is a presentation/demo codebase, not a reusable library. It is designed for educational and experimental purposes only. There are no plans to maintain or develop it as a general-purpose SDUI library. Feel free to explore, learn, and experiment, but do not use this as a dependency in production apps.**
 
 ---
 
@@ -17,7 +16,7 @@ This repository is the companion codebase for the **DroidKaigi 2025 presentation
 ## 🧑‍💻 How This Repository Supports the Talk
 
 - **Live Playground**: Try real SDUI JSON, see instant preview updates, and experiment with validation and fallback mechanisms.
-- **Modular Design**: Each concept (parsing, validation, rendering, actions, state) is isolated for clarity and demo purposes.
+- **Modular Demo Code**: Each concept (parsing, validation, rendering, actions, state) is isolated for clarity and for demonstrating the talk material.
 - **Multi-platform Ready**: Demos run on Android, Desktop, iOS, and Web via Compose Multiplatform—showing how SDUI can unify UI logic across platforms.
 
 ---
@@ -32,12 +31,12 @@ This repository is the companion codebase for the **DroidKaigi 2025 presentation
 
 ---
 
-## 🏃‍♂️ What to Do Before/After the Talk
+## 🏃‍♂️ Try It Out (for Learning & Experimentation)
 
 - **Run the playground** (see Quick Start below) and try editing the provided example JSONs.
 - **Observe the logs**: Watch parsing/validation in action—see what breaks, and why.
 - **Follow code links**: Jump straight to the key demo files referenced below.
-- **Fork and hack**: Use this as a starting point for your own SDUI experiments or prototypes.
+- **Fork and hack**: Use this as a sandbox for your own SDUI experiments or prototypes.
 
 ---
 
@@ -111,11 +110,12 @@ sequenceDiagram
 
 ---
 
-## ⚠️ Scope & Disclaimer
+## ⚠️ Disclaimer & Scope
 
-- **Not a production library**: This is a talk demo—code and APIs are optimized for clarity, not for production.
-- **Breaking changes likely**: Expect rapid evolution and simplification.
-- **Learning and prototyping encouraged!**
+- **This is NOT a production library**: This codebase exists solely to support a talk and hands-on learning.
+- **No plans for maintenance or general-purpose use**: Breaking changes and incomplete features are likely.
+- **Learning, experimenting, and prototyping are encouraged!**
+- **Do NOT use as a dependency or expect versioned releases.**
 
 ---
 
