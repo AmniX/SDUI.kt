@@ -54,7 +54,7 @@ import com.amnix.sdui.sdui.components.SduiComponent
 fun RenderSduiComponent(
     component: SduiComponent,
     dispatcher: ActionDispatcher,
-    formState: MutableMap<String, Any?> = remember { mutableStateMapOf() },
+    state: MutableMap<String, Any?> = remember { mutableStateMapOf() },
 ) {
     // Skip rendering if component is not visible
     if (component.visible == false) {
@@ -63,23 +63,23 @@ fun RenderSduiComponent(
 
     when (component) {
         is SduiComponent.TextComponent -> SduiTextComponent(component)
-        is SduiComponent.ButtonComponent -> SduiButtonComponent(component, dispatcher, formState)
-        is SduiComponent.ColumnComponent -> SduiColumnComponent(component, dispatcher, formState)
-        is SduiComponent.RowComponent -> SduiRowComponent(component, dispatcher, formState)
+        is SduiComponent.ButtonComponent -> SduiButtonComponent(component, dispatcher, state)
+        is SduiComponent.ColumnComponent -> SduiColumnComponent(component, dispatcher, state)
+        is SduiComponent.RowComponent -> SduiRowComponent(component, dispatcher, state)
         is SduiComponent.ImageComponent -> SduiImageComponent(component)
-        is SduiComponent.TextFieldComponent -> SduiTextFieldComponent(component, formState)
+        is SduiComponent.TextFieldComponent -> SduiTextFieldComponent(component, state)
         is SduiComponent.SpacerComponent -> SduiSpacerComponent(component)
         is SduiComponent.DividerComponent -> SduiDividerComponent(component)
-        is SduiComponent.BoxComponent -> SduiBoxComponent(component, dispatcher, formState)
-        is SduiComponent.CardComponent -> SduiCardComponent(component, dispatcher, formState)
-        is SduiComponent.ListComponent -> SduiListComponent(component, dispatcher, formState)
-        is SduiComponent.GridComponent -> SduiGridComponent(component, dispatcher, formState)
-        is SduiComponent.SwitchComponent -> SduiSwitchComponent(component, formState)
-        is SduiComponent.CheckboxComponent -> SduiCheckboxComponent(component, formState)
-        is SduiComponent.RadioButtonComponent -> SduiRadioButtonComponent(component, formState)
+        is SduiComponent.BoxComponent -> SduiBoxComponent(component, dispatcher, state)
+        is SduiComponent.CardComponent -> SduiCardComponent(component, dispatcher, state)
+        is SduiComponent.ListComponent -> SduiListComponent(component, dispatcher, state)
+        is SduiComponent.GridComponent -> SduiGridComponent(component, dispatcher, state)
+        is SduiComponent.SwitchComponent -> SduiSwitchComponent(component, state)
+        is SduiComponent.CheckboxComponent -> SduiCheckboxComponent(component, state)
+        is SduiComponent.RadioButtonComponent -> SduiRadioButtonComponent(component, state)
         is SduiComponent.ProgressBarComponent -> SduiProgressBarComponent(component)
-        is SduiComponent.SliderComponent -> SduiSliderComponent(component, formState)
-        is SduiComponent.ChipComponent -> SduiChipComponent(component, formState)
+        is SduiComponent.SliderComponent -> SduiSliderComponent(component, state)
+        is SduiComponent.ChipComponent -> SduiChipComponent(component, state)
     }
 }
 

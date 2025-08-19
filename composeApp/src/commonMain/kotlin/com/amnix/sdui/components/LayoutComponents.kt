@@ -1,7 +1,6 @@
 package com.amnix.sdui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -455,7 +454,7 @@ private fun CompactPreviewCard(
             RenderSduiComponent(
                 component = component,
                 dispatcher = dispatcher,
-                formState = formState,
+                state = formState,
             )
         }
     }

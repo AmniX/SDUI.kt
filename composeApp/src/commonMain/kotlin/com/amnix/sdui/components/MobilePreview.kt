@@ -156,7 +156,7 @@ private fun PhoneScreen(
                 RenderSduiComponent(
                     component = component,
                     dispatcher = dispatcher,
-                    formState = formState,
+                    state = formState,
                 )
             } ?: run {
                 // Empty state for mobile preview
