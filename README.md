@@ -136,7 +136,7 @@ sequenceDiagram
         P->>RL: Use lastWorkingComponent
         RL->>Prev: Pass fallback component
         Prev->>R: RenderSduiComponent(...)
-      else
+      else No working component
         P-->>U: Show error; no render
       end
     end
@@ -213,13 +213,13 @@ sequenceDiagram
         alt Valid
             Ser-->>C: Success(component)
         else Invalid
-            Ser-->>C: Error with message Validation failed and details
+            Ser-->>C: Error (Validation failed and details)
         end
     else SerializationException
         KJ--x Ser: SerializationException
-        Ser-->>C: Error with message JSON parsing failed plus details, line, column
+        Ser-->>C: Error (parsing failed, details, line, column)
     else Other Exception
-        Ser-->>C: Error with message Unexpected error and stack trace
+        Ser-->>C: Error (unexpected, stack trace)
     end
 ```
 
