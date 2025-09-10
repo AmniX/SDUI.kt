@@ -1,4 +1,4 @@
-# SDUI.kt – DroidKaigi 2025: Server Driven UI in Kotlin Multiplatform
+# SDUI.kt – Server Driven UI in Kotlin Multiplatform
 
 > **⚠️ This repository is a presentation/demo codebase, not a reusable library. It is designed for educational and experimental purposes only. There are no plans to maintain or develop it as a general-purpose SDUI library. Feel free to explore, learn, and experiment, but do not use this as a dependency in production apps.**
 
