@@ -3,9 +3,9 @@
   "children": [
     {"type": "text", "text": "Simple Form", "style": {"fontSize": 20, "fontWeight": "bold"}},
     {"type": "spacer", "height": 16},
-    {"type": "textField", "placeholder": "Name"},
+    {"type": "textField", "id":"text_field_name", "placeholder": "Name"},
     {"type": "spacer", "height": 12},
-    {"type": "textField", "placeholder": "Email"},
+    {"type": "textField", "id":"text_field_email", "placeholder": "Email"},
     {"type": "spacer", "height": 16},
     {"type": "button", "text": "Submit", "action": {"type": "navigate", "payload": {"route": "success"}}}
   ]

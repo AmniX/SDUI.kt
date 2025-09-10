@@ -4,49 +4,49 @@
     { "type": "row",
       "style": { "justifyContent": "space-between", "alignItems": "center", "width": "100%", "padding": { "vertical": 12 } },
       "children": [
-        { "type": "text", "text": "DroidKaigi TV", "style": { "fontSize": 24, "fontWeight": "bold" } },
+        { "type": "text", "text": "DroidKaigi Gallery", "style": { "fontSize": 24, "fontWeight": "bold" } },
         { "type": "text", "text": "🔍", "style": { "fontSize": 24 } }
       ]
     },
     { "type": "spacer", "height": 8 },
-    { "type": "image", "url": "https://2025.droidkaigi.jp/_astro/image01.DW1wrnVH_d5vwm.webp",
-      "style": { "width": "100%", "aspectRatio": "16:9", "cornerRadius": 8, "backgroundColor": "#EEEEEE" }
+    { "type": "image", "url": "https://2025.droidkaigi.jp/_astro/main_key_visual_night.BS7aQH0l_Onncf.webp",
+      "style": { "width": "100%", "aspectRatio": "16:9", "cornerRadius": 24 }
     },
     { "type": "spacer", "height": 12 },
-    { "type": "text", "text": "Android", "style": { "fontSize": 18, "fontWeight": "medium" } },
+    { "type": "text", "text": "2024", "style": { "fontSize": 24, "fontWeight": "medium" } },
     { "type": "spacer", "height": 8 },
     { "type": "row", "spacing": 8, "style": { "scroll": true, "width": "100%" },
       "children": [
-        { "type": "image", "url": "https://2025.droidkaigi.jp/_astro/image01.DW1wrnVH_d5vwm.webp",
-          "style": { "height": "190dp", "aspectRatio": "9:16", "cornerRadius": 8, "backgroundColor": "#EEEEEE" }
+        { "type": "image", "url": "https://2024.droidkaigi.jp/_astro/image01.9RxQX509_um6nW.webp",
+          "style": { "height": "190dp", "aspectRatio": "1:1", "cornerRadius": 16 }
         },
-        { "type": "image", "url": "https://2025.droidkaigi.jp/_astro/image01.DW1wrnVH_d5vwm.webp",
-          "style": { "height": "190dp", "aspectRatio": "9:16", "cornerRadius": 8, "backgroundColor": "#EEEEEE" }
+        { "type": "image", "url": "https://2024.droidkaigi.jp/_astro/image05.Du5xISOU_2ANw0.webp",
+          "style": { "height": "190dp", "aspectRatio": "1:1", "cornerRadius": 16 }
         },
-        { "type": "image", "url": "https://2025.droidkaigi.jp/_astro/image01.DW1wrnVH_d5vwm.webp",
-          "style": { "height": "190dp", "aspectRatio": "9:16", "cornerRadius": 8, "backgroundColor": "#EEEEEE" }
+        { "type": "image", "url": "https://2024.droidkaigi.jp/_astro/image03.CnkRf9cA_Z2e9r2h.webp",
+          "style": { "height": "190dp", "aspectRatio": "1:1", "cornerRadius": 16 }
         },
-        { "type": "image", "url": "https://2025.droidkaigi.jp/_astro/image01.DW1wrnVH_d5vwm.webp",
-          "style": { "height": "190dp", "aspectRatio": "9:16", "cornerRadius": 8, "backgroundColor": "#EEEEEE" }
+        { "type": "image", "url": "https://2024.droidkaigi.jp/_astro/image07.DlVvTGhp_18g7Nx.webp",
+          "style": { "height": "190dp", "aspectRatio": "1:1", "cornerRadius": 16 }
         }
       ]
     },
     { "type": "spacer", "height": 8 },
-    { "type": "text", "text": "KMM", "style": { "fontSize": 18, "fontWeight": "medium" }},
+    { "type": "text", "text": "2023", "style": { "fontSize": 24, "fontWeight": "medium" }},
     { "type": "spacer", "height": 8 },
     { "type": "row", "spacing": 8, "style": { "scroll": true, "width": "100%" },
       "children": [
-        { "type": "image", "url": "https://2025.droidkaigi.jp/_astro/image01.DW1wrnVH_d5vwm.webp",
-          "style": { "height": "190dp", "aspectRatio": "9:16", "cornerRadius": 8, "backgroundColor": "#EEEEEE" }
+        { "type": "image", "url": "https://2023.droidkaigi.jp/static/1f654c30a663fe2cf634cf39dfa66869/img_02.jpg",
+          "style": { "height": "190dp", "aspectRatio": "1:1", "cornerRadius": 16 }
         },
-        { "type": "image", "url": "https://2025.droidkaigi.jp/_astro/image01.DW1wrnVH_d5vwm.webp",
-          "style": { "height": "190dp", "aspectRatio": "9:16", "cornerRadius": 8, "backgroundColor": "#EEEEEE" }
+        { "type": "image", "url": "https://2023.droidkaigi.jp/static/2e8719f7d58f96ceecb4418dea9b6ad8/img_01.jpg",
+          "style": { "height": "190dp", "aspectRatio": "1:1", "cornerRadius": 16 }
         },
-        { "type": "image", "url": "https://2025.droidkaigi.jp/_astro/image01.DW1wrnVH_d5vwm.webp",
-          "style": { "height": "190dp", "aspectRatio": "9:16", "cornerRadius": 8, "backgroundColor": "#EEEEEE" }
+        { "type": "image", "url": "https://2023.droidkaigi.jp/static/12059b53c8c9813a85c1c44f8692a2c0/img_04.jpg",
+          "style": { "height": "190dp", "aspectRatio": "1:1", "cornerRadius": 16 }
         },
-        { "type": "image", "url": "https://2025.droidkaigi.jp/_astro/image01.DW1wrnVH_d5vwm.webp",
-          "style": { "height": "190dp", "aspectRatio": "9:16", "cornerRadius": 8, "backgroundColor": "#EEEEEE" }
+        { "type": "image", "url": "https://2023.droidkaigi.jp/static/d2ec14c136a3c9d8649594d8b1fb86fb/img_05.jpg",
+          "style": { "height": "190dp", "aspectRatio": "1:1", "cornerRadius": 16 }
         }
       ]
     }
