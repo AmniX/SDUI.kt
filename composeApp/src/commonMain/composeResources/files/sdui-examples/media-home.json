@@ -1,0 +1,52 @@
+{
+  "type": "column",
+  "style": { "alignItems": "start" },
+  "children": [
+    {
+      "type": "row",
+      "style": { "justifyContent": "space-between", "alignItems": "center", "width": "100%", "padding": { "vertical": 12 } },
+      "children": [
+        { "type": "text", "text": "droidcon YouTube", "style": { "fontSize": 24, "fontWeight": "bold" } },
+        { "type": "text", "text": "🔍", "style": { "fontSize": 24 } }
+      ]
+    },
+    { "type": "spacer", "height": 8 },
+    { "type": "image", "url": "https://media.konfhub.com/event_poster/2025/April/20/1745143473576-5621bef3-0c4d-4553-84f7-a1848bce450e.png", "style": { "width": "100%", "aspectRatio": "", "cornerRadius": 16 } },
+    { "type": "spacer", "height": 12 },
+    { "type": "text", "text": "Interviews", "style": { "fontSize": 24, "fontWeight": "medium" } },
+    { "type": "spacer", "height": 8 },
+    {
+      "type": "row", "spacing": 8, "style": { "scroll": true, "width": "100%" },
+      "children": [
+        { "type": "image", "url": "https://i.ytimg.com/vi/eLJZZEhSTrg/mqdefault.jpg", "style": { "height": "120dp", "aspectRatio": "16:9", "cornerRadius": 16 } },
+        { "type": "image", "url": "https://i.ytimg.com/vi/9Q656CudrQA/mqdefault.jpg", "style": { "height": "120dp", "aspectRatio": "16:9", "cornerRadius": 16 } },
+        { "type": "image", "url": "https://i.ytimg.com/vi/K6sGu_OJ62I/mqdefault.jpg", "style": { "height": "120dp", "aspectRatio": "16:9", "cornerRadius": 16 } },
+        { "type": "image", "url": "https://i.ytimg.com/vi/FO83uPDrCec/mqdefault.jpg", "style": { "height": "120dp", "aspectRatio": "16:9", "cornerRadius": 16 } }
+      ]
+    },
+    { "type": "spacer", "height": 8 },
+    { "type": "text", "text": "droidcon London 2025", "style": { "fontSize": 24, "fontWeight": "medium" } },
+    { "type": "spacer", "height": 8 },
+    {
+      "type": "row", "spacing": 8, "style": { "scroll": true, "width": "100%" },
+      "children": [
+        { "type": "image", "url": "https://i.ytimg.com/vi/l9mS5XqyVpw/mqdefault.jpg", "style": { "height": "120dp", "aspectRatio": "16:9", "cornerRadius": 16 } },
+        { "type": "image", "url": "https://i.ytimg.com/vi/r5fEIJ0yFfY/mqdefault.jpg", "style": { "height": "120dp", "aspectRatio": "16:9", "cornerRadius": 16 } },
+        { "type": "image", "url": "https://i.ytimg.com/vi/cz2qiT-_-Zs/mqdefault.jpg", "style": { "height": "120dp", "aspectRatio": "16:9", "cornerRadius": 16 } },
+        { "type": "image", "url": "https://i.ytimg.com/vi/T82YYwg0GWc/mqdefault.jpg", "style": { "height": "120dp", "aspectRatio": "16:9", "cornerRadius": 16 } }
+      ]
+    },
+    { "type": "spacer", "height": 8 },
+    { "type": "text", "text": "droidcon Berlin 2018", "style": { "fontSize": 24, "fontWeight": "medium" } },
+    { "type": "spacer", "height": 8 },
+    {
+      "type": "row", "spacing": 8, "style": { "scroll": true, "width": "100%" },
+      "children": [
+        { "type": "image", "url": "https://i.ytimg.com/vi/yd-Xztr4fyY/mqdefault.jpg", "style": { "height": "120dp", "aspectRatio": "16:9", "cornerRadius": 16 } },
+        { "type": "image", "url": "https://i.ytimg.com/vi/jlYlHnQinXY/mqdefault.jpg", "style": { "height": "120dp", "aspectRatio": "16:9", "cornerRadius": 16 } },
+        { "type": "image", "url": "https://i.ytimg.com/vi/b1_k7RtzyWM/mqdefault.jpg", "style": { "height": "120dp", "aspectRatio": "16:9", "cornerRadius": 16 } },
+        { "type": "image", "url": "https://i.ytimg.com/vi/Stt0v7dd2pw/mqdefault.jpg", "style": { "height": "120dp", "aspectRatio": "16:9", "cornerRadius": 16 } }
+      ]
+    }
+  ]
+}

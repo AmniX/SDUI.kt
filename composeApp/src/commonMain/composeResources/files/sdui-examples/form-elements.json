@@ -1,0 +1,20 @@
+{
+  "type": "column",
+  "children": [
+    { "type": "text", "text": "Simple Form", "style": { "fontSize": 20, "fontWeight": "bold" } },
+    { "type": "spacer", "height": 16 },
+    { "type": "textField", "id": "text_field_name", "placeholder": "Name" },
+    { "type": "spacer", "height": 12 },
+    { "type": "textField", "id": "text_field_email", "placeholder": "Email" },
+    { "type": "spacer", "height": 16 },
+    {
+      "type": "button", "text": "Submit",
+      "action": {
+        "type": "api_call", "url": "https://example.com/login", "method": "POST",
+        "headers": { "auth_token": "${APP_AUTH_TOKEN}" },
+        "body": { "name": "@states.text_field_name", "email": "@states.text_field_email" },
+        "onSuccess": "navigate:/home", "onError": "show_dialog:Error"
+      }
+    }
+  ]
+}

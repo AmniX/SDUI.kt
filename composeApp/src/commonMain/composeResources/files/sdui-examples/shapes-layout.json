@@ -1,0 +1,9 @@
+{
+  "type": "row",
+  "children": [
+    { "type": "text", "text": "✗", "style": { "fontSize": 48, "textColor": "#E67E8A" } },
+    { "type": "text", "text": "○", "style": { "fontSize": 48, "textColor": "#7EB3E6" } },
+    { "type": "text", "text": "△", "style": { "fontSize": 48, "textColor": "#7EE67E" } },
+    { "type": "text", "text": "□", "style": { "fontSize": 48, "textColor": "#E67ED9" } }
+  ]
+}
