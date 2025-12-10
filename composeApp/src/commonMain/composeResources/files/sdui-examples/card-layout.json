@@ -1,78 +1,28 @@
 {
   "type": "column",
-  "style": {
-    "padding": {
-      "all": 16
-    }
-  },
+  "style": { "padding": { "all": 16 } },
   "children": [
     {
-      "type": "text",
-      "text": "Simple SDUI Example",
-      "style": {
-        "fontSize": 24,
-        "fontWeight": "bold",
-        "textColor": "#1976D2",
-        "alignment": "center"
-      }
+      "type": "text", "text": "Simple SDUI Example",
+      "style": { "fontSize": 24, "fontWeight": "bold", "textColor": "#1976D2", "alignment": "center" }
     },
     {
-      "type": "text",
-      "text": "This demonstrates basic SDUI components",
-      "style": {
-        "fontSize": 16,
-        "textColor": "#666666",
-        "alignment": "center",
-        "padding": {
-          "all": 16
-        }
-      }
+      "type": "text", "text": "This demonstrates basic SDUI components",
+      "style": { "fontSize": 16, "textColor": "#666666", "alignment": "center", "padding": { "all": 16 } }
     },
     {
       "type": "row",
       "children": [
-        {
-          "type": "button",
-          "text": "Button 1!",
-          "action": {
-            "type": "navigate",
-            "route": "success"
-          }
-        },
-        {
-          "type": "spacer",
-          "width": 8
-        },
-        {
-          "type": "button",
-          "text": "Button 2!",
-          "action": {
-            "type": "navigate",
-            "route": "failed"
-          }
-        }
+        { "type": "button", "text": "Button 1!", "action": { "type": "navigate", "route": "success" } },
+        { "type": "spacer", "width": 8 },
+        { "type": "button", "text": "Button 2!", "action": { "type": "navigate", "route": "failed" } }
       ]
     },
     {
       "type": "card",
-      "style": {
-        "cornerRadius": 8,
-        "padding": {
-          "all": 16
-        }
-      },
+      "style": { "cornerRadius": 8, "padding": { "all": 16 } },
       "children": [
-        {
-          "type": "text",
-          "text": "This is a simple card component",
-          "style": {
-            "fontSize": 14,
-            "textColor": "#333333",
-            "padding": {
-              "all": 16
-            }
-          }
-        }
+        { "type": "text", "text": "This is a simple card component", "style": { "fontSize": 14, "textColor": "#333333", "padding": { "all": 16 } } }
       ]
     }
   ]
